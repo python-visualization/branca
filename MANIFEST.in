@@ -1,3 +1,6 @@
 include *.txt
 
 recursive-include branca *.py
+recursive-include branca *.js
+recursive-include branca/plugins *
+recursive-include branca/templates *

@@ -46,7 +46,14 @@ def walk_subpkg(name):
     return data_files
 
 
-pkg_data = {'': ['*.js', ]}
+pkg_data = {'': ['*.js',
+                 'plugins/*.js',
+                 'plugins/*.html',
+                 'plugins/*.css',
+                 'plugins/*.tpl',
+                 'templates/*.html',
+                 'templates/*.js',
+                 'templates/*.txt']}
 pkgs = ['branca', ]
 
 LICENSE = read('LICENSE.txt')
