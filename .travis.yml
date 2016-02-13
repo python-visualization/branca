@@ -1,0 +1,23 @@
+language: python
+
+sudo: false
+
+env:
+    - PYTHON="2.7"
+    - PYTHON="3.4"
+    - PYTHON="3.5"
+
+before_install:
+    - wget http://bit.ly/miniconda -O miniconda.sh
+    - bash miniconda.sh -b -p $HOME/miniconda
+    - export PATH="$HOME/miniconda/bin:$PATH"
+    - conda config --add channels ioos -f
+    - conda update --yes --all
+    - travis_retry conda create --yes -n test python=$PYTHON --file requirements.txt
+    - source activate test
+    - conda install --yes --file requirements-dev.txt;
+    - travis_retry pip install
+
+script:
+    - python setup.py test
+    - find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100
