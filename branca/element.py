@@ -43,11 +43,11 @@ class Element(object):
         self._parent = None
         self._template = Template(template) if template is not None\
             else ENV.get_template(template_name) if template_name is not None\
-            else Template(u"""
-        {% for name, element in this._children.items() %}
-            {{element.render(**kwargs)}}
-        {% endfor %}
-        """)
+            else Template(
+                "{% for name, element in this._children.items() %}\n"
+                "    {{element.render(**kwargs)}}"
+                "{% endfor %}"
+                )
 
     def get_name(self):
         """Returns a string representation of the object.
@@ -189,13 +189,13 @@ class JavascriptLink(Link):
         if download:
             self.get_code()
 
-        self._template = Template(u"""
-        {% if kwargs.get("embedded",False) %}
-            <script>{{this.get_code()}}</script>
-        {% else %}
-            <script src="{{this.url}}"></script>
-        {% endif %}
-        """)
+        self._template = Template(
+            '{% if kwargs.get("embedded",False) %}'
+            '<script>{{this.get_code()}}</script>'
+            '{% else %}'
+            '<script src="{{this.url}}"></script>'
+            '{% endif %}'
+            )
 
 
 class CssLink(Link):
@@ -215,13 +215,13 @@ class CssLink(Link):
         if download:
             self.get_code()
 
-        self._template = Template(u"""
-        {% if kwargs.get("embedded",False) %}
-            <style>{{this.get_code()}}</style>
-        {% else %}
-            <link rel="stylesheet" href="{{this.url}}" />
-        {% endif %}
-        """)
+        self._template = Template(
+            '{% if kwargs.get("embedded",False) %}'
+            '<style>{{this.get_code()}}</style>'
+            '{% else %}'
+            '<link rel="stylesheet" href="{{this.url}}" />'
+            '{% endif %}'
+            )
 
 _default_js = [
     ('leaflet',
@@ -296,18 +296,18 @@ class Figure(Element):
             self.width = str(60*figsize[0])+'px'
             self.height = str(60*figsize[1])+'px'
 
-        self._template = Template(u"""
-        <!DOCTYPE html>
-        <head>
-            {{this.header.render(**kwargs)}}
-        </head>
-        <body>
-            {{this.html.render(**kwargs)}}
-        </body>
-        <script>
-            {{this.script.render(**kwargs)}}
-        </script>
-        """)
+        self._template = Template(
+            '<!DOCTYPE html>\n'
+            '<head>'
+            '    {{this.header.render(**kwargs)}}\n'
+            '</head>\n'
+            '<body>'
+            '    {{this.html.render(**kwargs)}}\n'
+            '</body>\n'
+            '<script>'
+            '    {{this.script.render(**kwargs)}}\n'
+            '</script>\n'
+            )
 
         # Create the meta tag.
         self.header.add_children(Element(
@@ -322,25 +322,24 @@ class Figure(Element):
         for name, url in _default_css:
             self.header.add_children(CssLink(url), name=name)
 
-        self.header.add_children(Element("""
-            <style>
+        self.header.add_children(Element(
+            '<style>html, body {'
+            'width: 100%;'
+            'height: 100%;'
+            'margin: 0;'
+            'padding: 0;'
+            '}'
+            '</style>'), name='css_style')
 
-            html, body {
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                }
-
-            #map {
-                position:absolute;
-                top:0;
-                bottom:0;
-                right:0;
-                left:0;
-                }
-            </style>
-            """), name='css_style')
+        self.header.add_children(Element(
+            '<style>#map {'
+            'position:absolute;'
+            'top:0;'
+            'bottom:0;'
+            'right:0;'
+            'left:0;'
+            '}'
+            '</style>'), name='map_style')
 
     def to_dict(self, depth=-1, **kwargs):
         """Returns a dict representation of the object."""
