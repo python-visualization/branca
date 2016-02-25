@@ -223,40 +223,6 @@ class CssLink(Link):
             '{% endif %}'
             )
 
-_default_js = [
-    ('leaflet',
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"),
-    ('jquery',
-     "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"),
-    ('bootstrap',
-     "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"),
-    ('awesome_markers',
-     "https://rawgithub.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.js"),  # noqa
-    ('marker_cluster_src',
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"),  # noqa
-    ('marker_cluster',
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"),  # noqa
-    ]
-
-_default_css = [
-    ("leaflet_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css"),
-    ("bootstrap_css",
-     "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"),
-    ("bootstrap_theme_css",
-     "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"),  # noqa
-    ("awesome_markers_font_css",
-     "https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"),  # noqa
-    ("awesome_markers_css",
-     "https://rawgit.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.css"),  # noqa
-    ("marker_cluster_default_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),  # noqa
-    ("marker_cluster_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),  # noqa
-    ("awesome_rotate_css",
-     "https://raw.githubusercontent.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"),  # noqa
-    ]
-
 
 class Figure(Element):
     """Create a Figure object, to plot things into it.
@@ -313,33 +279,6 @@ class Figure(Element):
         self.header.add_children(Element(
             '<meta http-equiv="content-type" content="text/html; charset=UTF-8" />'),  # noqa
             name='meta_http')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            self.header.add_children(JavascriptLink(url), name=name)
-
-        # Import Css
-        for name, url in _default_css:
-            self.header.add_children(CssLink(url), name=name)
-
-        self.header.add_children(Element(
-            '<style>html, body {'
-            'width: 100%;'
-            'height: 100%;'
-            'margin: 0;'
-            'padding: 0;'
-            '}'
-            '</style>'), name='css_style')
-
-        self.header.add_children(Element(
-            '<style>#map {'
-            'position:absolute;'
-            'top:0;'
-            'bottom:0;'
-            'right:0;'
-            'left:0;'
-            '}'
-            '</style>'), name='map_style')
 
     def to_dict(self, depth=-1, **kwargs):
         """Returns a dict representation of the object."""
