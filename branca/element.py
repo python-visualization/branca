@@ -388,12 +388,11 @@ class Html(Element):
         self.width = _parse_size(width)
         self.height = _parse_size(height)
 
-        self._template = Template(u"""
-        <div id="{{this.get_name()}}"
-                style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">
-                {% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>
-                """)  # noqa
-
+        self._template = Template(
+            '<div id="{{this.get_name()}}" '
+            'style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">'
+            '{% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>'
+            )  # noqa
 
 class Div(Figure):
     """Create a Div to be embedded in a Figure.
@@ -425,33 +424,31 @@ class Div(Figure):
         self.position = position
 
         self.header = Element()
-        self.html = Element("""
-        {% for name, element in this._children.items() %}
-            {{element.render(**kwargs)}}
-        {% endfor %}
-        """)
+        self.html = Element(
+            '{% for name, element in this._children.items() %}'
+            '{{element.render(**kwargs)}}'
+            '{% endfor %}'
+            )
         self.script = Element()
 
         self.header._parent = self
         self.html._parent = self
         self.script._parent = self
 
-        self._template = Template(u"""
-        {% macro header(this, kwargs) %}
-            <style> #{{this.get_name()}} {
-                position : {{this.position}};
-                width : {{this.width[0]}}{{this.width[1]}};
-                height: {{this.height[0]}}{{this.height[1]}};
-                left: {{this.left[0]}}{{this.left[1]}};
-                top: {{this.top[0]}}{{this.top[1]}};
-            </style>
-        {% endmacro %}
-        {% macro html(this, kwargs) %}
-            <div id="{{this.get_name()}}">
-                {{this.html.render(**kwargs)}}
-            </div>
-        {% endmacro %}
-        """)
+        self._template = Template(
+            '{% macro header(this, kwargs) %}'
+            '<style> #{{this.get_name()}} {\n'
+            '        position : {{this.position}};\n'
+            '        width : {{this.width[0]}}{{this.width[1]}};\n'
+            '        height: {{this.height[0]}}{{this.height[1]}};\n'
+            '        left: {{this.left[0]}}{{this.left[1]}};\n'
+            '        top: {{this.top[0]}}{{this.top[1]}};\n'
+            '    </style>'
+            '{% endmacro %}'
+            '{% macro html(this, kwargs) %}'
+            '<div id="{{this.get_name()}}">{{this.html.render(**kwargs)}}</div>'
+            '{% endmacro %}'
+            )
 
     def get_root(self):
         """Returns the root of the elements tree."""
