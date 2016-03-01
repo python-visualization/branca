@@ -51,7 +51,8 @@ class Element(object):
 
     def get_name(self):
         """Returns a string representation of the object.
-        This string has to be unique and to be a python and javascript-compatible
+        This string has to be unique and to be a python and
+        javascript-compatible
         variable name.
         """
         return _camelify(self._name) + '_' + self._id
@@ -399,7 +400,8 @@ class Figure(Element):
 
         Example:
         >>> fig.add_subplot(3,2,5)
-        # Create a div in the 5th cell of a 3rows x 2columns grid(bottom-left corner).
+        # Create a div in the 5th cell of a 3rows x 2columns
+        grid(bottom-left corner).
         """
         width = 1./y
         height = 1./x
@@ -428,6 +430,9 @@ class Html(Element):
     ----------
     data : str
         The HTML data to be embedded.
+    script : bool
+        If True, data will be embedded without escaping
+        (suitable for embedding html-ready code)
     width : int or str, default '100%'
         The width of the output div element.
         Ex: 120 , '120px', '80%'
@@ -436,9 +441,10 @@ class Html(Element):
         Ex: 120 , '120px', '80%'
     """
 
-    def __init__(self, data, width="100%", height="100%"):
+    def __init__(self, data, script=False, width="100%", height="100%"):
         super(Html, self).__init__()
         self._name = 'Html'
+        self.script = script
         self.data = data
 
         self.width = _parse_size(width)
@@ -447,7 +453,7 @@ class Html(Element):
         self._template = Template(u"""
         <div id="{{this.get_name()}}"
                 style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">
-                {{this.data|e}}</div>
+                {% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>
                 """)  # noqa
 
 
