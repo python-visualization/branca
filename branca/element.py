@@ -43,11 +43,11 @@ class Element(object):
         self._parent = None
         self._template = Template(template) if template is not None\
             else ENV.get_template(template_name) if template_name is not None\
-            else Template(u"""
-        {% for name, element in this._children.items() %}
-            {{element.render(**kwargs)}}
-        {% endfor %}
-        """)
+            else Template(
+                "{% for name, element in this._children.items() %}\n"
+                "    {{element.render(**kwargs)}}"
+                "{% endfor %}"
+                )
 
     def get_name(self):
         """Returns a string representation of the object.
@@ -189,13 +189,13 @@ class JavascriptLink(Link):
         if download:
             self.get_code()
 
-        self._template = Template(u"""
-        {% if kwargs.get("embedded",False) %}
-            <script>{{this.get_code()}}</script>
-        {% else %}
-            <script src="{{this.url}}"></script>
-        {% endif %}
-        """)
+        self._template = Template(
+            '{% if kwargs.get("embedded",False) %}'
+            '<script>{{this.get_code()}}</script>'
+            '{% else %}'
+            '<script src="{{this.url}}"></script>'
+            '{% endif %}'
+            )
 
 
 class CssLink(Link):
@@ -215,47 +215,13 @@ class CssLink(Link):
         if download:
             self.get_code()
 
-        self._template = Template(u"""
-        {% if kwargs.get("embedded",False) %}
-            <style>{{this.get_code()}}</style>
-        {% else %}
-            <link rel="stylesheet" href="{{this.url}}" />
-        {% endif %}
-        """)
-
-_default_js = [
-    ('leaflet',
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"),
-    ('jquery',
-     "https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"),
-    ('bootstrap',
-     "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"),
-    ('awesome_markers',
-     "https://rawgithub.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.js"),  # noqa
-    ('marker_cluster_src',
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster-src.js"),  # noqa
-    ('marker_cluster',
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js"),  # noqa
-    ]
-
-_default_css = [
-    ("leaflet_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css"),
-    ("bootstrap_css",
-     "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"),
-    ("bootstrap_theme_css",
-     "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"),  # noqa
-    ("awesome_markers_font_css",
-     "https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css"),  # noqa
-    ("awesome_markers_css",
-     "https://rawgit.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.css"),  # noqa
-    ("marker_cluster_default_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css"),  # noqa
-    ("marker_cluster_css",
-     "https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css"),  # noqa
-    ("awesome_rotate_css",
-     "https://raw.githubusercontent.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"),  # noqa
-    ]
+        self._template = Template(
+            '{% if kwargs.get("embedded",False) %}'
+            '<style>{{this.get_code()}}</style>'
+            '{% else %}'
+            '<link rel="stylesheet" href="{{this.url}}" />'
+            '{% endif %}'
+            )
 
 
 class Figure(Element):
@@ -296,51 +262,23 @@ class Figure(Element):
             self.width = str(60*figsize[0])+'px'
             self.height = str(60*figsize[1])+'px'
 
-        self._template = Template(u"""
-        <!DOCTYPE html>
-        <head>
-            {{this.header.render(**kwargs)}}
-        </head>
-        <body>
-            {{this.html.render(**kwargs)}}
-        </body>
-        <script>
-            {{this.script.render(**kwargs)}}
-        </script>
-        """)
+        self._template = Template(
+            '<!DOCTYPE html>\n'
+            '<head>'
+            '    {{this.header.render(**kwargs)}}\n'
+            '</head>\n'
+            '<body>'
+            '    {{this.html.render(**kwargs)}}\n'
+            '</body>\n'
+            '<script>'
+            '    {{this.script.render(**kwargs)}}\n'
+            '</script>\n'
+            )
 
         # Create the meta tag.
         self.header.add_children(Element(
             '<meta http-equiv="content-type" content="text/html; charset=UTF-8" />'),  # noqa
             name='meta_http')
-
-        # Import Javascripts
-        for name, url in _default_js:
-            self.header.add_children(JavascriptLink(url), name=name)
-
-        # Import Css
-        for name, url in _default_css:
-            self.header.add_children(CssLink(url), name=name)
-
-        self.header.add_children(Element("""
-            <style>
-
-            html, body {
-                width: 100%;
-                height: 100%;
-                margin: 0;
-                padding: 0;
-                }
-
-            #map {
-                position:absolute;
-                top:0;
-                bottom:0;
-                right:0;
-                left:0;
-                }
-            </style>
-            """), name='css_style')
 
     def to_dict(self, depth=-1, **kwargs):
         """Returns a dict representation of the object."""
@@ -450,11 +388,11 @@ class Html(Element):
         self.width = _parse_size(width)
         self.height = _parse_size(height)
 
-        self._template = Template(u"""
-        <div id="{{this.get_name()}}"
-                style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">
-                {% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>
-                """)  # noqa
+        self._template = Template(
+            '<div id="{{this.get_name()}}" '
+            'style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">'  # noqa
+            '{% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>'
+            )  # noqa
 
 
 class Div(Figure):
@@ -487,33 +425,31 @@ class Div(Figure):
         self.position = position
 
         self.header = Element()
-        self.html = Element("""
-        {% for name, element in this._children.items() %}
-            {{element.render(**kwargs)}}
-        {% endfor %}
-        """)
+        self.html = Element(
+            '{% for name, element in this._children.items() %}'
+            '{{element.render(**kwargs)}}'
+            '{% endfor %}'
+            )
         self.script = Element()
 
         self.header._parent = self
         self.html._parent = self
         self.script._parent = self
 
-        self._template = Template(u"""
-        {% macro header(this, kwargs) %}
-            <style> #{{this.get_name()}} {
-                position : {{this.position}};
-                width : {{this.width[0]}}{{this.width[1]}};
-                height: {{this.height[0]}}{{this.height[1]}};
-                left: {{this.left[0]}}{{this.left[1]}};
-                top: {{this.top[0]}}{{this.top[1]}};
-            </style>
-        {% endmacro %}
-        {% macro html(this, kwargs) %}
-            <div id="{{this.get_name()}}">
-                {{this.html.render(**kwargs)}}
-            </div>
-        {% endmacro %}
-        """)
+        self._template = Template(
+            '{% macro header(this, kwargs) %}'
+            '<style> #{{this.get_name()}} {\n'
+            '        position : {{this.position}};\n'
+            '        width : {{this.width[0]}}{{this.width[1]}};\n'
+            '        height: {{this.height[0]}}{{this.height[1]}};\n'
+            '        left: {{this.left[0]}}{{this.left[1]}};\n'
+            '        top: {{this.top[0]}}{{this.top[1]}};\n'
+            '    </style>'
+            '{% endmacro %}'
+            '{% macro html(this, kwargs) %}'
+            '<div id="{{this.get_name()}}">{{this.html.render(**kwargs)}}</div>'
+            '{% endmacro %}'
+            )
 
     def get_root(self):
         """Returns the root of the elements tree."""

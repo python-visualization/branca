@@ -49,6 +49,7 @@ ENV
 .cache
 data.png
 map.html
+examples/foo.html
 
 # documentation builds
 docs/_build
