@@ -1,2 +1,5 @@
-0.0.0
+0.1.0
 ~~~~~
+- Separate branca from folium (bibmartin d678357)
+- Enable HTML embedding in Html (samchorlton 90f6b13)
+ 
