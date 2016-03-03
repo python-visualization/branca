@@ -5,7 +5,7 @@ from __future__ import absolute_import
 import branca.colormap as colormap
 import branca.element as element
 
-__version__ = '0.0.0.dev'
+__version__ = '0.1.0'
 
 __all__ = ['colormap',
            'element',
