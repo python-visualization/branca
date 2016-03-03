@@ -390,9 +390,10 @@ class Html(Element):
 
         self._template = Template(
             '<div id="{{this.get_name()}}" '
-            'style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">'
+            'style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">'  # noqa
             '{% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>'
             )  # noqa
+
 
 class Div(Figure):
     """Create a Div to be embedded in a Figure.
