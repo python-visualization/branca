@@ -5,6 +5,7 @@ Element
 
 A generic class for creating Elements.
 """
+import warnings
 from uuid import uuid4
 
 from jinja2 import Environment, PackageLoader, Template
@@ -85,6 +86,8 @@ class Element(object):
 
     def add_children(self, child, name=None, index=None):
         """Add a child."""
+        warnings.warn("Method `add_children` is deprecated. Please use `add_child` instead.",
+                      FutureWarning, stacklevel=2)
         return self.add_child(child, name=name, index=index)
 
     def add_child(self, child, name=None, index=None):
@@ -103,7 +106,7 @@ class Element(object):
 
     def add_to(self, parent, name=None, index=None):
         """Add element to a parent."""
-        parent.add_children(self, name=name, index=index)
+        parent.add_child(self, name=name, index=index)
         return self
 
     def to_dict(self, depth=-1, ordered=True, **kwargs):
@@ -276,7 +279,7 @@ class Figure(Element):
             )
 
         # Create the meta tag.
-        self.header.add_children(Element(
+        self.header.add_child(Element(
             '<meta http-equiv="content-type" content="text/html; charset=UTF-8" />'),  # noqa
             name='meta_http')
 
@@ -357,7 +360,7 @@ class Figure(Element):
                   left="{}%".format(100.*left),
                   top="{}%".format(100.*top),
                   )
-        self.add_children(div)
+        self.add_child(div)
         return div
 
 
@@ -465,25 +468,25 @@ class Div(Figure):
             element.render(**kwargs)
 
         for name, element in self.header._children.items():
-            figure.header.add_children(element, name=name)
+            figure.header.add_child(element, name=name)
 
         for name, element in self.script._children.items():
-            figure.script.add_children(element, name=name)
+            figure.script.add_child(element, name=name)
 
         header = self._template.module.__dict__.get('header', None)
         if header is not None:
-            figure.header.add_children(Element(header(self, kwargs)),
-                                       name=self.get_name())
+            figure.header.add_child(Element(header(self, kwargs)),
+                                    name=self.get_name())
 
         html = self._template.module.__dict__.get('html', None)
         if html is not None:
-            figure.html.add_children(Element(html(self, kwargs)),
-                                     name=self.get_name())
+            figure.html.add_child(Element(html(self, kwargs)),
+                                  name=self.get_name())
 
         script = self._template.module.__dict__.get('script', None)
         if script is not None:
-            figure.script.add_children(Element(script(self, kwargs)),
-                                       name=self.get_name())
+            figure.script.add_child(Element(script(self, kwargs)),
+                                    name=self.get_name())
 
     def _repr_html_(self, **kwargs):
         """Displays the Div in a Jupyter notebook."""
@@ -531,9 +534,9 @@ class IFrame(Element):
             self.height = str(60*figsize[1])+'px'
 
         if isinstance(html, text_type) or isinstance(html, binary_type):
-            self.add_children(Element(html))
+            self.add_child(Element(html))
         elif html is not None:
-            self.add_children(html)
+            self.add_child(html)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -592,18 +595,18 @@ class MacroElement(Element):
 
         header = self._template.module.__dict__.get('header', None)
         if header is not None:
-            figure.header.add_children(Element(header(self, kwargs)),
-                                       name=self.get_name())
+            figure.header.add_child(Element(header(self, kwargs)),
+                                    name=self.get_name())
 
         html = self._template.module.__dict__.get('html', None)
         if html is not None:
-            figure.html.add_children(Element(html(self, kwargs)),
-                                     name=self.get_name())
+            figure.html.add_child(Element(html(self, kwargs)),
+                                  name=self.get_name())
 
         script = self._template.module.__dict__.get('script', None)
         if script is not None:
-            figure.script.add_children(Element(script(self, kwargs)),
-                                       name=self.get_name())
+            figure.script.add_child(Element(script(self, kwargs)),
+                                    name=self.get_name())
 
         for name, element in self._children.items():
             element.render(**kwargs)

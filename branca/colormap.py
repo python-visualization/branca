@@ -295,7 +295,7 @@ class ColorMap(MacroElement):
         assert isinstance(figure, Figure), ("You cannot render this Element "
                                             "if it's not in a Figure.")
 
-        figure.header.add_children(JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"), name='d3')  # noqa
+        figure.header.add_child(JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"), name='d3')  # noqa
 
     def rgba_floats_tuple(self, x):
         """
