@@ -57,7 +57,7 @@ pkg_data = {'': ['*.js',
 pkgs = ['branca', ]
 
 LICENSE = read('LICENSE.txt')
-long_description = '{}\n{}'.format(read('README.md'), read('CHANGES.txt'))
+long_description = '{}\n{}'.format(read('README.rst'), read('CHANGES.txt'))
 
 # Dependencies.
 with open('requirements.txt') as f:
