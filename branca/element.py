@@ -315,7 +315,8 @@ class Figure(Element):
             iframe = (
             '<div style="width:{width};">'
             '<div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">'  # noqa
-            '<iframe src="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;" '  # noqa
+            '<iframe src="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;'  # noqa
+            'border:none !important;" '
             'allowfullscreen webkitallowfullscreen mozallowfullscreen>'
             '</iframe>'
             '</div></div>').format
@@ -324,6 +325,7 @@ class Figure(Element):
                             ratio=self.ratio)
         else:
             iframe = ('<iframe src="{html}" width="{width}" height="{height}"'
+                      'style="border:none !important;" '
                       '"allowfullscreen" "webkitallowfullscreen" "mozallowfullscreen">'  # noqa
                       '</iframe>').format
             iframe = iframe(html=html, width=self.width, height=self.height)
