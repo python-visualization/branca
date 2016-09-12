@@ -543,7 +543,7 @@ class IFrame(Element):
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         html = super(IFrame, self).render(**kwargs)
-        html = "data:text/html;base64," + base64.b64encode(html.encode('utf8')).decode('utf8')  # noqa
+        html = "data:text/html;charset=utf-8;base64," + base64.b64encode(html.encode('utf8')).decode('utf8')  # noqa
 
         if self.height is None:
             iframe = (
