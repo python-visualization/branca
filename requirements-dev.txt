@@ -1,3 +1,6 @@
 flake8
 pytest
 vincent
+jupyter_client
+ipykernel
+nbconvert
