@@ -632,4 +632,5 @@ class _LinearColormaps(object):
         {% endfor %}</table>
         """).render(this=self)
 
+
 linear = _LinearColormaps()
