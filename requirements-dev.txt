@@ -4,3 +4,4 @@ vincent
 jupyter_client
 ipykernel
 nbconvert
+selenium
