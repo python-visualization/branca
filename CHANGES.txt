@@ -1,5 +1,11 @@
+0.2.0
+~~~~~
+- Correct rendering utf-8 IFrame (knil-sama https://github.com/python-visualization/branca/pull/18)
+- Remove embedded IFrame's border (deelaka https://github.com/python-visualization/branca/pull/17)
+- Let IFrame contents go fullscreen (sanga https://github.com/python-visualization/branca/pull/13)
+- Add HTML Popup Class to element.py (samchorlton https://github.com/python-visualization/branca/pull/6)
+
 0.1.0
 ~~~~~
 - Separate branca from folium (bibmartin d678357)
 - Enable HTML embedding in Html (samchorlton 90f6b13)
- 
