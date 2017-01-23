@@ -15,8 +15,8 @@ def test_create_iframe():
 	iframe.render()
 
 def test_rendering_utf8_iframe():
-	iframe = elem.IFrame(html="<p>Cerrahpaşa Tıp Fakültesi</p>")
+	iframe = elem.IFrame(html=u"<p>Cerrahpaşa Tıp Fakültesi</p>")
 	driver = webdriver.PhantomJS()
 	driver.get("data:text/html," + iframe.render())
 	driver.switch_to.frame(0);
-	assert "Cerrahpaşa Tıp Fakültesi" in driver.page_source
+	assert u"Cerrahpaşa Tıp Fakültesi" in driver.page_source
