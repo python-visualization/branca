@@ -2,25 +2,36 @@ language: python
 
 sudo: false
 
-env:
-    - PYTHON="2.7"
-    - PYTHON="3.4"
-    - PYTHON="3.5"
+matrix:
+  fast_finish: true
+  include:
+  - python: 2.7
+    env: TEST_TARGET=default
+  - python: 3.5
+    env: TEST_TARGET=default
+  - python: 3.6
+    env: TEST_TARGET=default
+  - python: 3.6
+    env: TEST_TARGET=coding_standards
+
 
 before_install:
-    - wget http://bit.ly/miniconda -O miniconda.sh
-    - bash miniconda.sh -b -p $HOME/miniconda
-    - export PATH="$HOME/miniconda/bin:$PATH"
-    - conda config --add channels ioos -f
-    - conda update --yes --all
-    - travis_retry conda create --yes -n test python=$PYTHON --file requirements.txt
-    - source activate test
-    - conda install --yes --file requirements-dev.txt;
-    - if [[ "$PYTHON" == "3.4" ]]; then
-        travis_retry conda install --yes nbconvert jupyter_client ipykernel;
-      fi
-    - travis_retry pip install
+  - wget http://bit.ly/miniconda -O miniconda.sh
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - conda config --add channels conda-forge --force
+  - conda update conda --yes
+  - travis_retry conda create --yes -n TEST python=$TRAVIS_PYTHON_VERSION --file requirements.txt --file requirements-dev.txt
+  - source activate TEST
+
+# Test source distribution.
+install:
+    - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install branca-${version}.tar.gz && popd
 
 script:
-    - python setup.py test
-    - find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100
+  - if [[ $TEST_TARGET == 'default' ]]; then
+      python setup.py test ;
+    fi
+  - if [[ $TEST_TARGET == 'coding_standards' ]]; then
+      find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100 ;
+    fi
