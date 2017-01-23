@@ -1,4 +1,4 @@
 flake8
 pytest
 vincent
-selenium
+-c bokeh selenium
