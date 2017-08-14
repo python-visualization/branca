@@ -189,30 +189,30 @@ def color_brewer(color_code, n=6):
                'Spectral': ['#d53e4f', '#fc8d59', '#fee08b','#ffffbf',
                             '#e6f598', '#99d594', '#3288bd'],
                'Accent': ['#7fc97f', '#beaed4', '#fdc086',
-                          '#ffff99', '#386cb0', '#f0027f'],
+                          '#ffff99', '#386cb0', '#f0027f','#bf5b17'],
                'Dark2': ['#1b9e77', '#d95f02', '#7570b3',
-                         '#e7298a', '#66a61e', '#e6ab02'],
+                         '#e7298a', '#66a61e', '#e6ab02','#a6761d'],
                'Paired': ['#a6cee3', '#1f78b4', '#b2df8a',
-                          '#33a02c', '#fb9a99', '#e31a1c'],
+                          '#33a02c', '#fb9a99', '#e31a1c','#fdbf6f'],
                'Pastel1': ['#fbb4ae', '#b3cde3', '#ccebc5',
-                           '#decbe4', '#fed9a6', '#ffffcc'],
+                           '#decbe4', '#fed9a6', '#ffffcc','#e5d8bd'],
                'Pastel2': ['#b3e2cd', '#fdcdac', '#cbd5e8',
-                           '#f4cae4', '#e6f5c9', '#fff2ae'],
+                           '#f4cae4', '#e6f5c9', '#fff2ae','#f1e2cc'],
                'Set1': ['#e41a1c', '#377eb8', '#4daf4a',
-                        '#984ea3', '#ff7f00', '#ffff33'],
+                        '#984ea3', '#ff7f00', '#ffff33','#a65628'],
                'Set2': ['#66c2a5', '#fc8d62', '#8da0cb',
-                        '#e78ac3', '#a6d854', '#ffd92f'],
+                        '#e78ac3', '#a6d854', '#ffd92f','#e5c494'],
                'Set3': ['#8dd3c7', '#ffffb3', '#bebada',
-                        '#fb8072', '#80b1d3', '#fdb462'],
+                        '#fb8072', '#80b1d3', '#fdb462','#b3de69'],
                }
-
+    
     # Raise an error if the n requested is greater than the maximum.
     if n > maximum_n:
         raise ValueError("The maximum number of colors in a"
                          " ColorBrewer sequential color series is 253")
 
-    # Only if n is greater than six do we interpolate values.
-    if n > 6:
+    # Only if n is greater than seven do we interpolate values.
+    if n > 7:
         if core_color_code not in schemes:
             color_scheme = None
         else:
@@ -220,17 +220,47 @@ def color_brewer(color_code, n=6):
             if scheme_info[core_color_code] == 'Qualitative':
                 raise ValueError("Expanded color support is not available"
                                  " for Qualitative schemes, restrict"
-                                 " number of colors to 6")
+                                 " number of colors to less than 8")
             else:
                 if not color_reverse:
                     color_scheme = linear_gradient(schemes.get(core_color_code), n)
                 else:
                     color_scheme = linear_gradient(schemes.get(core_color_code)[::-1],n)
+    elif n < 7: 
+        if core_color_code not in schemes:
+            color_scheme = None
+        else:
+            if scheme_info[core_color_code] == 'Qualitative': # Qualitative schemes simply truncate
+                color_scheme = schemes.get(core_color_code)
+                if not color_reverse:
+                    color_scheme = color_scheme[0:n]
+                else:
+                    color_scheme = color_scheme[0:n][::-1]
+            elif scheme_info[core_color_code] == 'Diverging': # odd n has white filler tile, even does not
+                color_scheme = schemes.get(core_color_code)
+                if n == 6:
+                    color_scheme = color_scheme[0:3] + color_scheme[4:7]
+                elif n == 5:
+                    color_scheme = color_scheme[0:2] + [color_scheme[3]] + color_scheme[5:7]
+                elif n == 4:
+                    color_scheme = color_scheme[0:2] + color_scheme[5:7]
+                elif n == 3:
+                    color_scheme = color_scheme[2:5]
+                elif n < 3:
+                    raise ValueError("Minimum number of data classes is 3")
+                if color_reverse:
+                    color_scheme = color_scheme[::-1]
+            else:
+                if not color_reverse:
+                    color_scheme = linear_gradient(schemes.get(core_color_code), n)
+                else:
+                    color_scheme = linear_gradient(schemes.get(core_color_code)[::-1],n)          
     else:
         if not color_reverse:
             color_scheme = schemes.get(core_color_code, None)
         else:
             color_scheme = schemes.get(core_color_code, None)[::-1]
+            
     return color_scheme
 
 
