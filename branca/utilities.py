@@ -108,6 +108,12 @@ def color_brewer(color_code, n=6):
 
     """
     maximum_n = 253
+    if color_code[-2:] == '_r':
+        core_color_code = color_code[:-2]
+        color_reverse = True
+    else:
+        core_color_code = color_code
+        color_reverse = False
 
     scheme_info = {'BuGn': 'Sequential',
                    'BuPu': 'Sequential',
@@ -207,18 +213,24 @@ def color_brewer(color_code, n=6):
 
     # Only if n is greater than six do we interpolate values.
     if n > 6:
-        if color_code not in schemes:
+        if core_color_code not in schemes:
             color_scheme = None
         else:
             # Check to make sure that it is not a qualitative scheme.
-            if scheme_info[color_code] == 'Qualitative':
+            if scheme_info[core_color_code] == 'Qualitative':
                 raise ValueError("Expanded color support is not available"
                                  " for Qualitative schemes, restrict"
                                  " number of colors to 6")
             else:
-                color_scheme = linear_gradient(schemes.get(color_code), n)
+                if not color_reverse:
+                    color_scheme = linear_gradient(schemes.get(core_color_code), n)
+                else:
+                    color_scheme = linear_gradient(schemes.get(core_color_code)[::-1], n)
     else:
-        color_scheme = schemes.get(color_code, None)
+        if not color_reverse:
+            color_scheme = schemes.get(core_color_code, None)
+        else:
+            color_scheme = schemes.get(core_color_code, None)[::-1]
     return color_scheme
 
 
