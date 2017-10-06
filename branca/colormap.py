@@ -655,4 +655,3 @@ class _StepColormaps(object):
 
 
 step = _StepColormaps()
-
