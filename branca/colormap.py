@@ -634,3 +634,25 @@ class _LinearColormaps(object):
 
 
 linear = _LinearColormaps()
+
+
+class _StepColormaps(object):
+    """A class for hosting the list of built-in step colormaps."""
+    def __init__(self):
+        self._schemes = _schemes.copy()
+        self._colormaps = {key: StepColormap(val) for
+                           key, val in _schemes.items()}
+        for key, val in _schemes.items():
+            setattr(self, key, StepColormap(val))
+
+    def _repr_html_(self):
+        return Template("""
+        <table>
+        {% for key,val in this._colormaps.items() %}
+        <tr><td>{{key}}</td><td>{{val._repr_html_()}}</td></tr>
+        {% endfor %}</table>
+        """).render(this=self)
+
+
+step = _StepColormaps()
+
