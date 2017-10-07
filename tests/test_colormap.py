@@ -52,7 +52,7 @@ def test_linear_object():
 
 def test_step_object():
     cm.step.OrRd._repr_html_()
-    cm.step.PuBu.to_step(12)
+    cm.step.PuBu.to_linear(12)
     cm.step.YlGn.scale(3, 12)
     cm.step._repr_html_()
     
