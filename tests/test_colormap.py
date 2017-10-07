@@ -48,3 +48,10 @@ def test_linear_object():
     cm.linear.PuBu.to_step(12)
     cm.linear.YlGn.scale(3, 12)
     cm.linear._repr_html_()
+
+
+def test_step_object():
+    cm.step.OrRd._repr_html_()
+    cm.step.PuBu.to_step(12)
+    cm.step.YlGn.scale(3, 12)
+    cm.step._repr_html_()
