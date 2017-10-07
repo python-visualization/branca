@@ -55,4 +55,3 @@ def test_step_object():
     cm.step.PuBu.to_linear()
     cm.step.YlGn.scale(3, 12)
     cm.step._repr_html_()
-    
