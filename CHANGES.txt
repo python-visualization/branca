@@ -1,3 +1,5 @@
+- Added class for hosting step colormap (matsavage https://github.com/python-visualization/branca/pull/25)
+
 0.2.0
 ~~~~~
 - Correct rendering utf-8 IFrame (knil-sama https://github.com/python-visualization/branca/pull/18)
