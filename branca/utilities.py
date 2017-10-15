@@ -15,6 +15,7 @@ import math
 import zlib
 import struct
 import json
+import pkg_resources
 import base64
 from jinja2 import Environment, PackageLoader
 
@@ -108,124 +109,71 @@ def color_brewer(color_code, n=6):
 
     """
     maximum_n = 253
-    if color_code[-2:] == '_r':
-        core_color_code = color_code[:-2]
-        color_reverse = True
-    else:
-        core_color_code = color_code
-        color_reverse = False
-
-    scheme_info = {'BuGn': 'Sequential',
-                   'BuPu': 'Sequential',
-                   'GnBu': 'Sequential',
-                   'OrRd': 'Sequential',
-                   'PuBu': 'Sequential',
-                   'PuBuGn': 'Sequential',
-                   'PuRd': 'Sequential',
-                   'RdPu': 'Sequential',
-                   'YlGn': 'Sequential',
-                   'YlGnBu': 'Sequential',
-                   'YlOrBr': 'Sequential',
-                   'YlOrRd': 'Sequential',
-                   'BrBg': 'Diverging',
-                   'PiYG': 'Diverging',
-                   'PRGn': 'Diverging',
-                   'PuOr': 'Diverging',
-                   'RdBu': 'Diverging',
-                   'RdGy': 'Diverging',
-                   'RdYlBu': 'Diverging',
-                   'RdYlGn': 'Diverging',
-                   'Spectral': 'Diverging',
-                   'Accent': 'Qualitative',
-                   'Dark2': 'Qualitative',
-                   'Paired': 'Qualitative',
-                   'Pastel1': 'Qualitative',
-                   'Pastel2': 'Qualitative',
-                   'Set1': 'Qualitative',
-                   'Set2': 'Qualitative',
-                   'Set3': 'Qualitative',
-                   }
-
-    schemes = {'BuGn': ['#EDF8FB', '#CCECE6', '#CCECE6',
-                        '#66C2A4', '#41AE76', '#238B45', '#005824'],
-               'BuPu': ['#EDF8FB', '#BFD3E6', '#9EBCDA',
-                        '#8C96C6', '#8C6BB1', '#88419D', '#6E016B'],
-               'GnBu': ['#F0F9E8', '#CCEBC5', '#A8DDB5',
-                        '#7BCCC4', '#4EB3D3', '#2B8CBE', '#08589E'],
-               'OrRd': ['#FEF0D9', '#FDD49E', '#FDBB84',
-                        '#FC8D59', '#EF6548', '#D7301F', '#990000'],
-               'PuBu': ['#F1EEF6', '#D0D1E6', '#A6BDDB',
-                        '#74A9CF', '#3690C0', '#0570B0', '#034E7B'],
-               'PuBuGn': ['#F6EFF7', '#D0D1E6', '#A6BDDB',
-                          '#67A9CF', '#3690C0', '#02818A', '#016450'],
-               'PuRd': ['#F1EEF6', '#D4B9DA', '#C994C7',
-                        '#DF65B0', '#E7298A', '#CE1256', '#91003F'],
-               'RdPu': ['#FEEBE2', '#FCC5C0', '#FA9FB5',
-                        '#F768A1', '#DD3497', '#AE017E', '#7A0177'],
-               'YlGn': ['#FFFFCC', '#D9F0A3', '#ADDD8E',
-                        '#78C679', '#41AB5D', '#238443', '#005A32'],
-               'YlGnBu': ['#FFFFCC', '#C7E9B4', '#7FCDBB',
-                          '#41B6C4', '#1D91C0', '#225EA8', '#0C2C84'],
-               'YlOrBr': ['#FFFFD4', '#FEE391', '#FEC44F',
-                          '#FE9929', '#EC7014', '#CC4C02', '#8C2D04'],
-               'YlOrRd': ['#FFFFB2', '#FED976', '#FEB24C',
-                          '#FD8D3C', '#FC4E2A', '#E31A1C', '#B10026'],
-               'BrBg': ['#8c510a', '#d8b365', '#f6e8c3',
-                        '#c7eae5', '#5ab4ac', '#01665e'],
-               'PiYG': ['#c51b7d', '#e9a3c9', '#fde0ef',
-                        '#e6f5d0', '#a1d76a', '#4d9221'],
-               'PRGn': ['#762a83', '#af8dc3', '#e7d4e8',
-                        '#d9f0d3', '#7fbf7b', '#1b7837'],
-               'PuOr': ['#b35806', '#f1a340', '#fee0b6',
-                        '#d8daeb', '#998ec3', '#542788'],
-               'RdBu': ['#b2182b', '#ef8a62', '#fddbc7',
-                        '#d1e5f0', '#67a9cf', '#2166ac'],
-               'RdGy': ['#b2182b', '#ef8a62', '#fddbc7',
-                        '#e0e0e0', '#999999', '#4d4d4d'],
-               'RdYlBu': ['#d73027', '#fc8d59', '#fee090',
-                          '#e0f3f8', '#91bfdb', '#4575b4'],
-               'RdYlGn': ['#d73027', '#fc8d59', '#fee08b',
-                          '#d9ef8b', '#91cf60', '#1a9850'],
-               'Spectral': ['#d53e4f', '#fc8d59', '#fee08b',
-                            '#e6f598', '#99d594', '#3288bd'],
-               'Accent': ['#7fc97f', '#beaed4', '#fdc086',
-                          '#ffff99', '#386cb0', '#f0027f'],
-               'Dark2': ['#1b9e77', '#d95f02', '#7570b3',
-                         '#e7298a', '#66a61e', '#e6ab02'],
-               'Paired': ['#a6cee3', '#1f78b4', '#b2df8a',
-                          '#33a02c', '#fb9a99', '#e31a1c'],
-               'Pastel1': ['#fbb4ae', '#b3cde3', '#ccebc5',
-                           '#decbe4', '#fed9a6', '#ffffcc'],
-               'Pastel2': ['#b3e2cd', '#fdcdac', '#cbd5e8',
-                           '#f4cae4', '#e6f5c9', '#fff2ae'],
-               'Set1': ['#e41a1c', '#377eb8', '#4daf4a',
-                        '#984ea3', '#ff7f00', '#ffff33'],
-               'Set2': ['#66c2a5', '#fc8d62', '#8da0cb',
-                        '#e78ac3', '#a6d854', '#ffd92f'],
-               'Set3': ['#8dd3c7', '#ffffb3', '#bebada',
-                        '#fb8072', '#80b1d3', '#fdb462'],
-               }
+    minimum_n = 3
 
     # Raise an error if the n requested is greater than the maximum.
     if n > maximum_n:
         raise ValueError("The maximum number of colors in a"
                          " ColorBrewer sequential color series is 253")
+    if n < minimum_n:
+        raise ValueError("The minimum number of colors in a"
+                         " ColorBrewer sequential color series is 3")
 
-    # Only if n is greater than six do we interpolate values.
-    if n > 6:
-        if core_color_code not in schemes:
-            color_scheme = None
+    if color_code[-2:] == '_r':
+        base_code = color_code[:-2]
+        core_color_code = base_code + '_' + str(n).zfill(2)
+        color_reverse = True
+    else:
+        base_code = color_code
+        core_color_code = base_code + '_' + str(n).zfill(2)
+        color_reverse = False
+
+    resource_package = __name__
+    resource_path_schemes = '/_schemes.json'
+    resource_path_scheme_info = '/_cnames.json'
+    resource_path_scheme_base_codes = '/scheme_base_codes.json'
+
+    schemes_string = pkg_resources.resource_stream(
+        resource_package, resource_path_schemes).read().decode()
+    schemes = json.loads(schemes_string)
+
+    scheme_info_string = pkg_resources.resource_stream(
+        resource_package, resource_path_scheme_info).read().decode()
+    scheme_info = json.loads(scheme_info_string)
+
+    core_schemes_string = pkg_resources.resource_stream(
+        resource_package, resource_path_scheme_base_codes).read().decode()
+    core_schemes = json.loads(core_schemes_string)['codes']
+
+    if base_code not in core_schemes:
+        raise ValueError(base_code + " is not a valid ColorBrewer code")
+
+    try:
+        schemes[core_color_code]
+        explicit_scheme = True
+    except KeyError:
+        explicit_scheme = False
+
+    # Only if n is greater than the scheme length do we interpolate values.
+    if not explicit_scheme:
+        # Check to make sure that it is not a qualitative scheme.
+        if scheme_info[base_code] == 'Qualitative':
+            matching_quals = []
+            for key in schemes:
+                if base_code + '_' in key:
+                    matching_quals.append(int(key.split('_')[1]))
+
+            raise ValueError("Expanded color support is not available"
+                             " for Qualitative schemes; restrict the"
+                             " number of colors for the " + base_code +
+                             " code to between " + str(min(matching_quals)) +
+                             " and " + str(max(matching_quals))
+                             )
         else:
-            # Check to make sure that it is not a qualitative scheme.
-            if scheme_info[core_color_code] == 'Qualitative':
-                raise ValueError("Expanded color support is not available"
-                                 " for Qualitative schemes, restrict"
-                                 " number of colors to 6")
+            if not color_reverse:
+                color_scheme = linear_gradient(schemes.get(core_color_code), n)
             else:
-                if not color_reverse:
-                    color_scheme = linear_gradient(schemes.get(core_color_code), n)
-                else:
-                    color_scheme = linear_gradient(schemes.get(core_color_code)[::-1], n)
+                color_scheme = linear_gradient(schemes.get(core_color_code)[::-1], n)
     else:
         if not color_reverse:
             color_scheme = schemes.get(core_color_code, None)

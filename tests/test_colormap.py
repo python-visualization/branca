@@ -23,7 +23,7 @@ def test_simple_linear():
 
 def test_linear_to_step():
     some_list = [30.6, 50, 51, 52, 53, 54, 55, 60, 70, 100]
-    lc = cm.linear.YlOrRd
+    lc = cm.linear.YlOrRd_06
     lc.to_step(n=12)
     lc.to_step(index=[0, 2, 4, 6, 8, 10])
     lc.to_step(data=some_list, n=12)
@@ -44,14 +44,14 @@ def test_step_to_linear():
 
 
 def test_linear_object():
-    cm.linear.OrRd._repr_html_()
-    cm.linear.PuBu.to_step(12)
-    cm.linear.YlGn.scale(3, 12)
+    cm.linear.OrRd_06._repr_html_()
+    cm.linear.PuBu_06.to_step(12)
+    cm.linear.YlGn_06.scale(3, 12)
     cm.linear._repr_html_()
 
 
 def test_step_object():
-    cm.step.OrRd._repr_html_()
-    cm.step.PuBu.to_linear()
-    cm.step.YlGn.scale(3, 12)
+    cm.step.OrRd_06._repr_html_()
+    cm.step.PuBu_06.to_linear()
+    cm.step.YlGn_06.scale(3, 12)
     cm.step._repr_html_()
