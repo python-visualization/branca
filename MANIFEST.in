@@ -1,5 +1,9 @@
 include *.txt
 include README.rst
+include branca/_cnames.json
+include branca/_schemes.json
+include branca/scheme_info.json
+include branca/scheme_base_codes.json
 
 recursive-include branca *.py
 recursive-include branca *.js
