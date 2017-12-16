@@ -100,7 +100,7 @@ class Element(object):
             items = [item for item in self._children.items()
                      if item[0] != name]
             items.insert(int(index), (name, child))
-            self._children = items
+            self._children = OrderedDict(items)
         child._parent = self
         return self
 
