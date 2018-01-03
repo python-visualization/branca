@@ -247,7 +247,8 @@ class Figure(Element):
         For example figsize=(10, 5) will result in
         width="600px", height="300px".
     """
-    def __init__(self, width="100%", height=None, ratio="60%", figsize=None):
+    def __init__(self, width="100%", height=None, ratio="60%",
+                 title=None, figsize=None):
         super(Figure, self).__init__()
         self._name = 'Figure'
         self.header = Element()
@@ -261,6 +262,7 @@ class Figure(Element):
         self.width = width
         self.height = height
         self.ratio = ratio
+        self.title = title
         if figsize is not None:
             self.width = str(60*figsize[0])+'px'
             self.height = str(60*figsize[1])+'px'
@@ -268,6 +270,7 @@ class Figure(Element):
         self._template = Template(
             '<!DOCTYPE html>\n'
             '<head>'
+            '{% if this.title %}<title>{{this.title}}</title>{% endif %}'
             '    {{this.header.render(**kwargs)}}\n'
             '</head>\n'
             '<body>'
