@@ -264,7 +264,7 @@ class Figure(Element):
         '</script>\n'
     )
 
-    def __init__(self, width="100%", height=None, ratio="60%", figsize=None):
+    def __init__(self, width="100%", height=None, ratio="60%", title=None, figsize=None):
         super(Figure, self).__init__()
         self._name = 'Figure'
         self.header = Element()
@@ -278,6 +278,7 @@ class Figure(Element):
         self.width = width
         self.height = height
         self.ratio = ratio
+        self.title = title
         if figsize is not None:
             self.width = str(60*figsize[0])+'px'
             self.height = str(60*figsize[1])+'px'
