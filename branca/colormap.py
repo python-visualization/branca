@@ -13,7 +13,7 @@ import json
 import pkg_resources
 from jinja2 import Template
 from branca.six import text_type, binary_type
-from branca.element import MacroElement, Figure, JavascriptLink
+from branca.element import MacroElement, Figure, JavascriptLink, ENV
 from branca.utilities import legend_scaler
 
 
@@ -73,6 +73,8 @@ class ColorMap(MacroElement):
     caption: str
         A caption to draw with the colormap.
     """
+    _template = ENV.get_template('color_scale.js')
+
     def __init__(self, vmin=0., vmax=1., caption=""):
         super(ColorMap, self).__init__()
         self._name = 'ColorMap'
@@ -81,8 +83,6 @@ class ColorMap(MacroElement):
         self.vmax = vmax
         self.caption = caption
         self.index = [vmin, vmax]
-
-        self._template = self._env.get_template('color_scale.js')
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
