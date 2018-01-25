@@ -218,7 +218,7 @@ class CssLink(Link):
         '{% if kwargs.get("embedded",False) %}'
         '<style>{{this.get_code()}}</style>'
         '{% else %}'
-        '<link rel="stylesheet" href="{{this.url}}" />'
+        '<link rel="stylesheet" href="{{this.url}}"/>'
         '{% endif %}'
     )
 
