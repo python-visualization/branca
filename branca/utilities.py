@@ -362,7 +362,7 @@ def _parse_size(value):
             value_type = '%'
             value = float(value.strip('%'))
             assert 0 <= value <= 100
-    except:
+    except Exception:
         msg = "Cannot parse value {!r} as {!r}".format
         raise ValueError(msg(value, value_type))
     return value, value_type
