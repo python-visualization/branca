@@ -245,6 +245,8 @@ class Figure(Element):
     ratio : str, default "60%"
         A percentage defining the aspect ratio of the Figure.
         It will be ignored if height is not None.
+    title : str, default None
+        Figure title.
     figsize : tuple of two int, default None
         If you're a matplotlib addict, you can overwrite width and
         height. Values will be converted into pixels in using 60 dpi.
@@ -254,6 +256,7 @@ class Figure(Element):
     _template = Template(
         '<!DOCTYPE html>\n'
         '<head>'
+        '{% if this.title %}<title>{{this.title}}</title>{% endif %}'
         '    {{this.header.render(**kwargs)}}\n'
         '</head>\n'
         '<body>'
