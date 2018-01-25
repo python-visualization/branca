@@ -2,6 +2,12 @@ language: python
 
 sudo: false
 
+env:
+  - MOZ_HEADLESS=1
+
+addons:
+  firefox: latest
+
 matrix:
   fast_finish: true
   include:
@@ -24,6 +30,10 @@ before_install:
   - conda config --add channels conda-forge --force
   - conda create --name TEST python=$TRAVIS_PYTHON_VERSION --file requirements.txt --file requirements-dev.txt
   - source activate TEST
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.19.1/geckodriver-v0.19.1-linux64.tar.gz -O geckodriver.tar.gz
+  - mkdir geckodriver
+  - tar -xzf geckodriver.tar.gz -C geckodriver
+  - export PATH=$PATH:$PWD/geckodriver
 
 install:
     - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install branca-${version}.tar.gz && popd
