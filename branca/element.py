@@ -36,19 +36,23 @@ class Element(object):
     template_name: str, default None
         If no template is provided, you can also provide a filename.
     """
+    _template = Template(
+                "{% for name, element in this._children.items() %}\n"
+                "    {{element.render(**kwargs)}}"
+                "{% endfor %}"
+                )
+
     def __init__(self, template=None, template_name=None):
         self._name = 'Element'
         self._id = uuid4().hex
         self._env = ENV
         self._children = OrderedDict()
         self._parent = None
-        self._template = Template(template) if template is not None\
-            else ENV.get_template(template_name) if template_name is not None\
-            else Template(
-                "{% for name, element in this._children.items() %}\n"
-                "    {{element.render(**kwargs)}}"
-                "{% endfor %}"
-                )
+
+        if template is not None:
+            self._template = Template(template)
+        elif template_name is not None:
+            self._template = ENV.get_template(template_name)
 
     def get_name(self):
         """Returns a string representation of the object.
@@ -184,6 +188,14 @@ class JavascriptLink(Link):
         download : bool, default False
             Whether the target document shall be loaded right now.
     """
+    _template = Template(
+        '{% if kwargs.get("embedded",False) %}'
+        '<script>{{this.get_code()}}</script>'
+        '{% else %}'
+        '<script src="{{this.url}}"></script>'
+        '{% endif %}'
+    )
+
     def __init__(self, url, download=False):
         super(JavascriptLink, self).__init__()
         self._name = 'JavascriptLink'
@@ -191,14 +203,6 @@ class JavascriptLink(Link):
         self.code = None
         if download:
             self.get_code()
-
-        self._template = Template(
-            '{% if kwargs.get("embedded",False) %}'
-            '<script>{{this.get_code()}}</script>'
-            '{% else %}'
-            '<script src="{{this.url}}"></script>'
-            '{% endif %}'
-            )
 
 
 class CssLink(Link):
@@ -210,6 +214,14 @@ class CssLink(Link):
         download : bool, default False
             Whether the target document shall be loaded right now.
     """
+    _template = Template(
+        '{% if kwargs.get("embedded",False) %}'
+        '<style>{{this.get_code()}}</style>'
+        '{% else %}'
+        '<link rel="stylesheet" href="{{this.url}}"/>'
+        '{% endif %}'
+    )
+
     def __init__(self, url, download=False):
         super(CssLink, self).__init__()
         self._name = 'CssLink'
@@ -217,14 +229,6 @@ class CssLink(Link):
         self.code = None
         if download:
             self.get_code()
-
-        self._template = Template(
-            '{% if kwargs.get("embedded",False) %}'
-            '<style>{{this.get_code()}}</style>'
-            '{% else %}'
-            '<link rel="stylesheet" href="{{this.url}}"/>'
-            '{% endif %}'
-            )
 
 
 class Figure(Element):
@@ -247,6 +251,19 @@ class Figure(Element):
         For example figsize=(10, 5) will result in
         width="600px", height="300px".
     """
+    _template = Template(
+        '<!DOCTYPE html>\n'
+        '<head>'
+        '    {{this.header.render(**kwargs)}}\n'
+        '</head>\n'
+        '<body>'
+        '    {{this.html.render(**kwargs)}}\n'
+        '</body>\n'
+        '<script>'
+        '    {{this.script.render(**kwargs)}}\n'
+        '</script>\n'
+    )
+
     def __init__(self, width="100%", height=None, ratio="60%", figsize=None):
         super(Figure, self).__init__()
         self._name = 'Figure'
@@ -264,19 +281,6 @@ class Figure(Element):
         if figsize is not None:
             self.width = str(60*figsize[0])+'px'
             self.height = str(60*figsize[1])+'px'
-
-        self._template = Template(
-            '<!DOCTYPE html>\n'
-            '<head>'
-            '    {{this.header.render(**kwargs)}}\n'
-            '</head>\n'
-            '<body>'
-            '    {{this.html.render(**kwargs)}}\n'
-            '</body>\n'
-            '<script>'
-            '    {{this.script.render(**kwargs)}}\n'
-            '</script>\n'
-            )
 
         # Create the meta tag.
         self.header.add_child(Element(
@@ -385,6 +389,11 @@ class Html(Element):
         The height of the output div element.
         Ex: 120 , '120px', '80%'
     """
+    _template = Template(
+        '<div id="{{this.get_name()}}" '
+        'style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">'  # noqa
+        '{% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>'
+    )  # noqa
 
     def __init__(self, data, script=False, width="100%", height="100%"):
         super(Html, self).__init__()
@@ -394,12 +403,6 @@ class Html(Element):
 
         self.width = _parse_size(width)
         self.height = _parse_size(height)
-
-        self._template = Template(
-            '<div id="{{this.get_name()}}" '
-            'style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">'  # noqa
-            '{% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>'
-            )  # noqa
 
 
 class Div(Figure):
@@ -419,6 +422,21 @@ class Div(Figure):
         The position policy of the div.
         Usual values are 'relative', 'absolute', 'fixed', 'static'.
     """
+    _template = Template(
+        '{% macro header(this, kwargs) %}'
+        '<style> #{{this.get_name()}} {\n'
+        '        position : {{this.position}};\n'
+        '        width : {{this.width[0]}}{{this.width[1]}};\n'
+        '        height: {{this.height[0]}}{{this.height[1]}};\n'
+        '        left: {{this.left[0]}}{{this.left[1]}};\n'
+        '        top: {{this.top[0]}}{{this.top[1]}};\n'
+        '    </style>'
+        '{% endmacro %}'
+        '{% macro html(this, kwargs) %}'
+        '<div id="{{this.get_name()}}">{{this.html.render(**kwargs)}}</div>'
+        '{% endmacro %}'
+    )
+
     def __init__(self, width='100%', height='100%',
                  left="0%", top="0%", position='relative'):
         super(Figure, self).__init__()
@@ -442,21 +460,6 @@ class Div(Figure):
         self.header._parent = self
         self.html._parent = self
         self.script._parent = self
-
-        self._template = Template(
-            '{% macro header(this, kwargs) %}'
-            '<style> #{{this.get_name()}} {\n'
-            '        position : {{this.position}};\n'
-            '        width : {{this.width[0]}}{{this.width[1]}};\n'
-            '        height: {{this.height[0]}}{{this.height[1]}};\n'
-            '        left: {{this.left[0]}}{{this.left[1]}};\n'
-            '        top: {{this.top[0]}}{{this.top[1]}};\n'
-            '    </style>'
-            '{% endmacro %}'
-            '{% macro html(this, kwargs) %}'
-            '<div id="{{this.get_name()}}">{{this.html.render(**kwargs)}}</div>'
-            '{% endmacro %}'
-            )
 
     def get_root(self):
         """Returns the root of the elements tree."""
@@ -586,11 +589,11 @@ class MacroElement(Element):
         {% endmacro %}
 
     """
+    _template = Template(u"")
+
     def __init__(self):
         super(MacroElement, self).__init__()
         self._name = 'MacroElement'
-
-        self._template = Template(u"")
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
