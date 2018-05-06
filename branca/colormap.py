@@ -163,12 +163,12 @@ class LinearColormap(ColorMap):
     Parameters
     ----------
 
-    colors : list-like object
+    colors : list-like object with at least two colors.
         The set of colors to be used for interpolation.
         Colors can be provided in the form:
-        * tuples of int between 0 and 255 (e.g: `(255,255,0)` or
+        * tuples of RGBA ints between 0 and 255 (e.g: `(255, 255, 0)` or
         `(255, 255, 0, 255)`)
-        * tuples of floats between 0. and 1. (e.g: `(1.,1.,0.)` or
+        * tuples of RGBA floats between 0. and 1. (e.g: `(1.,1.,0.)` or
         `(1., 1., 0., 1.)`)
         * HTML-like string (e.g: `"#ffff00`)
         * a color name or shortcut (e.g: `"y"` or `"yellow"`)
