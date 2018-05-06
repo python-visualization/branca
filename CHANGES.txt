@@ -1,13 +1,19 @@
-- Added class for hosting step colormap (matsavage https://github.com/python-visualization/branca/pull/25)
+0.3.0
+~~~~~
+- Add title to Figure (@fitoprincipe #33 and #39)
+- Move templates to class attributes (@psarka #34 and #38)
+- Explicit color support for range of ``n``
+  and diverging colormaps (@nanodan #29)
+- Added class for hosting step colormap (@matsavage #25)
 
 0.2.0
 ~~~~~
-- Correct rendering utf-8 IFrame (knil-sama https://github.com/python-visualization/branca/pull/18)
-- Remove embedded IFrame's border (deelaka https://github.com/python-visualization/branca/pull/17)
-- Let IFrame contents go fullscreen (sanga https://github.com/python-visualization/branca/pull/13)
-- Add HTML Popup Class to element.py (samchorlton https://github.com/python-visualization/branca/pull/6)
+- Correct rendering utf-8 IFrame (@knil-sama #18)
+- Remove embedded IFrame's border (@deelaka #17)
+- Let IFrame contents go fullscreen (@sanga #13)
+- Add HTML Popup Class to element.py (@samchorlton #6)
 
 0.1.0
 ~~~~~
-- Separate branca from folium (bibmartin d678357)
-- Enable HTML embedding in Html (samchorlton 90f6b13)
+- Separate branca from folium (@bibmartin d678357)
+- Enable HTML embedding in Html (@samchorlton 90f6b13)
