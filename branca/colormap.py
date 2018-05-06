@@ -8,13 +8,16 @@ Utility module for dealing with colormaps.
 
 from __future__ import absolute_import
 
-import math
 import json
-import pkg_resources
-from jinja2 import Template
-from branca.six import text_type, binary_type
-from branca.element import MacroElement, Figure, JavascriptLink, ENV
+import math
+
+from branca.element import ENV, Figure, JavascriptLink, MacroElement
+from branca.six import binary_type, text_type
 from branca.utilities import legend_scaler
+
+from jinja2 import Template
+
+import pkg_resources
 
 
 resource_package = __name__
@@ -30,24 +33,28 @@ schemes_string = pkg_resources.resource_stream(
 _schemes = json.loads(schemes_string)
 
 
+def _is_hex(x):
+    return x.startswith('#') and len(x) == 7
+
+
+def _parse_hex(color_code):
+    return (int(color_code[1:3], 16),
+            int(color_code[3:5], 16),
+            int(color_code[5:7], 16))
+
+
 def _parse_color(x):
-    """
-    """
     if isinstance(x, (tuple, list)):
         color_tuple = tuple(x)[:4]
+    elif isinstance(x, (text_type, binary_type)) and _is_hex(x):
+        color_tuple = _parse_hex(x)
     elif isinstance(x, (text_type, binary_type)):
-        if x.startswith('#') and len(x) == 7:
-            # Color of the form #RRGGBB
-            color_tuple = (int(x[1:3], 16),
-                           int(x[3:5], 16),
-                           int(x[5:7], 16))
-        else:
-            color_code = _cnames.get(x.lower(), None)
-            if color_code is None:
-                raise ValueError('Unknown color {!r}.'.format(x))
-            color_tuple = (int(color_code[1:3], 16),
-                           int(color_code[3:5], 16),
-                           int(color_code[5:7], 16))
+        cname = _cnames.get(x.lower(), None)
+        if cname is None:
+            raise ValueError('Unknown color {!r}.'.format(cname))
+        color_tuple = _parse_hex(cname)
+    else:
+        raise ValueError('Unrecognized color code {!r}'.format(x))
     if max(color_tuple) > 1.:
         color_tuple = tuple(u/255. for u in color_tuple)
     return tuple(map(float, (color_tuple+(1.,))[:4]))
@@ -75,7 +82,7 @@ class ColorMap(MacroElement):
     """
     _template = ENV.get_template('color_scale.js')
 
-    def __init__(self, vmin=0., vmax=1., caption=""):
+    def __init__(self, vmin=0., vmax=1., caption=''):
         super(ColorMap, self).__init__()
         self._name = 'ColorMap'
 
@@ -94,8 +101,8 @@ class ColorMap(MacroElement):
         super(ColorMap, self).render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         figure.header.add_child(JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"), name='d3')  # noqa
 
@@ -125,7 +132,7 @@ class ColorMap(MacroElement):
         """Provides the color corresponding to value `x` in the
         form of a string of hewadecimal values "#RRGGBB".
         """
-        return "#%02x%02x%02x" % self.rgb_bytes_tuple(x)
+        return '#%02x%02x%02x' % self.rgb_bytes_tuple(x)
 
     def __call__(self, x):
         """Provides the color corresponding to value `x` in the
@@ -176,7 +183,7 @@ class LinearColormap(ColorMap):
         The maximal value for the colormap.
         Values higher than `vmax` will be bound directly to `colors[-1]`."""
 
-    def __init__(self, colors, index=None, vmin=0., vmax=1., caption=""):
+    def __init__(self, colors, index=None, vmin=0., vmax=1., caption=''):
         super(LinearColormap, self).__init__(vmin=vmin, vmax=vmax,
                                              caption=caption)
 
@@ -357,7 +364,7 @@ class StepColormap(ColorMap):
         Values higher than `vmax` will be bound directly to `colors[-1]`.
 
     """
-    def __init__(self, colors, index=None, vmin=0., vmax=1., caption=""):
+    def __init__(self, colors, index=None, vmin=0., vmax=1., caption=''):
         super(StepColormap, self).__init__(vmin=vmin, vmax=vmax,
                                            caption=caption)
 
