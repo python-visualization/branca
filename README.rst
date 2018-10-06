@@ -1,9 +1,16 @@
-.. image:: https://badge.fury.io/py/branca.png
-   :target: http://badge.fury.io/py/branca
-.. image:: https://api.travis-ci.org/python-visualization/branca.png?branch=master
-   :target: https://travis-ci.org/python-visualization/branca
-.. image:: https://badges.gitter.im/Join%20Chat.svg
-   :target: https://gitter.im/python-visualization/folium?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+|PyPI| |Travis| |Gitter|
+
+.. |PyPI| image:: https://img.shields.io/pypi/v/branca.svg
+    :target: https://pypi.python.org/pypi/branca/
+    :alt: PyPI Package
+
+.. |Travis| image:: https://travis-ci.org/python-visualization/branca.svg?branch=master
+    :target: https://travis-ci.org/python-visualization/branca
+    :alt: Travis Build Status
+
+.. |Gitter| image:: https://badges.gitter.im/python-visualization/folium.svg
+    :target: https://gitter.im/python-visualization/folium
+    :alt: Gitter
 
 Branca
 ======
