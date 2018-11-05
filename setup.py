@@ -53,9 +53,9 @@ setup(
     keywords='data visualization',
     classifiers=[
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'License :: OSI Approved :: MIT License',
         'Development Status :: 5 - Production/Stable'
     ],
@@ -66,5 +66,5 @@ setup(
     tests_require=['pytest'],
     license=LICENSE,
     install_requires=install_requires,
-    zip_safe=False
+    zip_safe=False,
 )
