@@ -1,0 +1,737 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>branca.element &#8212; branca 0.3.0+13.gb64d22a documentation</title>
+    <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for branca.element</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Element</span>
+<span class="sd">-------</span>
+
+<span class="sd">A generic class for creating Elements.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="k">import</span> <span class="n">uuid4</span>
+
+<span class="kn">from</span> <span class="nn">jinja2</span> <span class="k">import</span> <span class="n">Environment</span><span class="p">,</span> <span class="n">PackageLoader</span><span class="p">,</span> <span class="n">Template</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">OrderedDict</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+
+<span class="kn">from</span> <span class="nn">.six</span> <span class="k">import</span> <span class="n">urlopen</span><span class="p">,</span> <span class="n">text_type</span><span class="p">,</span> <span class="n">binary_type</span>
+<span class="kn">from</span> <span class="nn">.utilities</span> <span class="k">import</span> <span class="n">_camelify</span><span class="p">,</span> <span class="n">_parse_size</span><span class="p">,</span> <span class="n">none_min</span><span class="p">,</span> <span class="n">none_max</span>
+
+
+<span class="n">ENV</span> <span class="o">=</span> <span class="n">Environment</span><span class="p">(</span><span class="n">loader</span><span class="o">=</span><span class="n">PackageLoader</span><span class="p">(</span><span class="s1">&#39;branca&#39;</span><span class="p">,</span> <span class="s1">&#39;templates&#39;</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="Element"><a class="viewcode-back" href="../../element.html#branca.element.Element">[docs]</a><span class="k">class</span> <span class="nc">Element</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Basic Element object that does nothing.</span>
+<span class="sd">    Other Elements may inherit from this one.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    template : str, default None</span>
+<span class="sd">        A jinaj2-compatible template string for rendering the element.</span>
+<span class="sd">        If None, template will be:</span>
+
+<span class="sd">        .. code-block:: jinja</span>
+
+<span class="sd">            {% for name, element in this._children.items() %}</span>
+<span class="sd">            {{element.render(**kwargs)}}</span>
+<span class="sd">            {% endfor %}</span>
+
+<span class="sd">        so that all the element&#39;s children are rendered.</span>
+<span class="sd">    template_name : str, default None</span>
+<span class="sd">        If no template is provided, you can also provide a filename.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span>
+                <span class="s2">&quot;{</span><span class="si">% f</span><span class="s2">or name, element in this._children.items() %}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;    {{element.render(**kwargs)}}&quot;</span>
+                <span class="s2">&quot;{</span><span class="si">% e</span><span class="s2">ndfor %}&quot;</span>
+                <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">template_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;Element&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_env</span> <span class="o">=</span> <span class="n">ENV</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_children</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">template</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">template_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_template</span> <span class="o">=</span> <span class="n">ENV</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="n">template_name</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Element.get_name"><a class="viewcode-back" href="../../element.html#branca.element.Element.get_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_name</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a string representation of the object.</span>
+<span class="sd">        This string has to be unique and to be a python and</span>
+<span class="sd">        javascript-compatible</span>
+<span class="sd">        variable name.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">_camelify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span></div>
+
+    <span class="k">def</span> <span class="nf">_get_self_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the bounds of the object itself (not including it&#39;s children)</span>
+<span class="sd">        in the form [[lat_min, lon_min], [lat_max, lon_max]]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]</span>
+
+<div class="viewcode-block" id="Element.get_bounds"><a class="viewcode-back" href="../../element.html#branca.element.Element.get_bounds">[docs]</a>    <span class="k">def</span> <span class="nf">get_bounds</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Computes the bounds of the object and all it&#39;s children</span>
+<span class="sd">        in the form [[lat_min, lon_min], [lat_max, lon_max]].</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bounds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_self_bounds</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">child_bounds</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">get_bounds</span><span class="p">()</span>
+            <span class="n">bounds</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">[</span>
+                    <span class="n">none_min</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">child_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span>
+                    <span class="n">none_min</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">child_bounds</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="p">],</span>
+                <span class="p">[</span>
+                    <span class="n">none_max</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">child_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span>
+                    <span class="n">none_max</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">child_bounds</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]),</span>
+                    <span class="p">],</span>
+                <span class="p">]</span>
+        <span class="k">return</span> <span class="n">bounds</span></div>
+
+<div class="viewcode-block" id="Element.add_children"><a class="viewcode-back" href="../../element.html#branca.element.Element.add_children">[docs]</a>    <span class="k">def</span> <span class="nf">add_children</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a child.&quot;&quot;&quot;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Method `add_children` is deprecated. Please use `add_child` instead.&quot;</span><span class="p">,</span>
+                      <span class="ne">FutureWarning</span><span class="p">,</span> <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Element.add_child"><a class="viewcode-back" href="../../element.html#branca.element.Element.add_child">[docs]</a>    <span class="k">def</span> <span class="nf">add_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a child.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">child</span><span class="o">.</span><span class="n">get_name</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">child</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">items</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                     <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">name</span><span class="p">]</span>
+            <span class="n">items</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">index</span><span class="p">),</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">child</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_children</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+        <span class="n">child</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Element.add_to"><a class="viewcode-back" href="../../element.html#branca.element.Element.add_to">[docs]</a>    <span class="k">def</span> <span class="nf">add_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add element to a parent.&quot;&quot;&quot;</span>
+        <span class="n">parent</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Element.to_dict"><a class="viewcode-back" href="../../element.html#branca.element.Element.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a dict representation of the object.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">ordered</span><span class="p">:</span>
+            <span class="n">dict_fun</span> <span class="o">=</span> <span class="n">OrderedDict</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dict_fun</span> <span class="o">=</span> <span class="nb">dict</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">dict_fun</span><span class="p">()</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span>
+        <span class="k">if</span> <span class="n">depth</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">out</span><span class="p">[</span><span class="s1">&#39;children&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dict_fun</span><span class="p">([(</span><span class="n">name</span><span class="p">,</span> <span class="n">child</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                                        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>  <span class="c1"># noqa</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="Element.to_json"><a class="viewcode-back" href="../../element.html#branca.element.Element.to_json">[docs]</a>    <span class="k">def</span> <span class="nf">to_json</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a JSON representation of the object.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">,</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Element.get_root"><a class="viewcode-back" href="../../element.html#branca.element.Element.get_root">[docs]</a>    <span class="k">def</span> <span class="nf">get_root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the root of the elements tree.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">get_root</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Element.render"><a class="viewcode-back" href="../../element.html#branca.element.Element.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Renders the HTML representation of the element.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">this</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Element.save"><a class="viewcode-back" href="../../element.html#branca.element.Element.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">outfile</span><span class="p">,</span> <span class="n">close_file</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Saves an Element into a file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        outfile : str or file object</span>
+<span class="sd">            The file (or filename) where you want to output the html.</span>
+<span class="sd">        close_file : bool, default True</span>
+<span class="sd">            Whether the file has to be closed after write.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">text_type</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="n">binary_type</span><span class="p">):</span>
+            <span class="n">fid</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">outfile</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fid</span> <span class="o">=</span> <span class="n">outfile</span>
+
+        <span class="n">root</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_root</span><span class="p">()</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">fid</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">html</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">close_file</span><span class="p">:</span>
+            <span class="n">fid</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="Link"><a class="viewcode-back" href="../../element.html#branca.element.Link">[docs]</a><span class="k">class</span> <span class="nc">Link</span><span class="p">(</span><span class="n">Element</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An abstract class for embedding a link in the HTML.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Link.get_code"><a class="viewcode-back" href="../../element.html#branca.element.Link.get_code">[docs]</a>    <span class="k">def</span> <span class="nf">get_code</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Opens the link and returns the response&#39;s content.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="n">urlopen</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">code</span></div>
+
+<div class="viewcode-block" id="Link.to_dict"><a class="viewcode-back" href="../../element.html#branca.element.Link.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a dict representation of the object.&quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Link</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">depth</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">url</span>
+        <span class="k">return</span> <span class="n">out</span></div></div>
+
+
+<div class="viewcode-block" id="JavascriptLink"><a class="viewcode-back" href="../../element.html#branca.element.JavascriptLink">[docs]</a><span class="k">class</span> <span class="nc">JavascriptLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a JavascriptLink object based on a url.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    url : str</span>
+<span class="sd">        The url to be linked</span>
+<span class="sd">    download : bool, default False</span>
+<span class="sd">        Whether the target document shall be loaded right now.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span>
+        <span class="s1">&#39;{</span><span class="si">% i</span><span class="s1">f kwargs.get(&quot;embedded&quot;,False) %}&#39;</span>
+        <span class="s1">&#39;&lt;script&gt;{{this.get_code()}}&lt;/script&gt;&#39;</span>
+        <span class="s1">&#39;{</span><span class="si">% e</span><span class="s1">lse %}&#39;</span>
+        <span class="s1">&#39;&lt;script src=&quot;{{this.url}}&quot;&gt;&lt;/script&gt;&#39;</span>
+        <span class="s1">&#39;{</span><span class="si">% e</span><span class="s1">ndif %}&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">JavascriptLink</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;JavascriptLink&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">download</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="CssLink"><a class="viewcode-back" href="../../element.html#branca.element.CssLink">[docs]</a><span class="k">class</span> <span class="nc">CssLink</span><span class="p">(</span><span class="n">Link</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a CssLink object based on a url.</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    url : str</span>
+<span class="sd">        The url to be linked</span>
+<span class="sd">    download : bool, default False</span>
+<span class="sd">        Whether the target document shall be loaded right now.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span>
+        <span class="s1">&#39;{</span><span class="si">% i</span><span class="s1">f kwargs.get(&quot;embedded&quot;,False) %}&#39;</span>
+        <span class="s1">&#39;&lt;style&gt;{{this.get_code()}}&lt;/style&gt;&#39;</span>
+        <span class="s1">&#39;{</span><span class="si">% e</span><span class="s1">lse %}&#39;</span>
+        <span class="s1">&#39;&lt;link rel=&quot;stylesheet&quot; href=&quot;{{this.url}}&quot;/&gt;&#39;</span>
+        <span class="s1">&#39;{</span><span class="si">% e</span><span class="s1">ndif %}&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CssLink</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;CssLink&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">download</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">get_code</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Figure"><a class="viewcode-back" href="../../element.html#branca.element.Figure">[docs]</a><span class="k">class</span> <span class="nc">Figure</span><span class="p">(</span><span class="n">Element</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a Figure object, to plot things into it.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    width : str, default &quot;100%&quot;</span>
+<span class="sd">        The width of the Figure.</span>
+<span class="sd">        It may be a percentage or pixel value (like &quot;300px&quot;).</span>
+<span class="sd">    height : str, default None</span>
+<span class="sd">        The height of the Figure.</span>
+<span class="sd">        It may be a percentage or a pixel value (like &quot;300px&quot;).</span>
+<span class="sd">    ratio : str, default &quot;60%&quot;</span>
+<span class="sd">        A percentage defining the aspect ratio of the Figure.</span>
+<span class="sd">        It will be ignored if height is not None.</span>
+<span class="sd">    title : str, default None</span>
+<span class="sd">        Figure title.</span>
+<span class="sd">    figsize : tuple of two int, default None</span>
+<span class="sd">        If you&#39;re a matplotlib addict, you can overwrite width and</span>
+<span class="sd">        height. Values will be converted into pixels in using 60 dpi.</span>
+<span class="sd">        For example figsize=(10, 5) will result in</span>
+<span class="sd">        width=&quot;600px&quot;, height=&quot;300px&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span>
+        <span class="s1">&#39;&lt;!DOCTYPE html&gt;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;&lt;head&gt;&#39;</span>
+        <span class="s1">&#39;{</span><span class="si">% i</span><span class="s1">f this.title %}&lt;title&gt;{{this.title}}&lt;/title&gt;{</span><span class="si">% e</span><span class="s1">ndif %}&#39;</span>
+        <span class="s1">&#39;    {{this.header.render(**kwargs)}}</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;&lt;/head&gt;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;&lt;body&gt;&#39;</span>
+        <span class="s1">&#39;    {{this.html.render(**kwargs)}}</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;&lt;/body&gt;</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;&lt;script&gt;&#39;</span>
+        <span class="s1">&#39;    {{this.script.render(**kwargs)}}</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;&lt;/script&gt;</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="s2">&quot;60%&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Figure</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;Figure&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">Element</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html</span> <span class="o">=</span> <span class="n">Element</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">script</span> <span class="o">=</span> <span class="n">Element</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">script</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="bp">self</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span> <span class="o">=</span> <span class="n">ratio</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="n">title</span>
+        <span class="k">if</span> <span class="n">figsize</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">60</span><span class="o">*</span><span class="n">figsize</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;px&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">60</span><span class="o">*</span><span class="n">figsize</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;px&#39;</span>
+
+        <span class="c1"># Create the meta tag.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">Element</span><span class="p">(</span>
+            <span class="s1">&#39;&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=UTF-8&quot; /&gt;&#39;</span><span class="p">),</span>  <span class="c1"># noqa</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;meta_http&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Figure.to_dict"><a class="viewcode-back" href="../../element.html#branca.element.Figure.to_dict">[docs]</a>    <span class="k">def</span> <span class="nf">to_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">depth</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a dict representation of the object.&quot;&quot;&quot;</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">Figure</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;header&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;html&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">[</span><span class="s1">&#39;script&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">script</span><span class="o">.</span><span class="n">to_dict</span><span class="p">(</span><span class="n">depth</span><span class="o">=</span><span class="n">depth</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+<div class="viewcode-block" id="Figure.get_root"><a class="viewcode-back" href="../../element.html#branca.element.Figure.get_root">[docs]</a>    <span class="k">def</span> <span class="nf">get_root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the root of the elements tree.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Figure.render"><a class="viewcode-back" href="../../element.html#branca.element.Figure.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Renders the HTML representation of the element.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">child</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">this</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Displays the Figure in a Jupyter notebook.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="s2">&quot;data:text/html;charset=utf-8;base64,&quot;</span> <span class="o">+</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">html</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>  <span class="c1"># noqa</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">iframe</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s1">&#39;&lt;div style=&quot;width:</span><span class="si">{width}</span><span class="s1">;&quot;&gt;&#39;</span>
+            <span class="s1">&#39;&lt;div style=&quot;position:relative;width:100%;height:0;padding-bottom:</span><span class="si">{ratio}</span><span class="s1">;&quot;&gt;&#39;</span>  <span class="c1"># noqa</span>
+            <span class="s1">&#39;&lt;iframe src=&quot;</span><span class="si">{html}</span><span class="s1">&quot; style=&quot;position:absolute;width:100%;height:100%;left:0;top:0;&#39;</span>  <span class="c1"># noqa</span>
+            <span class="s1">&#39;border:none !important;&quot; &#39;</span>
+            <span class="s1">&#39;allowfullscreen webkitallowfullscreen mozallowfullscreen&gt;&#39;</span>
+            <span class="s1">&#39;&lt;/iframe&gt;&#39;</span>
+            <span class="s1">&#39;&lt;/div&gt;&lt;/div&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span>
+            <span class="n">iframe</span> <span class="o">=</span> <span class="n">iframe</span><span class="p">(</span><span class="n">html</span><span class="o">=</span><span class="n">html</span><span class="p">,</span>
+                            <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+                            <span class="n">ratio</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">iframe</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;&lt;iframe src=&quot;</span><span class="si">{html}</span><span class="s1">&quot; width=&quot;</span><span class="si">{width}</span><span class="s1">&quot; height=&quot;</span><span class="si">{height}</span><span class="s1">&quot;&#39;</span>
+                      <span class="s1">&#39;style=&quot;border:none !important;&quot; &#39;</span>
+                      <span class="s1">&#39;&quot;allowfullscreen&quot; &quot;webkitallowfullscreen&quot; &quot;mozallowfullscreen&quot;&gt;&#39;</span>  <span class="c1"># noqa</span>
+                      <span class="s1">&#39;&lt;/iframe&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span>
+            <span class="n">iframe</span> <span class="o">=</span> <span class="n">iframe</span><span class="p">(</span><span class="n">html</span><span class="o">=</span><span class="n">html</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">iframe</span>
+
+<div class="viewcode-block" id="Figure.add_subplot"><a class="viewcode-back" href="../../element.html#branca.element.Figure.add_subplot">[docs]</a>    <span class="k">def</span> <span class="nf">add_subplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a div child subplot in a matplotlib.figure.add_subplot style.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x : int</span>
+<span class="sd">            The number of rows in the grid.</span>
+<span class="sd">        y : int</span>
+<span class="sd">            The number of columns in the grid.</span>
+<span class="sd">        n : int</span>
+<span class="sd">            The cell number in the grid, counted from 1 to x*y.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">        &gt;&gt;&gt; fig.add_subplot(3,2,5)</span>
+<span class="sd">        # Create a div in the 5th cell of a 3rows x 2columns</span>
+<span class="sd">        grid(bottom-left corner).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">y</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="mf">1.</span><span class="o">/</span><span class="n">x</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="p">((</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">width</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="p">((</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="n">y</span><span class="p">)</span><span class="o">*</span><span class="n">height</span>
+
+        <span class="n">left</span> <span class="o">=</span> <span class="n">left</span><span class="o">+</span><span class="n">width</span><span class="o">*</span><span class="n">margin</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="n">top</span><span class="o">+</span><span class="n">height</span><span class="o">*</span><span class="n">margin</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">width</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mf">2.</span><span class="o">*</span><span class="n">margin</span><span class="p">)</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="mf">2.</span><span class="o">*</span><span class="n">margin</span><span class="p">)</span>
+
+        <span class="n">div</span> <span class="o">=</span> <span class="n">Div</span><span class="p">(</span><span class="n">position</span><span class="o">=</span><span class="s1">&#39;absolute&#39;</span><span class="p">,</span>
+                  <span class="n">width</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">100.</span><span class="o">*</span><span class="n">width</span><span class="p">),</span>
+                  <span class="n">height</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">100.</span><span class="o">*</span><span class="n">height</span><span class="p">),</span>
+                  <span class="n">left</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">100.</span><span class="o">*</span><span class="n">left</span><span class="p">),</span>
+                  <span class="n">top</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">100.</span><span class="o">*</span><span class="n">top</span><span class="p">),</span>
+                  <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">div</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">div</span></div></div>
+
+
+<div class="viewcode-block" id="Html"><a class="viewcode-back" href="../../element.html#branca.element.Html">[docs]</a><span class="k">class</span> <span class="nc">Html</span><span class="p">(</span><span class="n">Element</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create an HTML div object for embedding data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : str</span>
+<span class="sd">        The HTML data to be embedded.</span>
+<span class="sd">    script : bool</span>
+<span class="sd">        If True, data will be embedded without escaping</span>
+<span class="sd">        (suitable for embedding html-ready code)</span>
+<span class="sd">    width : int or str, default &#39;100%&#39;</span>
+<span class="sd">        The width of the output div element.</span>
+<span class="sd">        Ex: 120 , &#39;120px&#39;, &#39;80%&#39;</span>
+<span class="sd">    height : int or str, default &#39;100%&#39;</span>
+<span class="sd">        The height of the output div element.</span>
+<span class="sd">        Ex: 120 , &#39;120px&#39;, &#39;80%&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span>
+        <span class="s1">&#39;&lt;div id=&quot;{{this.get_name()}}&quot; &#39;</span>
+        <span class="s1">&#39;style=&quot;width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};&quot;&gt;&#39;</span>  <span class="c1"># noqa</span>
+        <span class="s1">&#39;{</span><span class="si">% i</span><span class="s1">f this.script %}{{this.data}}{</span><span class="si">% e</span><span class="s1">lse %}{{this.data|e}}{</span><span class="si">% e</span><span class="s1">ndif %}&lt;/div&gt;&#39;</span>
+    <span class="p">)</span>  <span class="c1"># noqa</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">script</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Html</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;Html&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">script</span> <span class="o">=</span> <span class="n">script</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">_parse_size</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">_parse_size</span><span class="p">(</span><span class="n">height</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Div"><a class="viewcode-back" href="../../element.html#branca.element.Div">[docs]</a><span class="k">class</span> <span class="nc">Div</span><span class="p">(</span><span class="n">Figure</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a Div to be embedded in a Figure.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    width: int or str, default &#39;100%&#39;</span>
+<span class="sd">        The width of the div in pixels (int) or percentage (str).</span>
+<span class="sd">    height: int or str, default &#39;100%&#39;</span>
+<span class="sd">        The height of the div in pixels (int) or percentage (str).</span>
+<span class="sd">    left: int or str, default &#39;0%&#39;</span>
+<span class="sd">        The left-position of the div in pixels (int) or percentage (str).</span>
+<span class="sd">    top: int or str, default &#39;0%&#39;</span>
+<span class="sd">        The top-position of the div in pixels (int) or percentage (str).</span>
+<span class="sd">    position: str, default &#39;relative&#39;</span>
+<span class="sd">        The position policy of the div.</span>
+<span class="sd">        Usual values are &#39;relative&#39;, &#39;absolute&#39;, &#39;fixed&#39;, &#39;static&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span>
+        <span class="s1">&#39;{% macro header(this, kwargs) %}&#39;</span>
+        <span class="s1">&#39;&lt;style&gt; #{{this.get_name()}} {</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;        position : {{this.position}};</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;        width : {{this.width[0]}}{{this.width[1]}};</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;        height: {{this.height[0]}}{{this.height[1]}};</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;        left: {{this.left[0]}}{{this.left[1]}};</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;        top: {{this.top[0]}}{{this.top[1]}};</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;    &lt;/style&gt;&#39;</span>
+        <span class="s1">&#39;{</span><span class="si">% e</span><span class="s1">ndmacro %}&#39;</span>
+        <span class="s1">&#39;{% macro html(this, kwargs) %}&#39;</span>
+        <span class="s1">&#39;&lt;div id=&quot;{{this.get_name()}}&quot;&gt;{{this.html.render(**kwargs)}}&lt;/div&gt;&#39;</span>
+        <span class="s1">&#39;{</span><span class="si">% e</span><span class="s1">ndmacro %}&#39;</span>
+    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s1">&#39;100%&#39;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="s1">&#39;100%&#39;</span><span class="p">,</span>
+                 <span class="n">left</span><span class="o">=</span><span class="s2">&quot;0%&quot;</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="s2">&quot;0%&quot;</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="s1">&#39;relative&#39;</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Figure</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;Div&#39;</span>
+
+        <span class="c1"># Size Parameters.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">_parse_size</span><span class="p">(</span><span class="n">width</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">_parse_size</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">_parse_size</span><span class="p">(</span><span class="n">left</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">top</span> <span class="o">=</span> <span class="n">_parse_size</span><span class="p">(</span><span class="n">top</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">position</span> <span class="o">=</span> <span class="n">position</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span> <span class="o">=</span> <span class="n">Element</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html</span> <span class="o">=</span> <span class="n">Element</span><span class="p">(</span>
+            <span class="s1">&#39;{</span><span class="si">% f</span><span class="s1">or name, element in this._children.items() %}&#39;</span>
+            <span class="s1">&#39;{{element.render(**kwargs)}}&#39;</span>
+            <span class="s1">&#39;{</span><span class="si">% e</span><span class="s1">ndfor %}&#39;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">script</span> <span class="o">=</span> <span class="n">Element</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="bp">self</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">script</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="bp">self</span>
+
+<div class="viewcode-block" id="Div.get_root"><a class="viewcode-back" href="../../element.html#branca.element.Div.get_root">[docs]</a>    <span class="k">def</span> <span class="nf">get_root</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the root of the elements tree.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="Div.render"><a class="viewcode-back" href="../../element.html#branca.element.Div.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Renders the HTML representation of the element.&quot;&quot;&quot;</span>
+        <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">figure</span><span class="p">,</span> <span class="n">Figure</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;You cannot render this Element &quot;</span>
+                                            <span class="s2">&quot;if it&#39;s not in a Figure.&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">element</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">_children</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">figure</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">script</span><span class="o">.</span><span class="n">_children</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">figure</span><span class="o">.</span><span class="n">script</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="n">header</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;header&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">header</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">figure</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">Element</span><span class="p">(</span><span class="n">header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)),</span>
+                                    <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">())</span>
+
+        <span class="n">html</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">html</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">figure</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">Element</span><span class="p">(</span><span class="n">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)),</span>
+                                  <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">())</span>
+
+        <span class="n">script</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">script</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">figure</span><span class="o">.</span><span class="n">script</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">Element</span><span class="p">(</span><span class="n">script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)),</span>
+                                    <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">())</span></div>
+
+    <span class="k">def</span> <span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Displays the Div in a Jupyter notebook.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_to</span><span class="p">(</span><span class="n">Figure</span><span class="p">())</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">_repr_html_</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">_repr_html_</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span></div>
+
+
+<div class="viewcode-block" id="IFrame"><a class="viewcode-back" href="../../element.html#branca.element.IFrame">[docs]</a><span class="k">class</span> <span class="nc">IFrame</span><span class="p">(</span><span class="n">Element</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a Figure object, to plot things into it.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    html : str, default None</span>
+<span class="sd">        Eventual HTML code that you want to put in the frame.</span>
+<span class="sd">    width : str, default &quot;100%&quot;</span>
+<span class="sd">        The width of the Figure.</span>
+<span class="sd">        It may be a percentage or pixel value (like &quot;300px&quot;).</span>
+<span class="sd">    height : str, default None</span>
+<span class="sd">        The height of the Figure.</span>
+<span class="sd">        It may be a percentage or a pixel value (like &quot;300px&quot;).</span>
+<span class="sd">    ratio : str, default &quot;60%&quot;</span>
+<span class="sd">        A percentage defining the aspect ratio of the Figure.</span>
+<span class="sd">        It will be ignored if height is not None.</span>
+<span class="sd">    figsize : tuple of two int, default None</span>
+<span class="sd">        If you&#39;re a matplotlib addict, you can overwrite width and</span>
+<span class="sd">        height. Values will be converted into pixels in using 60 dpi.</span>
+<span class="sd">        For example figsize=(10, 5) will result in</span>
+<span class="sd">        width=&quot;600px&quot;, height=&quot;300px&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">html</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s2">&quot;100%&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="s2">&quot;60%&quot;</span><span class="p">,</span>
+                 <span class="n">figsize</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">IFrame</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;IFrame&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ratio</span> <span class="o">=</span> <span class="n">ratio</span>
+        <span class="k">if</span> <span class="n">figsize</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">60</span><span class="o">*</span><span class="n">figsize</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;px&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="mi">60</span><span class="o">*</span><span class="n">figsize</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">+</span><span class="s1">&#39;px&#39;</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="n">text_type</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">html</span><span class="p">,</span> <span class="n">binary_type</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">Element</span><span class="p">(</span><span class="n">html</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="n">html</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+
+<div class="viewcode-block" id="IFrame.render"><a class="viewcode-back" href="../../element.html#branca.element.IFrame.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Renders the HTML representation of the element.&quot;&quot;&quot;</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">IFrame</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="s2">&quot;data:text/html;charset=utf-8;base64,&quot;</span> <span class="o">+</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">html</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>  <span class="c1"># noqa</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">iframe</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s1">&#39;&lt;div style=&quot;width:</span><span class="si">{width}</span><span class="s1">;&quot;&gt;&#39;</span>
+            <span class="s1">&#39;&lt;div style=&quot;position:relative;width:100%;height:0;padding-bottom:</span><span class="si">{ratio}</span><span class="s1">;&quot;&gt;&#39;</span>  <span class="c1"># noqa</span>
+            <span class="s1">&#39;&lt;iframe src=&quot;</span><span class="si">{html}</span><span class="s1">&quot; style=&quot;position:absolute;width:100%;height:100%;left:0;top:0;&#39;</span>  <span class="c1"># noqa</span>
+            <span class="s1">&#39;border:none !important;&quot;&gt;&#39;</span>
+            <span class="s1">&#39;&lt;/iframe&gt;&#39;</span>
+            <span class="s1">&#39;&lt;/div&gt;&lt;/div&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span>
+            <span class="n">iframe</span> <span class="o">=</span> <span class="n">iframe</span><span class="p">(</span><span class="n">html</span><span class="o">=</span><span class="n">html</span><span class="p">,</span>
+                            <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+                            <span class="n">ratio</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">iframe</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;&lt;iframe src=&quot;</span><span class="si">{html}</span><span class="s1">&quot; width=&quot;</span><span class="si">{width}</span><span class="s1">&quot; style=&quot;border:none !important;&quot; &#39;</span>
+                      <span class="s1">&#39;height=&quot;</span><span class="si">{height}</span><span class="s1">&quot;&gt;&lt;/iframe&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span>
+            <span class="n">iframe</span> <span class="o">=</span> <span class="n">iframe</span><span class="p">(</span><span class="n">html</span><span class="o">=</span><span class="n">html</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">iframe</span></div></div>
+
+
+<div class="viewcode-block" id="MacroElement"><a class="viewcode-back" href="../../element.html#branca.element.MacroElement">[docs]</a><span class="k">class</span> <span class="nc">MacroElement</span><span class="p">(</span><span class="n">Element</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This is a parent class for Elements defined by a macro template.</span>
+<span class="sd">    To compute your own element, all you have to do is:</span>
+
+<span class="sd">    * To inherit from this class</span>
+<span class="sd">    * Overwrite the &#39;_name&#39; attribute</span>
+<span class="sd">    * Overwrite the &#39;_template&#39; attribute with something of the form::</span>
+
+<span class="sd">        {% macro header(this, kwargs) %}</span>
+<span class="sd">            ...</span>
+<span class="sd">        {% endmacro %}</span>
+
+<span class="sd">        {% macro html(this, kwargs) %}</span>
+<span class="sd">            ...</span>
+<span class="sd">        {% endmacro %}</span>
+
+<span class="sd">        {% macro script(this, kwargs) %}</span>
+<span class="sd">            ...</span>
+<span class="sd">        {% endmacro %}</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_template</span> <span class="o">=</span> <span class="n">Template</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">MacroElement</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;MacroElement&#39;</span>
+
+<div class="viewcode-block" id="MacroElement.render"><a class="viewcode-back" href="../../element.html#branca.element.MacroElement.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Renders the HTML representation of the element.&quot;&quot;&quot;</span>
+        <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_root</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">figure</span><span class="p">,</span> <span class="n">Figure</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;You cannot render this Element &quot;</span>
+                                            <span class="s2">&quot;if it&#39;s not in a Figure.&quot;</span><span class="p">)</span>
+
+        <span class="n">header</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;header&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">header</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">figure</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">Element</span><span class="p">(</span><span class="n">header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)),</span>
+                                    <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">())</span>
+
+        <span class="n">html</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">html</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">figure</span><span class="o">.</span><span class="n">html</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">Element</span><span class="p">(</span><span class="n">html</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)),</span>
+                                  <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">())</span>
+
+        <span class="n">script</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">script</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">figure</span><span class="o">.</span><span class="n">script</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">Element</span><span class="p">(</span><span class="n">script</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)),</span>
+                                    <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_name</span><span class="p">())</span>
+
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_children</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">element</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">branca</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../element.html"><code class="docutils literal notranslate"><span class="pre">branca.element</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../colormap.html"><code class="docutils literal notranslate"><span class="pre">branca.colormap</span></code></a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Filipe Fernandes.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
