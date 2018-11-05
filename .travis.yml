@@ -8,6 +8,10 @@ env:
 addons:
   firefox: latest
 
+env:
+  global:
+    - secure: "JrdAJJKe+Y564LIiIaGPmw9X9utvj2lVI2MkVyZX6CQ7cJwqPUB+ukZpa6MnGUEJSoI6S7/5ZqX/cvciVAKpcYadi/snlDGq6q+lLnA+6rtB6ppy99Ib64aqm+VqDyohvvvrNtSxqhBY48DLG9UuQEcvviabpx9CG4s439/osspsA80SRXgDm/dELjU8vuIJvL1EFPeOu4a01sAHsqhknQw4F4YSWWjUr1oNjZIhSKroxCJV0o/0ok600SwTrQrbwJNO8QmEBOTw1JO1kaxDRlMAsJ5JTBaeGWdhqWQ3IRH/RogkU3ukOyyybbeoWU9ou5xG08P0r4CM3dGh44M8qrTOOCUSSNrFIG5OhAW6ZdkSR/2w76fNnW6y25jKUQ2444kd8n8+TObsp8aNl1FkCwou6/SpPluKvtaFA+I1zbk8roG58tW9anf6o9zCdIyYhSFysEoKNNihSC6xc4zHlJUHWr61f4zC0mU1Xf/djgpvj2YUQLsQ4++K6FNb6I/CN7LDl67kkOiyVCKv60J1mHVXAPJpj2Y9SxR87ob+GH+na8oFy5IMPMDoym2hPImtl2cjGvpP6RvE+gVE+mfvc4BizWfsR1zO49DUD15U1Y6jqhbcPMCgk5FoQ3ZKiH6LBeFbmV0qMjwSC6pZONgz8s/2nTUMV3VU+9SBiah51ho="
+
 matrix:
   fast_finish: true
   include:
@@ -17,7 +21,8 @@ matrix:
     env: TEST_TARGET=default PY=3.7
   - name: coding_standards
     env: TEST_TARGET=coding_standards PY=3.7
-
+  - name: docs
+    env: TEST_TARGET=docs PY=3.7
 
 before_install:
   - wget http://bit.ly/miniconda -O miniconda.sh
@@ -49,7 +54,16 @@ script:
       flake8 --max-line-length=105 tests ;
     fi
 
-  deploy:
+  - if [[ $TEST_TARGET == 'docs' ]]; then
+      set -e ;
+      conda install doctr ;
+      pushd docs ;
+      make clean html linkcheck ;
+      popd ;
+      python -m doctr deploy --sync --built-docs docs/build/html . ;
+    fi
+
+deploy:
   skip_cleanup: true
   provider: pypi
   user: ocefpaf
