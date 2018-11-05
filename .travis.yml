@@ -46,7 +46,7 @@ install:
 script:
   - if [[ $TEST_TARGET == 'default' ]]; then
       cp -r tests/ /tmp && cd /tmp ;
-      py.test -vv tests ;
+      pytest -vvv tests ;
     fi
 
   - if [[ $TEST_TARGET == 'coding_standards' ]]; then
@@ -62,6 +62,10 @@ script:
       popd ;
       python -m doctr deploy --sync --built-docs docs/build/html . ;
     fi
+
+doctr:
+  require-master: true
+  sync: False
 
 deploy:
   skip_cleanup: true

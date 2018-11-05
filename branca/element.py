@@ -6,16 +6,18 @@ A generic class for creating Elements.
 
 """
 
+import base64
+import json
 import warnings
+from collections import OrderedDict
 from uuid import uuid4
 
 from jinja2 import Environment, PackageLoader, Template
-from collections import OrderedDict
-import json
-import base64
 
-from .six import urlopen, text_type, binary_type
-from .utilities import _camelify, _parse_size, none_min, none_max
+from six import binary_type, text_type
+from six.moves.urllib.request import urlopen
+
+from .utilities import _camelify, _parse_size, none_max, none_min
 
 
 ENV = Environment(loader=PackageLoader('branca', 'templates'))
@@ -43,9 +45,9 @@ class Element(object):
 
     """
     _template = Template(
-                "{% for name, element in this._children.items() %}\n"
-                "    {{element.render(**kwargs)}}"
-                "{% endfor %}"
+                '{% for name, element in this._children.items() %}\n'
+                '    {{element.render(**kwargs)}}'
+                '{% endfor %}'
                 )
 
     def __init__(self, template=None, template_name=None):
@@ -96,7 +98,7 @@ class Element(object):
 
     def add_children(self, child, name=None, index=None):
         """Add a child."""
-        warnings.warn("Method `add_children` is deprecated. Please use `add_child` instead.",
+        warnings.warn('Method `add_children` is deprecated. Please use `add_child` instead.',
                       FutureWarning, stacklevel=2)
         return self.add_child(child, name=name, index=index)
 
@@ -187,7 +189,7 @@ class Link(Element):
 
 class JavascriptLink(Link):
     """Create a JavascriptLink object based on a url.
-    
+
     Parameters
     ----------
     url : str
@@ -215,7 +217,7 @@ class JavascriptLink(Link):
 
 class CssLink(Link):
     """Create a CssLink object based on a url.
-    
+
     Parameters
     ----------
     url : str
@@ -277,7 +279,7 @@ class Figure(Element):
         '</script>\n'
     )
 
-    def __init__(self, width="100%", height=None, ratio="60%", title=None, figsize=None):
+    def __init__(self, width='100%', height=None, ratio='60%', title=None, figsize=None):
         super(Figure, self).__init__()
         self._name = 'Figure'
         self.header = Element()
@@ -374,10 +376,10 @@ class Figure(Element):
         height = height*(1-2.*margin)
 
         div = Div(position='absolute',
-                  width="{}%".format(100.*width),
-                  height="{}%".format(100.*height),
-                  left="{}%".format(100.*left),
-                  top="{}%".format(100.*top),
+                  width='{}%'.format(100.*width),
+                  height='{}%'.format(100.*height),
+                  left='{}%'.format(100.*left),
+                  top='{}%'.format(100.*top),
                   )
         self.add_child(div)
         return div
@@ -406,7 +408,7 @@ class Html(Element):
         '{% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>'
     )  # noqa
 
-    def __init__(self, data, script=False, width="100%", height="100%"):
+    def __init__(self, data, script=False, width='100%', height='100%'):
         super(Html, self).__init__()
         self._name = 'Html'
         self.script = script
@@ -449,7 +451,7 @@ class Div(Figure):
     )
 
     def __init__(self, width='100%', height='100%',
-                 left="0%", top="0%", position='relative'):
+                 left='0%', top='0%', position='relative'):
         super(Figure, self).__init__()
         self._name = 'Div'
 
@@ -479,8 +481,8 @@ class Div(Figure):
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         figure = self._parent
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         for name, element in self._children.items():
             element.render(**kwargs)
@@ -539,7 +541,7 @@ class IFrame(Element):
         For example figsize=(10, 5) will result in
         width="600px", height="300px".
     """
-    def __init__(self, html=None, width="100%", height=None, ratio="60%",
+    def __init__(self, html=None, width='100%', height=None, ratio='60%',
                  figsize=None):
         super(IFrame, self).__init__()
         self._name = 'IFrame'
@@ -600,7 +602,7 @@ class MacroElement(Element):
         {% endmacro %}
 
     """
-    _template = Template(u"")
+    _template = Template(u'')
 
     def __init__(self):
         super(MacroElement, self).__init__()
@@ -609,8 +611,8 @@ class MacroElement(Element):
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         figure = self.get_root()
-        assert isinstance(figure, Figure), ("You cannot render this Element "
-                                            "if it's not in a Figure.")
+        assert isinstance(figure, Figure), ('You cannot render this Element '
+                                            'if it is not in a Figure.')
 
         header = self._template.module.__dict__.get('header', None)
         if header is not None:

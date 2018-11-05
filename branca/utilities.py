@@ -7,17 +7,19 @@ Utility module for Folium helper functions.
 
 """
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import division
+from __future__ import absolute_import, division, print_function
 
-import math
-import zlib
-import struct
-import json
-import pkg_resources
 import base64
+import json
+import math
+import struct
+import zlib
+
 from jinja2 import Environment, PackageLoader
+
+import pkg_resources
+
+from six import binary_type, text_type
 
 try:
     import pandas as pd
@@ -28,8 +30,6 @@ try:
     import numpy as np
 except ImportError:
     np = None
-
-from branca.six import text_type, binary_type
 
 
 def get_templates():
@@ -113,11 +113,11 @@ def color_brewer(color_code, n=6):
 
     # Raise an error if the n requested is greater than the maximum.
     if n > maximum_n:
-        raise ValueError("The maximum number of colors in a"
-                         " ColorBrewer sequential color series is 253")
+        raise ValueError('The maximum number of colors in a'
+                         ' ColorBrewer sequential color series is 253')
     if n < minimum_n:
-        raise ValueError("The minimum number of colors in a"
-                         " ColorBrewer sequential color series is 3")
+        raise ValueError('The minimum number of colors in a'
+                         ' ColorBrewer sequential color series is 3')
 
     if color_code[-2:] == '_r':
         base_code = color_code[:-2]
@@ -146,7 +146,7 @@ def color_brewer(color_code, n=6):
     core_schemes = json.loads(core_schemes_string)['codes']
 
     if base_code not in core_schemes:
-        raise ValueError(base_code + " is not a valid ColorBrewer code")
+        raise ValueError(base_code + ' is not a valid ColorBrewer code')
 
     try:
         schemes[core_color_code]
@@ -163,11 +163,11 @@ def color_brewer(color_code, n=6):
                 if base_code + '_' in key:
                     matching_quals.append(int(key.split('_')[1]))
 
-            raise ValueError("Expanded color support is not available"
-                             " for Qualitative schemes; restrict the"
-                             " number of colors for the " + base_code +
-                             " code to between " + str(min(matching_quals)) +
-                             " and " + str(max(matching_quals))
+            raise ValueError('Expanded color support is not available'
+                             ' for Qualitative schemes; restrict the'
+                             ' number of colors for the ' + base_code +
+                             ' code to between ' + str(min(matching_quals)) +
+                             ' and ' + str(max(matching_quals))
                              )
         else:
             if not color_reverse:
@@ -198,11 +198,11 @@ def split_six(series=None):
 
     """
     if pd is None:
-        raise ImportError("The Pandas package is required"
-                          " for this functionality")
+        raise ImportError('The Pandas package is required'
+                          ' for this functionality')
     if np is None:
-        raise ImportError("The NumPy package is required"
-                          " for this functionality")
+        raise ImportError('The NumPy package is required'
+                          ' for this functionality')
 
     def base(x):
         if x > 0:
@@ -244,13 +244,13 @@ def image_to_url(image, colormap=None, origin='upper'):
             fileformat = image.name.lower().split('.')[-1]
         else:
             fileformat = 'png'
-        url = "data:image/{};base64,{}".format(
+        url = 'data:image/{};base64,{}'.format(
             fileformat, base64.b64encode(image.read()).decode('utf-8'))
     elif (not (isinstance(image, text_type) or
                isinstance(image, binary_type))) and hasattr(image, '__iter__'):
         # We got an array-like object.
         png = write_png(image, origin=origin, colormap=colormap)
-        url = "data:image/png;base64," + base64.b64encode(png).decode('utf-8')
+        url = 'data:image/png;base64,' + base64.b64encode(png).decode('utf-8')
     else:
         # We got an URL.
         url = json.loads(json.dumps(image))
@@ -265,7 +265,7 @@ def write_png(data, origin='upper', colormap=None):
     for an inline PNG like this:
 
     >>> png_str = write_png(array)
-    >>> "data:image/png;base64,"+png_str.encode('base64')
+    >>> 'data:image/png;base64,'+png_str.encode('base64')
 
     Inspired from
     http://stackoverflow.com/questions/902761/saving-a-numpy-array-as-an-image
@@ -290,8 +290,8 @@ def write_png(data, origin='upper', colormap=None):
     PNG formatted byte string
     """
     if np is None:
-        raise ImportError("The NumPy package is required"
-                          " for this functionality")
+        raise ImportError('The NumPy package is required'
+                          ' for this functionality')
 
     if colormap is None:
         def colormap(x):
@@ -301,16 +301,16 @@ def write_png(data, origin='upper', colormap=None):
     height, width, nblayers = array.shape
 
     if nblayers not in [1, 3, 4]:
-            raise ValueError("Data must be NxM (mono), "
-                             "NxMx3 (RGB), or NxMx4 (RGBA)")
+            raise ValueError('Data must be NxM (mono), '
+                             'NxMx3 (RGB), or NxMx4 (RGBA)')
     assert array.shape == (height, width, nblayers)
 
     if nblayers == 1:
         array = np.array(list(map(colormap, array.ravel())))
         nblayers = array.shape[1]
         if nblayers not in [3, 4]:
-            raise ValueError("colormap must provide colors of"
-                             "length 3 (RGB) or 4 (RGBA)")
+            raise ValueError('colormap must provide colors of'
+                             'length 3 (RGB) or 4 (RGBA)')
         array = array.reshape((height, width, nblayers))
     assert array.shape == (height, width, nblayers)
 
@@ -335,20 +335,20 @@ def write_png(data, origin='upper', colormap=None):
 
     def png_pack(png_tag, data):
             chunk_head = png_tag + data
-            return (struct.pack("!I", len(data)) +
+            return (struct.pack('!I', len(data)) +
                     chunk_head +
-                    struct.pack("!I", 0xFFFFFFFF & zlib.crc32(chunk_head)))
+                    struct.pack('!I', 0xFFFFFFFF & zlib.crc32(chunk_head)))
 
     return b''.join([
         b'\x89PNG\r\n\x1a\n',
-        png_pack(b'IHDR', struct.pack("!2I5B", width, height, 8, 6, 0, 0, 0)),
+        png_pack(b'IHDR', struct.pack('!2I5B', width, height, 8, 6, 0, 0, 0)),
         png_pack(b'IDAT', zlib.compress(raw_data, 9)),
         png_pack(b'IEND', b'')])
 
 
 def _camelify(out):
-    return (''.join(["_" + x.lower() if i < len(out)-1 and x.isupper() and out[i+1].islower()  # noqa
-         else x.lower() + "_" if i < len(out)-1 and x.islower() and out[i+1].isupper()  # noqa
+    return (''.join(['_' + x.lower() if i < len(out)-1 and x.isupper() and out[i+1].islower()  # noqa
+         else x.lower() + '_' if i < len(out)-1 and x.islower() and out[i+1].isupper()  # noqa
          else x.lower() for i, x in enumerate(list(out))])).lstrip('_').replace('__', '_')  # noqa
 
 
@@ -363,7 +363,7 @@ def _parse_size(value):
             value = float(value.strip('%'))
             assert 0 <= value <= 100
     except Exception:
-        msg = "Cannot parse value {!r} as {!r}".format
+        msg = 'Cannot parse value {!r} as {!r}'.format
         raise ValueError(msg(value, value_type))
     return value, value_type
 
