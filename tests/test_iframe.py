@@ -25,8 +25,8 @@ def test_rendering_utf8_iframe():
     iframe = elem.IFrame(html=u'<p>Cerrahpaşa Tıp Fakültesi</p>')
 
     options = Options()
-    options.set_headless()
-    driver = Firefox(firefox_options=options)
+    options.add_argument('-headless')
+    driver = Firefox(options=options)
 
     driver.get('data:text/html,' + iframe.render())
     driver.switch_to.frame(0)

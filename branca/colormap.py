@@ -12,12 +12,13 @@ import json
 import math
 
 from branca.element import ENV, Figure, JavascriptLink, MacroElement
-from branca.six import binary_type, text_type
 from branca.utilities import legend_scaler
 
 from jinja2 import Template
 
 import pkg_resources
+
+from six import binary_type, text_type
 
 
 resource_package = __name__
