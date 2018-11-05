@@ -8,6 +8,10 @@ env:
 addons:
   firefox: latest
 
+env:
+  global:
+    - secure: "JrdAJJKe+Y564LIiIaGPmw9X9utvj2lVI2MkVyZX6CQ7cJwqPUB+ukZpa6MnGUEJSoI6S7/5ZqX/cvciVAKpcYadi/snlDGq6q+lLnA+6rtB6ppy99Ib64aqm+VqDyohvvvrNtSxqhBY48DLG9UuQEcvviabpx9CG4s439/osspsA80SRXgDm/dELjU8vuIJvL1EFPeOu4a01sAHsqhknQw4F4YSWWjUr1oNjZIhSKroxCJV0o/0ok600SwTrQrbwJNO8QmEBOTw1JO1kaxDRlMAsJ5JTBaeGWdhqWQ3IRH/RogkU3ukOyyybbeoWU9ou5xG08P0r4CM3dGh44M8qrTOOCUSSNrFIG5OhAW6ZdkSR/2w76fNnW6y25jKUQ2444kd8n8+TObsp8aNl1FkCwou6/SpPluKvtaFA+I1zbk8roG58tW9anf6o9zCdIyYhSFysEoKNNihSC6xc4zHlJUHWr61f4zC0mU1Xf/djgpvj2YUQLsQ4++K6FNb6I/CN7LDl67kkOiyVCKv60J1mHVXAPJpj2Y9SxR87ob+GH+na8oFy5IMPMDoym2hPImtl2cjGvpP6RvE+gVE+mfvc4BizWfsR1zO49DUD15U1Y6jqhbcPMCgk5FoQ3ZKiH6LBeFbmV0qMjwSC6pZONgz8s/2nTUMV3VU+9SBiah51ho="
+
 matrix:
   fast_finish: true
   include:
@@ -17,7 +21,8 @@ matrix:
     env: TEST_TARGET=default PY=3.7
   - name: coding_standards
     env: TEST_TARGET=coding_standards PY=3.7
-
+  - name: docs
+    env: TEST_TARGET=docs PY=3.7
 
 before_install:
   - wget http://bit.ly/miniconda -O miniconda.sh
@@ -30,7 +35,7 @@ before_install:
   - conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
   - source activate TEST
   # firefox headless driver
-  - wget https://github.com/mozilla/geckodriver/releases/download/v0.19.1/geckodriver-v0.19.1-linux64.tar.gz -O geckodriver.tar.gz
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
   - mkdir geckodriver
   - tar -xzf geckodriver.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
@@ -45,5 +50,29 @@ script:
     fi
 
   - if [[ $TEST_TARGET == 'coding_standards' ]]; then
-      find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100 ;
+      flake8 --max-line-length=105 branca --exclude=_version.py ;
+      flake8 --max-line-length=105 tests ;
     fi
+
+  - if [[ $TEST_TARGET == 'docs' ]]; then
+      set -e ;
+      conda install doctr ;
+      pushd docs ;
+      make clean html linkcheck ;
+      popd ;
+      python -m doctr deploy --sync --built-docs docs/build/html . ;
+    fi
+
+deploy:
+  skip_cleanup: true
+  provider: pypi
+  user: ocefpaf
+  password:
+    secure: "M5aQahIqYdA8XwfM2SwwWmsRWn7Vybm3iekv4BbIpi36gVZmJa/ZxTdzP4/eg7F8MgUMKY1hNEBKP0XkFuDC6tW9W95wP7vPAKeevm1Uvjil/fjbsFjG7AAgXgUru5sGZsleTCvjaCiL2vS2FlMyG8dGN5kj+kO9QxWaOmwvPV02oCDNacKpxyvBiZgT7CtIHhKyaNHGl1epbBdAgEm/VibhW93VkgSw8+FilZ1+8RElpg8DV4cl/Cv+vcCjpmKIS2spZDalr+h/MKCwZtw6cJ9pwGu+SUl1HKGz9YA01u2Yqov1INlGzohp1Tw/R00zaE0vo/8b8CIdQBAZjcc6ZxyCcLUcAu3bHowvWHuRZ6qG8JFHT3ISv4vDSMdNPeeDEX1ChetZtwA1RP5pCw6QoKTI0JgEyiFRwgVif2YZOvGcopmzQhfhYxpLsKgAss8sA2gBPKzZWKUmQPh1rbqjVaBAoMimbBPFMJdC6c6Ks23srSbsY438q/GAKiUyMWoxnfWwie/fhz8h5UjAwZ4glJdh5pQ51ZE3Vwk1xMsxj1aTnGGF6GmsXsrCnC4zz20tX12QI35ApcdD3ot8RkpgxxWU4N6Fh8R8zEsS5RReeDKbWz6n5c283d+FJczYztdEbNklM5mGry7kzWJzYIGMrjnSLZdOWoAs2zYMWE/RbTs="
+  distributions: sdist bdist_wheel
+  upload_docs: no
+  on:
+    repo: python-visualization/branca
+    tags: true
+    all_branches: master
+    condition: '$TEST_TARGET == "default"'

@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
 """
 Colormap
--------
+--------
 
 Utility module for dealing with colormaps.
+
 """
 
 from __future__ import absolute_import
