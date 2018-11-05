@@ -48,3 +48,17 @@ script:
       flake8 --max-line-length=105 branca --exclude=_version.py ;
       flake8 --max-line-length=105 tests ;
     fi
+
+  deploy:
+  skip_cleanup: true
+  provider: pypi
+  user: ocefpaf
+  password:
+    secure: "M5aQahIqYdA8XwfM2SwwWmsRWn7Vybm3iekv4BbIpi36gVZmJa/ZxTdzP4/eg7F8MgUMKY1hNEBKP0XkFuDC6tW9W95wP7vPAKeevm1Uvjil/fjbsFjG7AAgXgUru5sGZsleTCvjaCiL2vS2FlMyG8dGN5kj+kO9QxWaOmwvPV02oCDNacKpxyvBiZgT7CtIHhKyaNHGl1epbBdAgEm/VibhW93VkgSw8+FilZ1+8RElpg8DV4cl/Cv+vcCjpmKIS2spZDalr+h/MKCwZtw6cJ9pwGu+SUl1HKGz9YA01u2Yqov1INlGzohp1Tw/R00zaE0vo/8b8CIdQBAZjcc6ZxyCcLUcAu3bHowvWHuRZ6qG8JFHT3ISv4vDSMdNPeeDEX1ChetZtwA1RP5pCw6QoKTI0JgEyiFRwgVif2YZOvGcopmzQhfhYxpLsKgAss8sA2gBPKzZWKUmQPh1rbqjVaBAoMimbBPFMJdC6c6Ks23srSbsY438q/GAKiUyMWoxnfWwie/fhz8h5UjAwZ4glJdh5pQ51ZE3Vwk1xMsxj1aTnGGF6GmsXsrCnC4zz20tX12QI35ApcdD3ot8RkpgxxWU4N6Fh8R8zEsS5RReeDKbWz6n5c283d+FJczYztdEbNklM5mGry7kzWJzYIGMrjnSLZdOWoAs2zYMWE/RbTs="
+  distributions: sdist bdist_wheel
+  upload_docs: no
+  on:
+    repo: python-visualization/branca
+    tags: true
+    all_branches: master
+    condition: '$TEST_TARGET == "default"'
