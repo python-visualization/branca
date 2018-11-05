@@ -1,10 +1,11 @@
-# -*- coding: utf-8 -*-
 """
 Element
 -------
 
 A generic class for creating Elements.
+
 """
+
 import warnings
 from uuid import uuid4
 
@@ -26,15 +27,20 @@ class Element(object):
 
     Parameters
     ----------
-    template: str, default None
+    template : str, default None
         A jinaj2-compatible template string for rendering the element.
         If None, template will be:
+
+        .. code-block:: jinja
+
             {% for name, element in this._children.items() %}
-                {{element.render(**kwargs)}}
+            {{element.render(**kwargs)}}
             {% endfor %}
+
         so that all the element's children are rendered.
-    template_name: str, default None
+    template_name : str, default None
         If no template is provided, you can also provide a filename.
+
     """
     _template = Template(
                 "{% for name, element in this._children.items() %}\n"
@@ -181,12 +187,14 @@ class Link(Element):
 
 class JavascriptLink(Link):
     """Create a JavascriptLink object based on a url.
+    
     Parameters
     ----------
-        url : str
-            The url to be linked
-        download : bool, default False
-            Whether the target document shall be loaded right now.
+    url : str
+        The url to be linked
+    download : bool, default False
+        Whether the target document shall be loaded right now.
+
     """
     _template = Template(
         '{% if kwargs.get("embedded",False) %}'
@@ -207,12 +215,14 @@ class JavascriptLink(Link):
 
 class CssLink(Link):
     """Create a CssLink object based on a url.
+    
     Parameters
     ----------
-        url : str
-            The url to be linked
-        download : bool, default False
-            Whether the target document shall be loaded right now.
+    url : str
+        The url to be linked
+    download : bool, default False
+        Whether the target document shall be loaded right now.
+
     """
     _template = Template(
         '{% if kwargs.get("embedded",False) %}'
@@ -311,9 +321,6 @@ class Figure(Element):
 
     def _repr_html_(self, **kwargs):
         """Displays the Figure in a Jupyter notebook.
-
-        Parameters
-        ----------
 
         """
         html = self.render(**kwargs)
