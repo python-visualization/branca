@@ -30,7 +30,7 @@ before_install:
   - conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
   - source activate TEST
   # firefox headless driver
-  - wget https://github.com/mozilla/geckodriver/releases/download/v0.19.1/geckodriver-v0.19.1-linux64.tar.gz -O geckodriver.tar.gz
+  - wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
   - mkdir geckodriver
   - tar -xzf geckodriver.tar.gz -C geckodriver
   - export PATH=$PATH:$PWD/geckodriver
@@ -45,5 +45,6 @@ script:
     fi
 
   - if [[ $TEST_TARGET == 'coding_standards' ]]; then
-      find . -type f -name "*.py" ! -name 'conf.py' | xargs flake8 --max-line-length=100 ;
+      flake8 --max-line-length=105 branca --exclude=_version.py ;
+      flake8 --max-line-length=105 tests ;
     fi
