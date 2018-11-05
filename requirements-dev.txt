@@ -1,3 +1,5 @@
 flake8
+nbsphinx
 pytest
 selenium
+sphinx
