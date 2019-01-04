@@ -264,22 +264,29 @@ class Figure(Element):
         height. Values will be converted into pixels in using 60 dpi.
         For example figsize=(10, 5) will result in
         width="600px", height="300px".
+    format_header : callable str -> str, optional
+        If specified, will be used to post-process the `header` part of the figure.
+    format_html : callable str -> str, optional
+        If specified, will be used to post-process the `html` part of the figure.
+    format_script : callable str -> str, optional
+        If specified, will be used to post-process the `script` part of the figure.
     """
     _template = Template(
         '<!DOCTYPE html>\n'
         '<head>'
         '{% if this.title %}<title>{{this.title}}</title>{% endif %}'
-        '    {{this.header.render(**kwargs)}}\n'
+        '{{format_header(this.header.render(**kwargs))}}'
         '</head>\n'
         '<body>'
-        '    {{this.html.render(**kwargs)}}\n'
+        '{{format_html(this.html.render(**kwargs))}}'
         '</body>\n'
         '<script>'
-        '    {{this.script.render(**kwargs)}}\n'
+        '{{format_script(this.script.render(**kwargs))}}'
         '</script>\n'
     )
 
-    def __init__(self, width='100%', height=None, ratio='60%', title=None, figsize=None):
+    def __init__(self, width='100%', height=None, ratio='60%', title=None, figsize=None,
+                 format_header=None, format_html=None, format_script=None):
         super(Figure, self).__init__()
         self._name = 'Figure'
         self.header = Element()
@@ -289,6 +296,13 @@ class Figure(Element):
         self.header._parent = self
         self.html._parent = self
         self.script._parent = self
+
+        def identity(x):
+            """Default post-processor that does nothing. """
+            return x
+        self.format_header = format_header if format_header is not None else identity
+        self.format_html = format_html if format_html is not None else identity
+        self.format_script = format_script if format_script is not None else identity
 
         self.width = width
         self.height = height
@@ -319,7 +333,8 @@ class Figure(Element):
         """Renders the HTML representation of the element."""
         for name, child in self._children.items():
             child.render(**kwargs)
-        return self._template.render(this=self, kwargs=kwargs)
+        return self._template.render(this=self, kwargs=kwargs, format_header=self.format_header,
+                                     format_html=self.format_html, format_script=self.format_script)
 
     def _repr_html_(self, **kwargs):
         """Displays the Figure in a Jupyter notebook.
