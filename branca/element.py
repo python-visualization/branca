@@ -275,13 +275,13 @@ class Figure(Element):
         '<!DOCTYPE html>\n'
         '<head>'
         '{% if this.title %}<title>{{this.title}}</title>{% endif %}'
-        '{{format_header(this.header.render(**kwargs))}}'
+        '{{this.format_header(this.header.render(**kwargs))}}'
         '</head>\n'
         '<body>'
-        '{{format_html(this.html.render(**kwargs))}}'
+        '{{this.format_html(this.html.render(**kwargs))}}'
         '</body>\n'
         '<script>'
-        '{{format_script(this.script.render(**kwargs))}}'
+        '{{this.format_script(this.script.render(**kwargs))}}'
         '</script>\n'
     )
 
@@ -333,8 +333,7 @@ class Figure(Element):
         """Renders the HTML representation of the element."""
         for name, child in self._children.items():
             child.render(**kwargs)
-        return self._template.render(this=self, kwargs=kwargs, format_header=self.format_header,
-                                     format_html=self.format_html, format_script=self.format_script)
+        return self._template.render(this=self, kwargs=kwargs)
 
     def _repr_html_(self, **kwargs):
         """Displays the Figure in a Jupyter notebook.
