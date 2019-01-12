@@ -119,6 +119,8 @@ def color_brewer(color_code, n=6):
         raise ValueError("The minimum number of colors in a"
                          " ColorBrewer sequential color series is 3")
 
+    assert isinstance(color_code, str), \
+        'color should be a string, not a {}.'.format(type(color_code))
     if color_code[-2:] == '_r':
         base_code = color_code[:-2]
         core_color_code = base_code + '_' + str(n).zfill(2)
