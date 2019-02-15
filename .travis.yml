@@ -20,7 +20,7 @@ matrix:
   - name: coding_standards
     env: PY=3.7
   - name: docs
-    env: TPY=3.7
+    env: PY=3.7
 
 before_install:
   - wget http://bit.ly/miniconda -O miniconda.sh
