@@ -53,5 +53,4 @@ examples/foo.html
 
 # documentation builds
 docs/_build
-
 geckodriver.log
