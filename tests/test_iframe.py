@@ -10,6 +10,8 @@ import branca.element as elem
 from selenium.webdriver import Firefox
 from selenium.webdriver.firefox.options import Options
 
+import pytest
+
 
 def test_create_empty_iframe():
     iframe = elem.IFrame()
@@ -21,6 +23,7 @@ def test_create_iframe():
     iframe.render()
 
 
+@pytest.mark.headless
 def test_rendering_utf8_iframe():
     iframe = elem.IFrame(html=u'<p>Cerrahpaşa Tıp Fakültesi</p>')
 
