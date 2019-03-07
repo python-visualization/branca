@@ -7,5 +7,6 @@ flake8-print
 flake8-quotes
 nbsphinx
 pytest
+pytest-xdist
 selenium
 sphinx
