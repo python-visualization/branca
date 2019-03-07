@@ -37,7 +37,8 @@ if sys.version_info[:2] == (3, 4):
         _nblist = [x for x in os.listdir(_filepath) if x.endswith('.ipynb')]
 
     for fn in TestNotebooks._nblist:
-                setattr(TestNotebooks,
-                        'test_'+branca.utilities._camelify(fn[:-6]),
-                        NotebookTester(TestNotebooks._filepath+fn).__call__
-                        )
+        setattr(
+            TestNotebooks,
+            'test_'+branca.utilities._camelify(fn[:-6]),
+            NotebookTester(TestNotebooks._filepath+fn).__call__
+        )

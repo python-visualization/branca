@@ -7,10 +7,10 @@ Folium Element Module class IFrame
 
 import branca.element as elem
 
+import pytest
+
 from selenium.webdriver import Firefox
 from selenium.webdriver.firefox.options import Options
-
-import pytest
 
 
 def test_create_empty_iframe():
