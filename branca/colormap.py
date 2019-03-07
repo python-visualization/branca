@@ -10,28 +10,23 @@ from __future__ import absolute_import
 
 import json
 import math
+import os
 
 from branca.element import ENV, Figure, JavascriptLink, MacroElement
 from branca.utilities import legend_scaler
 
 from jinja2 import Template
 
-import pkg_resources
-
 from six import binary_type, text_type
 
 
-resource_package = __name__
-resource_path_schemes = '/_schemes.json'
-resource_path_cnames = '/_cnames.json'
+rootpath = os.path.abspath(os.path.dirname(__file__))
 
-cnames_string = pkg_resources.resource_stream(
-    resource_package, resource_path_cnames).read().decode()
-_cnames = json.loads(cnames_string)
+with open(os.path.join(rootpath, '_cnames.json')) as f:
+    _cnames = json.loads(f.read())
 
-schemes_string = pkg_resources.resource_stream(
-    resource_package, resource_path_schemes).read().decode()
-_schemes = json.loads(schemes_string)
+with open(os.path.join(rootpath, '_schemes.json')) as f:
+    _schemes = json.loads(f.read())
 
 
 def _is_hex(x):
