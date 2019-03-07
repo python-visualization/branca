@@ -12,12 +12,12 @@ from __future__ import absolute_import, division, print_function
 import base64
 import json
 import math
+import os
 import struct
 import zlib
 
 from jinja2 import Environment, PackageLoader
 
-import pkg_resources
 
 from six import binary_type, text_type
 
@@ -30,6 +30,9 @@ try:
     import numpy as np
 except ImportError:
     np = None
+
+
+rootpath = os.path.abspath(os.path.dirname(__file__))
 
 
 def get_templates():
@@ -131,22 +134,14 @@ def color_brewer(color_code, n=6):
         core_color_code = base_code + '_' + str(n).zfill(2)
         color_reverse = False
 
-    resource_package = __name__
-    resource_path_schemes = '/_schemes.json'
-    resource_path_scheme_info = '/_cnames.json'
-    resource_path_scheme_base_codes = '/scheme_base_codes.json'
+    with open(os.path.join(rootpath, '_schemes.json')) as f:
+        schemes = json.loads(f.read())
 
-    schemes_string = pkg_resources.resource_stream(
-        resource_package, resource_path_schemes).read().decode()
-    schemes = json.loads(schemes_string)
+    with open(os.path.join(rootpath, '_cnames.json')) as f:
+        scheme_info = json.loads(f.read())
 
-    scheme_info_string = pkg_resources.resource_stream(
-        resource_package, resource_path_scheme_info).read().decode()
-    scheme_info = json.loads(scheme_info_string)
-
-    core_schemes_string = pkg_resources.resource_stream(
-        resource_package, resource_path_scheme_base_codes).read().decode()
-    core_schemes = json.loads(core_schemes_string)['codes']
+    with open(os.path.join(rootpath, 'scheme_base_codes.json')) as f:
+        core_schemes = json.loads(f.read())['codes']
 
     if base_code not in core_schemes:
         raise ValueError(base_code + ' is not a valid ColorBrewer code')
@@ -304,8 +299,8 @@ def write_png(data, origin='upper', colormap=None):
     height, width, nblayers = array.shape
 
     if nblayers not in [1, 3, 4]:
-            raise ValueError('Data must be NxM (mono), '
-                             'NxMx3 (RGB), or NxMx4 (RGBA)')
+        raise ValueError('Data must be NxM (mono), '
+                         'NxMx3 (RGB), or NxMx4 (RGBA)')
     assert array.shape == (height, width, nblayers)
 
     if nblayers == 1:
@@ -337,10 +332,10 @@ def write_png(data, origin='upper', colormap=None):
                          for i in range(height)])
 
     def png_pack(png_tag, data):
-            chunk_head = png_tag + data
-            return (struct.pack('!I', len(data)) +
-                    chunk_head +
-                    struct.pack('!I', 0xFFFFFFFF & zlib.crc32(chunk_head)))
+        chunk_head = png_tag + data
+        return (struct.pack('!I', len(data)) +
+                chunk_head +
+                struct.pack('!I', 0xFFFFFFFF & zlib.crc32(chunk_head)))
 
     return b''.join([
         b'\x89PNG\r\n\x1a\n',
