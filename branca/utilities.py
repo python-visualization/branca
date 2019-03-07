@@ -16,8 +16,6 @@ import zlib
 from jinja2 import Environment, PackageLoader
 
 
-from six import binary_type, text_type
-
 try:
     import pandas as pd
 except ImportError:

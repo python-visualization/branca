@@ -15,8 +15,6 @@ from branca.utilities import legend_scaler
 
 from jinja2 import Template
 
-from six import binary_type, text_type
-
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
