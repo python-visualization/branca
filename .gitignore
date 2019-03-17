@@ -55,3 +55,6 @@ examples/foo.html
 docs/_build
 
 geckodriver.log
+
+# Pycharm
+.idea/
