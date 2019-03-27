@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 
 from setuptools import setup
 
@@ -23,6 +24,22 @@ def walk_subpkg(name):
             data_files.append(os.path.join(sub_dir, f))
     return data_files
 
+
+if sys.version_info < (3, 5):
+    error = """
+    branca 0.4+ supports Python 3.5 and above.
+    When using Python 2.7, please install branca 0.3.*.
+
+    See branca `README.rst` file for more information:
+
+    https://github.com/python-visualization/branca/blob/master/README.rst
+
+    Python {py} detected.
+
+    Try upgrading pip and retry.
+    """.format(py='.'.join([str(v) for v in sys.version_info[:3]]))
+    print(error, file=sys.stderr)
+    sys.exit(1)
 
 pkg_data = {'': ['*.js',
                  'plugins/*.js',
@@ -52,7 +69,6 @@ setup(
     url='https://github.com/python-visualization/branca',
     keywords='data visualization',
     classifiers=[
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
@@ -66,5 +82,6 @@ setup(
     tests_require=['pytest'],
     license=LICENSE,
     install_requires=install_requires,
+    python_requires='>=3.5',
     zip_safe=False,
 )
