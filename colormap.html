@@ -1,12 +1,10 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>branca.colormap &#8212; branca 0.3.1+15.g790b5c2 documentation</title>
+    <meta charset="utf-8" />
+    <title>branca.colormap &#8212; branca 0.3.1+17.g4e89e88 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -43,19 +41,15 @@
 <em class="property">class </em><code class="descclassname">branca.colormap.</code><code class="descname">ColorMap</code><span class="sig-paren">(</span><em>vmin=0.0</em>, <em>vmax=1.0</em>, <em>caption=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.ColorMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="element.html#branca.element.MacroElement" title="branca.element.MacroElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></a></p>
 <p>A generic class for creating colormaps.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>vmin</strong> (<em>float</em>) – The left bound of the color scale.</li>
-<li><strong>vmax</strong> (<em>float</em>) – The right bound of the color scale.</li>
-<li><strong>caption</strong> (<em>str</em>) – A caption to draw with the colormap.</li>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vmin</strong> (<em>float</em>) – The left bound of the color scale.</p></li>
+<li><p><strong>vmax</strong> (<em>float</em>) – The right bound of the color scale.</p></li>
+<li><p><strong>caption</strong> (<em>str</em>) – A caption to draw with the colormap.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="method">
 <dt id="branca.colormap.ColorMap.render">
 <code class="descname">render</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.ColorMap.render" title="Permalink to this definition">¶</a></dt>
@@ -101,31 +95,27 @@ Each output value being between 0 and 1.</p>
 <dd><p>Bases: <a class="reference internal" href="#branca.colormap.ColorMap" title="branca.colormap.ColorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">branca.colormap.ColorMap</span></code></a></p>
 <p>Creates a ColorMap based on linear interpolation of a set of colors
 over a given index.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>colors</strong> (<em>list-like object with at least two colors.</em>) – The set of colors to be used for interpolation.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>colors</strong> (<em>list-like object with at least two colors.</em>) – The set of colors to be used for interpolation.
 Colors can be provided in the form:
 * tuples of RGBA ints between 0 and 255 (e.g: <cite>(255, 255, 0)</cite> or
 <cite>(255, 255, 0, 255)</cite>)
 * tuples of RGBA floats between 0. and 1. (e.g: <cite>(1.,1.,0.)</cite> or
 <cite>(1., 1., 0., 1.)</cite>)
 * HTML-like string (e.g: <cite>“#ffff00</cite>)
-* a color name or shortcut (e.g: <cite>“y”</cite> or <cite>“yellow”</cite>)</li>
-<li><strong>index</strong> (<em>list of floats</em><em>, </em><em>default None</em>) – The values corresponding to each color.
+* a color name or shortcut (e.g: <cite>“y”</cite> or <cite>“yellow”</cite>)</p></li>
+<li><p><strong>index</strong> (<em>list of floats</em><em>, </em><em>default None</em>) – The values corresponding to each color.
 It has to be sorted, and have the same length as <cite>colors</cite>.
-If None, a regular grid between <cite>vmin</cite> and <cite>vmax</cite> is created.</li>
-<li><strong>vmin</strong> (<em>float</em><em>, </em><em>default 0.</em>) – The minimal value for the colormap.
-Values lower than <cite>vmin</cite> will be bound directly to <cite>colors[0]</cite>.</li>
-<li><strong>vmax</strong> (<em>float</em><em>, </em><em>default 1.</em>) – The maximal value for the colormap.
-Values higher than <cite>vmax</cite> will be bound directly to <cite>colors[-1]</cite>.</li>
+If None, a regular grid between <cite>vmin</cite> and <cite>vmax</cite> is created.</p></li>
+<li><p><strong>vmin</strong> (<em>float</em><em>, </em><em>default 0.</em>) – The minimal value for the colormap.
+Values lower than <cite>vmin</cite> will be bound directly to <cite>colors[0]</cite>.</p></li>
+<li><p><strong>vmax</strong> (<em>float</em><em>, </em><em>default 1.</em>) – The maximal value for the colormap.
+Values higher than <cite>vmax</cite> will be bound directly to <cite>colors[-1]</cite>.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="method">
 <dt id="branca.colormap.LinearColormap.rgba_floats_tuple">
 <code class="descname">rgba_floats_tuple</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#LinearColormap.rgba_floats_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.LinearColormap.rgba_floats_tuple" title="Permalink to this definition">¶</a></dt>
@@ -144,48 +134,44 @@ fit the given parameters.</p>
 <dt id="branca.colormap.LinearColormap.to_step">
 <code class="descname">to_step</code><span class="sig-paren">(</span><em>n=None</em>, <em>index=None</em>, <em>data=None</em>, <em>method=None</em>, <em>quantiles=None</em>, <em>round_method=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#LinearColormap.to_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.LinearColormap.to_step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Splits the LinearColormap into a StepColormap.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>n</strong> (<em>int</em><em>, </em><em>default None</em>) – The number of expected colors in the ouput StepColormap.
-This will be ignored if <cite>index</cite> is provided.</li>
-<li><strong>index</strong> (<em>list of floats</em><em>, </em><em>default None</em>) – The values corresponding to each color bounds.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n</strong> (<em>int</em><em>, </em><em>default None</em>) – The number of expected colors in the ouput StepColormap.
+This will be ignored if <cite>index</cite> is provided.</p></li>
+<li><p><strong>index</strong> (<em>list of floats</em><em>, </em><em>default None</em>) – The values corresponding to each color bounds.
 It has to be sorted.
-If None, a regular grid between <cite>vmin</cite> and <cite>vmax</cite> is created.</li>
-<li><strong>data</strong> (<em>list of floats</em><em>, </em><em>default None</em>) – A sample of data to adapt the color map to.</li>
-<li><strong>method</strong> (<em>str</em><em>, </em><em>default 'linear'</em>) – The method used to create data-based colormap.
+If None, a regular grid between <cite>vmin</cite> and <cite>vmax</cite> is created.</p></li>
+<li><p><strong>data</strong> (<em>list of floats</em><em>, </em><em>default None</em>) – A sample of data to adapt the color map to.</p></li>
+<li><p><strong>method</strong> (<em>str</em><em>, </em><em>default 'linear'</em>) – The method used to create data-based colormap.
 It can be ‘linear’ for linear scale, ‘log’ for logarithmic,
-or ‘quant’ for data’s quantile-based scale.</li>
-<li><strong>quantiles</strong> (<em>list of floats</em><em>, </em><em>default None</em>) – Alternatively, you can provide explicitely the quantiles you
-want to use in the scale.</li>
-<li><strong>round_method</strong> (<em>str</em><em>, </em><em>default None</em>) – The method used to round thresholds.
+or ‘quant’ for data’s quantile-based scale.</p></li>
+<li><p><strong>quantiles</strong> (<em>list of floats</em><em>, </em><em>default None</em>) – Alternatively, you can provide explicitely the quantiles you
+want to use in the scale.</p></li>
+<li><p><strong>round_method</strong> (<em>str</em><em>, </em><em>default None</em>) – The method used to round thresholds.
 * If ‘int’, all values will be rounded to the nearest integer.
 * If ‘log10’, all values will be rounded to the nearest
 order-of-magnitude integer. For example, 2100 is rounded to
-2000, 2790 to 3000.</li>
+2000, 2790 to 3000.</p></li>
 </ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><ul class="simple">
-<li>A StepColormap with <cite>n=len(index)-1</cite> colors.</li>
-<li><em>Examples</em></li>
-<li><em>&gt;&gt; lc.to_step(n=12)</em></li>
-<li><em>&gt;&gt; lc.to_step(index=[0, 2, 4, 6, 8, 10])</em></li>
-<li><em>&gt;&gt; lc.to_step(data=some_list, n=12)</em></li>
-<li><em>&gt;&gt; lc.to_step(data=some_list, n=12, method=’linear’)</em></li>
-<li><em>&gt;&gt; lc.to_step(data=some_list, n=12, method=’log’)</em></li>
-<li><em>&gt;&gt; lc.to_step(data=some_list, n=12, method=’quantiles’)</em></li>
-<li><em>&gt;&gt; lc.to_step(data=some_list, quantiles=[0, 0.3, 0.7, 1])</em></li>
-<li><em>&gt;&gt; lc.to_step(data=some_list, quantiles=[0, 0.3, 0.7, 1],</em></li>
-<li><em>…           round_method=’log10’)</em></li>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p>A StepColormap with <cite>n=len(index)-1</cite> colors.</p></li>
+<li><p><em>Examples</em></p></li>
+<li><p><em>&gt;&gt; lc.to_step(n=12)</em></p></li>
+<li><p><em>&gt;&gt; lc.to_step(index=[0, 2, 4, 6, 8, 10])</em></p></li>
+<li><p><em>&gt;&gt; lc.to_step(data=some_list, n=12)</em></p></li>
+<li><p><em>&gt;&gt; lc.to_step(data=some_list, n=12, method=’linear’)</em></p></li>
+<li><p><em>&gt;&gt; lc.to_step(data=some_list, n=12, method=’log’)</em></p></li>
+<li><p><em>&gt;&gt; lc.to_step(data=some_list, n=12, method=’quantiles’)</em></p></li>
+<li><p><em>&gt;&gt; lc.to_step(data=some_list, quantiles=[0, 0.3, 0.7, 1])</em></p></li>
+<li><p><em>&gt;&gt; lc.to_step(data=some_list, quantiles=[0, 0.3, 0.7, 1],</em></p></li>
+<li><p><em>…           round_method=’log10’)</em></p></li>
 </ul>
 </p>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -196,31 +182,27 @@ order-of-magnitude integer. For example, 2100 is rounded to
 <dd><p>Bases: <a class="reference internal" href="#branca.colormap.ColorMap" title="branca.colormap.ColorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">branca.colormap.ColorMap</span></code></a></p>
 <p>Creates a ColorMap based on linear interpolation of a set of colors
 over a given index.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>colors</strong> (<em>list-like object</em>) – The set of colors to be used for interpolation.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>colors</strong> (<em>list-like object</em>) – The set of colors to be used for interpolation.
 Colors can be provided in the form:
 * tuples of int between 0 and 255 (e.g: <cite>(255,255,0)</cite> or
 <cite>(255, 255, 0, 255)</cite>)
 * tuples of floats between 0. and 1. (e.g: <cite>(1.,1.,0.)</cite> or
 <cite>(1., 1., 0., 1.)</cite>)
 * HTML-like string (e.g: <cite>“#ffff00</cite>)
-* a color name or shortcut (e.g: <cite>“y”</cite> or <cite>“yellow”</cite>)</li>
-<li><strong>index</strong> (<em>list of floats</em><em>, </em><em>default None</em>) – The values corresponding to each color.
+* a color name or shortcut (e.g: <cite>“y”</cite> or <cite>“yellow”</cite>)</p></li>
+<li><p><strong>index</strong> (<em>list of floats</em><em>, </em><em>default None</em>) – The values corresponding to each color.
 It has to be sorted, and have the same length as <cite>colors</cite>.
-If None, a regular grid between <cite>vmin</cite> and <cite>vmax</cite> is created.</li>
-<li><strong>vmin</strong> (<em>float</em><em>, </em><em>default 0.</em>) – The minimal value for the colormap.
-Values lower than <cite>vmin</cite> will be bound directly to <cite>colors[0]</cite>.</li>
-<li><strong>vmax</strong> (<em>float</em><em>, </em><em>default 1.</em>) – The maximal value for the colormap.
-Values higher than <cite>vmax</cite> will be bound directly to <cite>colors[-1]</cite>.</li>
+If None, a regular grid between <cite>vmin</cite> and <cite>vmax</cite> is created.</p></li>
+<li><p><strong>vmin</strong> (<em>float</em><em>, </em><em>default 0.</em>) – The minimal value for the colormap.
+Values lower than <cite>vmin</cite> will be bound directly to <cite>colors[0]</cite>.</p></li>
+<li><p><strong>vmax</strong> (<em>float</em><em>, </em><em>default 1.</em>) – The maximal value for the colormap.
+Values higher than <cite>vmax</cite> will be bound directly to <cite>colors[-1]</cite>.</p></li>
 </ul>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <dl class="method">
 <dt id="branca.colormap.StepColormap.rgba_floats_tuple">
 <code class="descname">rgba_floats_tuple</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#StepColormap.rgba_floats_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.StepColormap.rgba_floats_tuple" title="Permalink to this definition">¶</a></dt>
@@ -239,16 +221,13 @@ fit the given parameters.</p>
 <dt id="branca.colormap.StepColormap.to_linear">
 <code class="descname">to_linear</code><span class="sig-paren">(</span><em>index=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#StepColormap.to_linear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.StepColormap.to_linear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms the StepColormap into a LinearColormap.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> (<em>list of floats</em><em>, </em><em>default None</em>) – The values corresponding to each color in the output colormap.
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>index</strong> (<em>list of floats</em><em>, </em><em>default None</em>) – The values corresponding to each color in the output colormap.
 It has to be sorted.
-If None, a regular grid between <cite>vmin</cite> and <cite>vmax</cite> is created.</td>
-</tr>
-</tbody>
-</table>
+If None, a regular grid between <cite>vmin</cite> and <cite>vmax</cite> is created.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -275,8 +254,8 @@ If None, a regular grid between <cite>vmin</cite> and <cite>vmax</cite> is creat
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="element.html"><code class="docutils literal notranslate"><span class="pre">branca.element</span></code></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="docutils literal notranslate"><span class="pre">branca.colormap</span></code></a><ul>
+<li class="toctree-l1"><a class="reference internal" href="element.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">branca.element</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">branca.colormap</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#colormap">Colormap</a></li>
 </ul>
 </li>
@@ -286,7 +265,7 @@ If None, a regular grid between <cite>vmin</cite> and <cite>vmax</cite> is creat
 <h3>Related Topics</h3>
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="element.html" title="previous chapter"><code class="docutils literal notranslate"><span class="pre">branca.element</span></code></a></li>
+      <li>Previous: <a href="element.html" title="previous chapter"><code class="xref py py-mod docutils literal notranslate"><span class="pre">branca.element</span></code></a></li>
   </ul></li>
 </ul>
 </div>
@@ -296,8 +275,6 @@ If None, a regular grid between <cite>vmin</cite> and <cite>vmax</cite> is creat
     <form class="search" action="search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -318,7 +295,7 @@ If None, a regular grid between <cite>vmin</cite> and <cite>vmax</cite> is creat
       &copy;2018, Filipe Fernandes.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.0.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
