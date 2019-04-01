@@ -15,14 +15,12 @@ env:
 matrix:
   fast_finish: true
   include:
-  - name: default-python2
-    env: TEST_TARGET=default PY=2.7
   - name: default
-    env: TEST_TARGET=default PY=3.7
+    env: PY=3.7
   - name: coding_standards
-    env: TEST_TARGET=coding_standards PY=3.7
+    env: PY=3.7
   - name: docs
-    env: TEST_TARGET=docs PY=3.7
+    env: PY=3.7
 
 before_install:
   # Install miniconda and create TEST env.
@@ -49,17 +47,17 @@ install:
     - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install --no-deps --force-reinstall branca-${version}.tar.gz && popd
 
 script:
-  - if [[ $TEST_TARGET == 'default' ]]; then
+  - if [[ $TRAVIS_JOB_NAME == 'default' ]]; then
       cp -r tests/ /tmp ;
-      pushd /tmp && pytest -vvv tests && popd ;
+      pushd /tmp && pytest -n 2 -rxs -vv tests && popd ;
     fi
 
-  - if [[ $TEST_TARGET == 'coding_standards' ]]; then
+  - if [[ $TRAVIS_JOB_NAME == 'coding_standards' ]]; then
       flake8 --max-line-length=105 branca --exclude=_version.py ;
       flake8 --max-line-length=105 tests ;
     fi
 
-  - if [[ $TEST_TARGET == 'docs' ]]; then
+  - if [[ $TRAVIS_JOB_NAME == 'docs' ]]; then
       set -e ;
       conda install doctr ;
       pushd docs ;
