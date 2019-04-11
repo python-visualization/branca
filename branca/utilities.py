@@ -135,14 +135,14 @@ def color_brewer(color_code, n=6):
         core_color_code = base_code + "_" + str(n).zfill(2)
         color_reverse = False
 
-    with open(os.path.join(rootpath, '_schemes.json')) as f:
+    with open(os.path.join(rootpath, "_schemes.json")) as f:
         schemes = json.loads(f.read())
 
-    with open(os.path.join(rootpath, '_cnames.json')) as f:
+    with open(os.path.join(rootpath, "_cnames.json")) as f:
         scheme_info = json.loads(f.read())
 
-    with open(os.path.join(rootpath, 'scheme_base_codes.json')) as f:
-        core_schemes = json.loads(f.read())['codes']
+    with open(os.path.join(rootpath, "scheme_base_codes.json")) as f:
+        core_schemes = json.loads(f.read())["codes"]
 
     if base_code not in core_schemes:
         raise ValueError(base_code + " is not a valid ColorBrewer code")

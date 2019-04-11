@@ -18,10 +18,10 @@ from jinja2 import Template
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(rootpath, '_cnames.json')) as f:
+with open(os.path.join(rootpath, "_cnames.json")) as f:
     _cnames = json.loads(f.read())
 
-with open(os.path.join(rootpath, '_schemes.json')) as f:
+with open(os.path.join(rootpath, "_schemes.json")) as f:
     _schemes = json.loads(f.read())
 
 
