@@ -7,7 +7,7 @@ isort:
 	isort --remove-import . --apply --use-parentheses --trailing-comma
 
 format:
-	black --line-length 79 .
+	black .
 
 style: isort format
 
