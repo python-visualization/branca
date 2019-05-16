@@ -20,13 +20,9 @@ if sys.version_info[:2] == (3, 4):
             self.filename = filename
 
         def __call__(self, exporter=None, filename=None):
-            raw_nb = nbconvert.exporters.Exporter().from_filename(
-                self.filename
-            )
+            raw_nb = nbconvert.exporters.Exporter().from_filename(self.filename)
             raw_nb[0].metadata.setdefault("kernelspec", {})["name"] = "python"
-            exec_nb = nbconvert.preprocessors.ExecutePreprocessor().preprocess(
-                *raw_nb
-            )
+            exec_nb = nbconvert.preprocessors.ExecutePreprocessor().preprocess(*raw_nb)
 
             if exporter is not None:
                 out_nb = nbconvert.exporters.MarkdownExporter().from_notebook_node(

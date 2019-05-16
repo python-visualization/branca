@@ -102,9 +102,7 @@ class ColorMap(MacroElement):
         )
 
         figure.header.add_child(
-            JavascriptLink(
-                "https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"
-            ),
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),
             name="d3",
         )  # noqa
 
@@ -195,17 +193,13 @@ class LinearColormap(ColorMap):
         Values higher than `vmax` will be bound directly to `colors[-1]`."""
 
     def __init__(self, colors, index=None, vmin=0.0, vmax=1.0, caption=""):
-        super(LinearColormap, self).__init__(
-            vmin=vmin, vmax=vmax, caption=caption
-        )
+        super(LinearColormap, self).__init__(vmin=vmin, vmax=vmax, caption=caption)
 
         n = len(colors)
         if n < 2:
             raise ValueError("You must provide at least 2 colors.")
         if index is None:
-            self.index = [
-                vmin + (vmax - vmin) * i * 1.0 / (n - 1) for i in range(n)
-            ]
+            self.index = [vmin + (vmax - vmin) * i * 1.0 / (n - 1) for i in range(n)]
         else:
             self.index = [x for x in index]
         self.colors = [_parse_color(x) for x in colors]
@@ -221,19 +215,14 @@ class LinearColormap(ColorMap):
 
         i = len([u for u in self.index if u < x])  # 0 < i < n.
         if self.index[i - 1] < self.index[i]:
-            p = (
-                (x - self.index[i - 1])
-                * 1.0
-                / (self.index[i] - self.index[i - 1])
-            )
+            p = (x - self.index[i - 1]) * 1.0 / (self.index[i] - self.index[i - 1])
         elif self.index[i - 1] == self.index[i]:
             p = 1.0
         else:
             raise ValueError("Thresholds are not sorted.")
 
         return tuple(
-            (1.0 - p) * self.colors[i - 1][j] + p * self.colors[i][j]
-            for j in range(4)
+            (1.0 - p) * self.colors[i - 1][j] + p * self.colors[i][j] for j in range(4)
         )
 
     def to_step(
@@ -313,18 +302,12 @@ class LinearColormap(ColorMap):
                 if method.lower().startswith("lin"):
                     if n is None:
                         raise ValueError(msg)
-                    index = [
-                        min_ + i * (max_ - min_) * 1.0 / n
-                        for i in range(1 + n)
-                    ]
+                    index = [min_ + i * (max_ - min_) * 1.0 / n for i in range(1 + n)]
                 elif method.lower().startswith("log"):
                     if n is None:
                         raise ValueError(msg)
                     if min_ <= 0:
-                        msg = (
-                            "Log-scale works only with strictly "
-                            "positive values."
-                        )
+                        msg = "Log-scale works only with strictly " "positive values."
                         raise ValueError(msg)
                     index = [
                         math.exp(
@@ -337,8 +320,7 @@ class LinearColormap(ColorMap):
                     if quantiles is None:
                         if n is None:
                             msg = (
-                                "You must specify either `index`, `n` or"
-                                "`quantiles`."
+                                "You must specify either `index`, `n` or" "`quantiles`."
                             )
                             raise ValueError(msg)
                         else:
@@ -379,11 +361,7 @@ class LinearColormap(ColorMap):
         return LinearColormap(
             self.colors,
             index=[
-                vmin
-                + (vmax - vmin)
-                * (x - self.vmin)
-                * 1.0
-                / (self.vmax - self.vmin)
+                vmin + (vmax - vmin) * (x - self.vmin) * 1.0 / (self.vmax - self.vmin)
                 for x in self.index
             ],  # noqa
             vmin=vmin,
@@ -420,17 +398,13 @@ class StepColormap(ColorMap):
     """
 
     def __init__(self, colors, index=None, vmin=0.0, vmax=1.0, caption=""):
-        super(StepColormap, self).__init__(
-            vmin=vmin, vmax=vmax, caption=caption
-        )
+        super(StepColormap, self).__init__(vmin=vmin, vmax=vmax, caption=caption)
 
         n = len(colors)
         if n < 1:
             raise ValueError("You must provide at least 1 colors.")
         if index is None:
-            self.index = [
-                vmin + (vmax - vmin) * i * 1.0 / n for i in range(n + 1)
-            ]
+            self.index = [vmin + (vmax - vmin) * i * 1.0 / n for i in range(n + 1)]
         else:
             self.index = [x for x in index]
         self.colors = [_parse_color(x) for x in colors]
@@ -470,9 +444,7 @@ class StepColormap(ColorMap):
             ]
 
         colors = [self.rgba_floats_tuple(x) for x in index]
-        return LinearColormap(
-            colors, index=index, vmin=self.vmin, vmax=self.vmax
-        )
+        return LinearColormap(colors, index=index, vmin=self.vmin, vmax=self.vmax)
 
     def scale(self, vmin=0.0, vmax=1.0):
         """Transforms the colorscale so that the minimal and maximal values
@@ -481,11 +453,7 @@ class StepColormap(ColorMap):
         return StepColormap(
             self.colors,
             index=[
-                vmin
-                + (vmax - vmin)
-                * (x - self.vmin)
-                * 1.0
-                / (self.vmax - self.vmin)
+                vmin + (vmax - vmin) * (x - self.vmin) * 1.0 / (self.vmax - self.vmin)
                 for x in self.index
             ],  # noqa
             vmin=vmin,
@@ -498,9 +466,7 @@ class _LinearColormaps(object):
 
     def __init__(self):
         self._schemes = _schemes.copy()
-        self._colormaps = {
-            key: LinearColormap(val) for key, val in _schemes.items()
-        }
+        self._colormaps = {key: LinearColormap(val) for key, val in _schemes.items()}
         for key, val in _schemes.items():
             setattr(self, key, LinearColormap(val))
 
@@ -523,9 +489,7 @@ class _StepColormaps(object):
 
     def __init__(self):
         self._schemes = _schemes.copy()
-        self._colormaps = {
-            key: StepColormap(val) for key, val in _schemes.items()
-        }
+        self._colormaps = {key: StepColormap(val) for key, val in _schemes.items()}
         for key, val in _schemes.items():
             setattr(self, key, StepColormap(val))
 

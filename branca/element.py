@@ -110,9 +110,7 @@ class Element(object):
         if index is None:
             self._children[name] = child
         else:
-            items = [
-                item for item in self._children.items() if item[0] != name
-            ]
+            items = [item for item in self._children.items() if item[0] != name]
             items.insert(int(index), (name, child))
             self._children = OrderedDict(items)
         child._parent = self
@@ -474,12 +472,7 @@ class Div(Figure):
     )
 
     def __init__(
-        self,
-        width="100%",
-        height="100%",
-        left="0%",
-        top="0%",
-        position="relative",
+        self, width="100%", height="100%", left="0%", top="0%", position="relative"
     ):
         super(Figure, self).__init__()
         self._name = "Div"
@@ -525,21 +518,15 @@ class Div(Figure):
 
         header = self._template.module.__dict__.get("header", None)
         if header is not None:
-            figure.header.add_child(
-                Element(header(self, kwargs)), name=self.get_name()
-            )
+            figure.header.add_child(Element(header(self, kwargs)), name=self.get_name())
 
         html = self._template.module.__dict__.get("html", None)
         if html is not None:
-            figure.html.add_child(
-                Element(html(self, kwargs)), name=self.get_name()
-            )
+            figure.html.add_child(Element(html(self, kwargs)), name=self.get_name())
 
         script = self._template.module.__dict__.get("script", None)
         if script is not None:
-            figure.script.add_child(
-                Element(script(self, kwargs)), name=self.get_name()
-            )
+            figure.script.add_child(Element(script(self, kwargs)), name=self.get_name())
 
     def _repr_html_(self, **kwargs):
         """Displays the Div in a Jupyter notebook."""
@@ -575,9 +562,7 @@ class IFrame(Element):
         width="600px", height="300px".
     """
 
-    def __init__(
-        self, html=None, width="100%", height=None, ratio="60%", figsize=None
-    ):
+    def __init__(self, html=None, width="100%", height=None, ratio="60%", figsize=None):
         super(IFrame, self).__init__()
         self._name = "IFrame"
 
@@ -658,21 +643,15 @@ class MacroElement(Element):
 
         header = self._template.module.__dict__.get("header", None)
         if header is not None:
-            figure.header.add_child(
-                Element(header(self, kwargs)), name=self.get_name()
-            )
+            figure.header.add_child(Element(header(self, kwargs)), name=self.get_name())
 
         html = self._template.module.__dict__.get("html", None)
         if html is not None:
-            figure.html.add_child(
-                Element(html(self, kwargs)), name=self.get_name()
-            )
+            figure.html.add_child(Element(html(self, kwargs)), name=self.get_name())
 
         script = self._template.module.__dict__.get("script", None)
         if script is not None:
-            figure.script.add_child(
-                Element(script(self, kwargs)), name=self.get_name()
-            )
+            figure.script.add_child(Element(script(self, kwargs)), name=self.get_name())
 
         for name, element in self._children.items():
             element.render(**kwargs)

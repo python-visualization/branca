@@ -36,9 +36,7 @@ def test_linear_to_step():
     lc.to_step(data=some_list, n=30, method="quantiles")
     lc.to_step(data=some_list, quantiles=[0, 0.3, 0.7, 1])
     lc.to_step(data=some_list, quantiles=[0, 0.3, 0.7, 1], round_method="int")
-    lc.to_step(
-        data=some_list, quantiles=[0, 0.3, 0.7, 1], round_method="log10"
-    )
+    lc.to_step(data=some_list, quantiles=[0, 0.3, 0.7, 1], round_method="log10")
 
 
 def test_step_to_linear():

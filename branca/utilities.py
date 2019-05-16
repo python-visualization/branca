@@ -123,9 +123,7 @@ def color_brewer(color_code, n=6):
         )
 
     if not isinstance(color_code, str):
-        raise ValueError(
-            "color should be a string, not a {}.".format(type(color_code))
-        )
+        raise ValueError("color should be a string, not a {}.".format(type(color_code)))
     if color_code[-2:] == "_r":
         base_code = color_code[:-2]
         core_color_code = base_code + "_" + str(n).zfill(2)
@@ -176,9 +174,7 @@ def color_brewer(color_code, n=6):
             if not color_reverse:
                 color_scheme = linear_gradient(schemes.get(core_color_code), n)
             else:
-                color_scheme = linear_gradient(
-                    schemes.get(core_color_code)[::-1], n
-                )
+                color_scheme = linear_gradient(schemes.get(core_color_code)[::-1], n)
     else:
         if not color_reverse:
             color_scheme = schemes.get(core_color_code, None)
@@ -203,13 +199,9 @@ def split_six(series=None):
 
     """
     if pd is None:
-        raise ImportError(
-            "The Pandas package is required" " for this functionality"
-        )
+        raise ImportError("The Pandas package is required" " for this functionality")
     if np is None:
-        raise ImportError(
-            "The NumPy package is required" " for this functionality"
-        )
+        raise ImportError("The NumPy package is required" " for this functionality")
 
     def base(x):
         if x > 0:
@@ -254,9 +246,9 @@ def image_to_url(image, colormap=None, origin="upper"):
         url = "data:image/{};base64,{}".format(
             fileformat, base64.b64encode(image.read()).decode("utf-8")
         )
-    elif (
-        not (isinstance(image, str) or isinstance(image, bytes))
-    ) and hasattr(image, "__iter__"):
+    elif (not (isinstance(image, str) or isinstance(image, bytes))) and hasattr(
+        image, "__iter__"
+    ):
         # We got an array-like object.
         png = write_png(image, origin=origin, colormap=colormap)
         url = "data:image/png;base64," + base64.b64encode(png).decode("utf-8")
@@ -299,9 +291,7 @@ def write_png(data, origin="upper", colormap=None):
     PNG formatted byte string
     """
     if np is None:
-        raise ImportError(
-            "The NumPy package is required" " for this functionality"
-        )
+        raise ImportError("The NumPy package is required" " for this functionality")
 
     if colormap is None:
 
@@ -312,9 +302,7 @@ def write_png(data, origin="upper", colormap=None):
     height, width, nblayers = array.shape
 
     if nblayers not in [1, 3, 4]:
-        raise ValueError(
-            "Data must be NxM (mono), " "NxMx3 (RGB), or NxMx4 (RGBA)"
-        )
+        raise ValueError("Data must be NxM (mono), " "NxMx3 (RGB), or NxMx4 (RGBA)")
     assert array.shape == (height, width, nblayers)
 
     if nblayers == 1:
@@ -343,9 +331,7 @@ def write_png(data, origin="upper", colormap=None):
         array = array[::-1, :, :]
 
     # Transform the array to bytes.
-    raw_data = b"".join(
-        [b"\x00" + array[i, :, :].tobytes() for i in range(height)]
-    )
+    raw_data = b"".join([b"\x00" + array[i, :, :].tobytes() for i in range(height)])
 
     def png_pack(png_tag, data):
         chunk_head = png_tag + data
@@ -358,9 +344,7 @@ def write_png(data, origin="upper", colormap=None):
     return b"".join(
         [
             b"\x89PNG\r\n\x1a\n",
-            png_pack(
-                b"IHDR", struct.pack("!2I5B", width, height, 8, 6, 0, 0, 0)
-            ),
+            png_pack(b"IHDR", struct.pack("!2I5B", width, height, 8, 6, 0, 0, 0)),
             png_pack(b"IDAT", zlib.compress(raw_data, 9)),
             png_pack(b"IEND", b""),
         ]
@@ -373,13 +357,9 @@ def _camelify(out):
             "".join(
                 [
                     "_" + x.lower()
-                    if i < len(out) - 1
-                    and x.isupper()
-                    and out[i + 1].islower()  # noqa
+                    if i < len(out) - 1 and x.isupper() and out[i + 1].islower()  # noqa
                     else x.lower() + "_"
-                    if i < len(out) - 1
-                    and x.islower()
-                    and out[i + 1].isupper()  # noqa
+                    if i < len(out) - 1 and x.islower() and out[i + 1].isupper()  # noqa
                     else x.lower()
                     for i, x in enumerate(list(out))
                 ]
