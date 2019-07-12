@@ -330,6 +330,7 @@ class LinearColormap(ColorMap):
             index=[vmin + (vmax-vmin)*(x-self.vmin)*1./(self.vmax-self.vmin) for x in self.index],  # noqa
             vmin=vmin,
             vmax=vmax,
+            caption=self.caption,
             )
 
 
@@ -417,6 +418,7 @@ class StepColormap(ColorMap):
             index=[vmin + (vmax-vmin)*(x-self.vmin)*1./(self.vmax-self.vmin) for x in self.index],  # noqa
             vmin=vmin,
             vmax=vmax,
+            caption=self.caption,
             )
 
 
