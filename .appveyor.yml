@@ -1,20 +1,27 @@
 build: false
 
 environment:
+  PYTHON: "C:\\myminiconda3"
   matrix:
-    - PYTHON: "C:\\Miniconda36-x64"
-      PY: 3.6
+    - PY: 3.6
+    - PY: 3.7
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"
 
 install:
-  # Install and configure miniconda.
+  # Add path, activate `conda` and update conda.
+  - set URL="https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe"
+  - curl -fsS -o miniconda3.exe %URL%
+  - start /wait "" miniconda3.exe /InstallationType=JustMe /RegisterPython=0 /S /D=%PYTHON%
+
   - "set PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  - call %PYTHON%\Scripts\activate
+
   - conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
   - conda update conda --quiet
   - conda config --add channels conda-forge --force
-  - conda install pycryptosat
+  - conda config --set channel_priority strict
   - conda config --set safety_checks disabled
 
   # Create the test env.

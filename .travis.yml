@@ -15,27 +15,31 @@ env:
 matrix:
   fast_finish: true
   include:
-  - name: default
+  - name: "python-3.6"
+    env: PY=3.6
+  - name: "python-3.7"
     env: PY=3.7
   - name: coding_standards
     env: PY=3.7
   - name: docs
     env: PY=3.7
+  - name: "tarball"
+    env: PY=3.7
 
 before_install:
   # Install miniconda and create TEST env.
   - |
-    wget http://bit.ly/miniconda -O miniconda.sh
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
     bash miniconda.sh -b -p $HOME/miniconda
     export PATH="$HOME/miniconda/bin:$PATH"
     conda config --set always_yes yes --set changeps1 no --set show_channel_urls true
-    conda update conda --quiet
+    conda update --quiet conda
     conda config --add channels conda-forge --force
-    conda install pycryptosat
     conda config --set channel_priority strict
     conda config --set safety_checks disabled
     conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
     source activate TEST
+    conda info --all
   # Install firefox headless driver.
   - |
     wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
@@ -44,17 +48,22 @@ before_install:
     export PATH=$PATH:$PWD/geckodriver
 
 install:
-    - python setup.py sdist && version=$(python setup.py --version) && pushd dist  && pip install --no-deps --force-reinstall branca-${version}.tar.gz && popd
+  - pip install -e . --no-deps --force-reinstall
 
 script:
-  - if [[ $TRAVIS_JOB_NAME == 'default' ]]; then
+  - if [[ $TRAVIS_JOB_NAME == python-* ]]; then
       cp -r tests/ /tmp ;
-      pushd /tmp && pytest -n 2 -rxs -vv tests && popd ;
+      pushd /tmp && pytest -n 2 -rxs --cov=branca -vv tests && popd ;
+    fi
+
+  - if [[ $TRAVIS_JOB_NAME == 'tarball' ]]; then
+      pip wheel . -w dist --no-deps ;
+      check-manifest --verbose ;
+      twine check dist/* ;
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'coding_standards' ]]; then
-      flake8 --max-line-length=105 branca --exclude=_version.py ;
-      flake8 --max-line-length=105 tests ;
+      pytest --flake8 -m flake8 ;
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'docs' ]]; then
@@ -82,4 +91,4 @@ deploy:
     repo: python-visualization/branca
     tags: true
     all_branches: master
-    condition: '$TEST_TARGET == "default"'
+    condition: '$TEST_TARGET == "docs"'
