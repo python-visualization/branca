@@ -149,8 +149,10 @@ class ColorMap(MacroElement):
                 [('<line x1="{i}" y1="0" x2="{i}" '
                   'y2="20" style="stroke:{color};stroke-width:3;" />').format(
                       i=i*1,
-                      color=self.rgba_hex_str(self.vmin +
-                                             (self.vmax-self.vmin)*i/499.))
+                      color=self.rgba_hex_str(
+                          self.vmin +
+                          (self.vmax-self.vmin)*i/499.)
+                  )
                  for i in range(500)]) +
             '<text x="0" y="35">{}</text>'.format(self.vmin) +
             '<text x="500" y="35" style="text-anchor:end;">{}</text>'.format(
