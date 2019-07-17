@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>branca.colormap &#8212; branca 0.3.1+22.ge3c9583 documentation</title>
+    <title>branca.colormap &#8212; branca 0.3.1+25.g291b8e7 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
@@ -67,7 +67,7 @@ form of a tuple (R,G,B) with int values between 0 and 255.</p>
 <dt id="branca.colormap.ColorMap.rgb_hex_str">
 <code class="sig-name descname">rgb_hex_str</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.rgb_hex_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.ColorMap.rgb_hex_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides the color corresponding to value <cite>x</cite> in the
-form of a string of hewadecimal values “#RRGGBB”.</p>
+form of a string of hexadecimal values “#RRGGBB”.</p>
 </dd></dl>
 
 <dl class="method">
@@ -85,6 +85,13 @@ Colormap. This has to be a function of the form float -&gt;
 (float, float, float, float) describing for each input float x,
 the output color in RGBA format;
 Each output value being between 0 and 1.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="branca.colormap.ColorMap.rgba_hex_str">
+<code class="sig-name descname">rgba_hex_str</code><span class="sig-paren">(</span><em class="sig-param">x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.rgba_hex_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.ColorMap.rgba_hex_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides the color corresponding to value <cite>x</cite> in the
+form of a string of hexadecimal values “#RRGGBBAA”.</p>
 </dd></dl>
 
 </dd></dl>

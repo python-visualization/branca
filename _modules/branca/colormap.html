@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>branca.colormap &#8212; branca 0.3.1+22.ge3c9583 documentation</title>
+    <title>branca.colormap &#8212; branca 0.3.1+25.g291b8e7 documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -159,15 +159,21 @@
 
 <div class="viewcode-block" id="ColorMap.rgb_hex_str"><a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap.rgb_hex_str">[docs]</a>    <span class="k">def</span> <span class="nf">rgb_hex_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
-<span class="sd">        form of a string of hewadecimal values &quot;#RRGGBB&quot;.</span>
+<span class="sd">        form of a string of hexadecimal values &quot;#RRGGBB&quot;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s1">&#39;#</span><span class="si">%02x%02x%02x</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgb_bytes_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="ColorMap.rgba_hex_str"><a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap.rgba_hex_str">[docs]</a>    <span class="k">def</span> <span class="nf">rgba_hex_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
+<span class="sd">        form of a string of hexadecimal values &quot;#RRGGBBAA&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s1">&#39;#</span><span class="si">%02x%02x%02x%02x</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgba_bytes_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
     <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
-<span class="sd">        form of a string of hewadecimal values &quot;#RRGGBB&quot;.</span>
+<span class="sd">        form of a string of hexadecimal values &quot;#RRGGBBAA&quot;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgb_hex_str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgba_hex_str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">(</span>
@@ -176,8 +182,10 @@
                 <span class="p">[(</span><span class="s1">&#39;&lt;line x1=&quot;</span><span class="si">{i}</span><span class="s1">&quot; y1=&quot;0&quot; x2=&quot;</span><span class="si">{i}</span><span class="s1">&quot; &#39;</span>
                   <span class="s1">&#39;y2=&quot;20&quot; style=&quot;stroke:</span><span class="si">{color}</span><span class="s1">;stroke-width:3;&quot; /&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                       <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">*</span><span class="mi">1</span><span class="p">,</span>
-                      <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rgb_hex_str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">+</span>
-                                             <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span><span class="o">*</span><span class="n">i</span><span class="o">/</span><span class="mf">499.</span><span class="p">))</span>
+                      <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rgba_hex_str</span><span class="p">(</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">+</span>
+                          <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span><span class="o">*</span><span class="n">i</span><span class="o">/</span><span class="mf">499.</span><span class="p">)</span>
+                  <span class="p">)</span>
                  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">)])</span> <span class="o">+</span>
             <span class="s1">&#39;&lt;text x=&quot;0&quot; y=&quot;35&quot;&gt;</span><span class="si">{}</span><span class="s1">&lt;/text&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span> <span class="o">+</span>
             <span class="s1">&#39;&lt;text x=&quot;500&quot; y=&quot;35&quot; style=&quot;text-anchor:end;&quot;&gt;</span><span class="si">{}</span><span class="s1">&lt;/text&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
