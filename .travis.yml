@@ -42,7 +42,7 @@ before_install:
     conda info --all
   # Install firefox headless driver.
   - |
-    wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
+    wget https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz -O geckodriver.tar.gz
     mkdir geckodriver
     tar -xzf geckodriver.tar.gz -C geckodriver
     export PATH=$PATH:$PWD/geckodriver
