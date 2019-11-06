@@ -6,6 +6,9 @@ env:
   - MOZ_HEADLESS=1
 
 addons:
+  apt:
+    packages:
+      - libgtk-3-0
   firefox: latest
 
 env:
