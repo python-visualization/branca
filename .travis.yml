@@ -10,6 +10,7 @@ addons:
     packages:
       # Without libgtk (as of 2019-11-6), firefox cannot run properly
       - libgtk-3-0
+    update: false
   firefox: latest
 
 env:
