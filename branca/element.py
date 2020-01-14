@@ -267,6 +267,7 @@ class Figure(Element):
     """
     _template = Template(
         '<!DOCTYPE html>\n'
+        '<html>'
         '<head>'
         '{% if this.title %}<title>{{this.title}}</title>{% endif %}'
         '    {{this.header.render(**kwargs)}}\n'
@@ -277,6 +278,7 @@ class Figure(Element):
         '<script>'
         '    {{this.script.render(**kwargs)}}\n'
         '</script>\n'
+        '</html>\n'
     )
 
     def __init__(self, width='100%', height=None, ratio='60%', title=None, figsize=None):
