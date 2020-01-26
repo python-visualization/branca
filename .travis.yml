@@ -6,6 +6,10 @@ env:
   - MOZ_HEADLESS=1
 
 addons:
+  apt:
+    packages:
+      # Without libgtk (as of 2019-11-6), firefox cannot run properly
+      - libgtk-3-0
   firefox: latest
 
 env:
