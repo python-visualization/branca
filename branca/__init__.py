@@ -1,13 +1,15 @@
+import pkg_resources
+
 import branca.colormap as colormap
 import branca.element as element
 
-from ._version import get_versions
-
-__version__ = get_versions()['version']
-del get_versions
+try:
+    __version__ = pkg_resources.get_distribution("branca").version
+except Exception:
+    __version__ = "unknown"
 
 
 __all__ = [
-    'colormap',
-    'element',
-    ]
+    "colormap",
+    "element",
+]
