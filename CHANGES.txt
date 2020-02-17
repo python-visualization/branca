@@ -1,3 +1,15 @@
+0.4.0
+~~~~~
+- Store html content in a data-html attribute (#66)
+- Colormap alpha #64
+- Fix caption being propagated in scale functions #62
+- Assert color type in color_brewer #52
+
+0.3.1
+~~~~~
+- Added viridis scheme #47 (GillesC)
+- Fixed testing, auto PyPI upload, and docs
+
 0.3.0
 ~~~~~
 - Add title to Figure (@fitoprincipe #33 and #39)
