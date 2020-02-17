@@ -23,12 +23,14 @@ matrix:
     env: PY=3.6
   - name: "python-3.7"
     env: PY=3.7
+  - name: "python-3.8"
+    env: PY=3.8
   - name: coding_standards
-    env: PY=3.7
+    env: PY=3.8
   - name: docs
-    env: PY=3.7
+    env: PY=3.8
   - name: "tarball"
-    env: PY=3.7
+    env: PY=3.8
 
 before_install:
   # Install miniconda and create TEST env.
@@ -61,6 +63,7 @@ script:
     fi
 
   - if [[ $TRAVIS_JOB_NAME == 'tarball' ]]; then
+      python setup.py --version ;
       pip wheel . -w dist --no-deps ;
       check-manifest --verbose ;
       twine check dist/* ;
@@ -86,13 +89,13 @@ doctr:
 deploy:
   skip_cleanup: true
   provider: pypi
-  user: ocefpaf
+  user: "__token__"
   password:
-    secure: "LzZ9ppBFcqskCeMos99eAmLPRiG2pX8n2Ghf7O5Nd5KgJruZBNVq+uOAFtLkCBTheG+59HS75dQwmc2n2E8hmt1WPCTRpz6bffPl8hUzxuTBIPMzfdor8RmXvnMY+c8zAuWXH2ws166GzRApKMhrIZMv7d5OmZyUZgHTKsA4kyd9Nhz1nZdJf1ox3TbODl4OuGfUkQ8gVhA5LwdlJtzxbZlbPTUpTeu42plJawa2JtY20jiSbnu2mujR1UUuzkcnaBHhStjWYYMUQNtXdKonV5irQ9gNACnmlFSwSqDf1Jb74f3n3ojBMWIlMgCJCsPgssAtSaePuIB6HpS+xc7NCORBS1tkFyU0IHlMNXEpHGKCNXvAZVHGgDW71rQ0Gdg9bNpFd9vQ8IL6D+iBohjuxXRjdK1DWf6XlC/7N1aJB443LFtFOT7184AwmL3YNrqeZsaA3HfuMt1CGf3kC91SUn3BypQu+J+irtV7Z8ugOr8mcLcDuTuSAA8zM/VUeZToF29Xs0pwBTUJszkKL4+cxoNj/pXoL8JHQztL7e0BmD+qa4PoK8J87P1RkH2UwV7XSRzV2oWpiwRqPxMKK0HGM8oOckZJ5OcwF3yuNXGMC0hCw9TTW931auiwr4UZ254jxRPg/+HsojutBL0+z67szr3qzTNlO+FmXvwTChS8PW8="
+    secure: "ncVXDcUpadOXESusbUv/F5mhXqzjp0fFM+llYdBOWBGpipP2B1cU/cWRUU5fkhL1KZG/0DfVboJsRnNQCebZklJ0fczW2Z2QUzL8zCAK8KLOUqr0Nk8i8Oi5eC0h8Ew+HkDNORsZUCPCjKvqcFHRuSZnVYvEqqPPguSj1fwDdyBm9kW7lfZdPeR9mr79WJs+Miv5UKXGZcQAuzCU7g3AmaizRoUfhXnSgPXd9Yp2DY5nsBUZhmqFTj1xjQwLvqp5w/BiFZGkdqMuWVP9b/HbVJEeRxWgCaDPw+XLkQa+HdfUsDGBvPWaaQ+o6OwuADdCjIHLnVmfA2/E2FSU64IBaIZ1xOkHZpm74P8Y0NF5aRogyipkqhrm0WErRWFD4OYj8ud4y9AHLCAmyyLsKCka76NSxotbTd4W4Xu9MX7fkhGOVzhYXg1GNS6SDTIMn+bujFNg5fZrZUptn6FcNa8THkh7yKrduBv2kgbBcgx0/EodH4q2Ds7yfbFvPkQD+l0mBiOPXOXflcQDOiu0CZ70X2XmLe3v3zIEf51oigEtb/KRkf7B3r/Ab+ayNdS33xbHsE8JYE/6KKjGf+fEr0f4XiidadtCbUmNGCw8fgHo7dY4g7blYMPvab7z4zcHmqekzrSTTwxw2uRtmGLWWJupmOerasRIuLsKiJxnk9oiS+k="
   distributions: sdist bdist_wheel
   upload_docs: no
   on:
     repo: python-visualization/branca
     tags: true
     all_branches: master
-    condition: '$TEST_TARGET == "docs"'
+    condition: '$TRAVIS_JOB_NAME == "tarball"'

@@ -3,8 +3,8 @@ build: false
 environment:
   PYTHON: "C:\\myminiconda3"
   matrix:
-    - PY: 3.6
     - PY: 3.7
+    - PY: 3.8
 
 init:
   - "ECHO %PYTHON_VERSION% %MINICONDA%"

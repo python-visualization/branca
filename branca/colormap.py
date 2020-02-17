@@ -197,7 +197,7 @@ class LinearColormap(ColorMap):
         if index is None:
             self.index = [vmin + (vmax-vmin)*i*1./(n-1) for i in range(n)]
         else:
-            self.index = [x for x in index]
+            self.index = list(index)
         self.colors = [_parse_color(x) for x in colors]
 
     def rgba_floats_tuple(self, x):
@@ -379,7 +379,7 @@ class StepColormap(ColorMap):
         if index is None:
             self.index = [vmin + (vmax-vmin)*i*1./n for i in range(n+1)]
         else:
-            self.index = [x for x in index]
+            self.index = list(index)
         self.colors = [_parse_color(x) for x in colors]
 
     def rgba_floats_tuple(self, x):
