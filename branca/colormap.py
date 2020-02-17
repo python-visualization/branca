@@ -6,19 +6,14 @@ Utility module for dealing with colormaps.
 
 """
 
-from __future__ import absolute_import
-
 import json
 import math
 import os
 
-from branca.element import ENV, Figure, JavascriptLink, MacroElement
-from branca.utilities import legend_scaler
-
 from jinja2 import Template
 
-from six import binary_type, text_type
-
+from branca.element import ENV, Figure, JavascriptLink, MacroElement
+from branca.utilities import legend_scaler
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
@@ -42,9 +37,9 @@ def _parse_hex(color_code):
 def _parse_color(x):
     if isinstance(x, (tuple, list)):
         color_tuple = tuple(x)[:4]
-    elif isinstance(x, (text_type, binary_type)) and _is_hex(x):
+    elif isinstance(x, (str, bytes)) and _is_hex(x):
         color_tuple = _parse_hex(x)
-    elif isinstance(x, (text_type, binary_type)):
+    elif isinstance(x, (str, bytes)):
         cname = _cnames.get(x.lower(), None)
         if cname is None:
             raise ValueError('Unknown color {!r}.'.format(cname))
