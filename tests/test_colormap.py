@@ -9,13 +9,13 @@ import branca.colormap as cm
 def test_simple_step():
     step = cm.StepColormap(['green', 'yellow', 'red'],
                            vmin=3., vmax=10.,
-                           index=[3, 4, 8, 10], caption='step')
+                           index=[3, 4, 8, 10], caption='step', width='30%')
     step = cm.StepColormap(['r', 'y', 'g', 'c', 'b', 'm'])
     step._repr_html_()
 
 
 def test_simple_linear():
-    linear = cm.LinearColormap(['green', 'yellow', 'red'], vmin=3., vmax=10.)
+    linear = cm.LinearColormap(['green', 'yellow', 'red'], vmin=3., vmax=10., width='30%')
     linear = cm.LinearColormap(['red', 'orange', 'yellow', 'green'],
                                index=[0, 0.1, 0.9, 1.])
     linear._repr_html_()
@@ -39,7 +39,7 @@ def test_linear_to_step():
 def test_step_to_linear():
     step = cm.StepColormap(['green', 'yellow', 'red'],
                            vmin=3., vmax=10.,
-                           index=[3, 4, 8, 10], caption='step')
+                           index=[3, 4, 8, 10], caption='step', width='20%')
     step.to_linear()
 
 

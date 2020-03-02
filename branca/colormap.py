@@ -75,10 +75,12 @@ class ColorMap(MacroElement):
         The right bound of the color scale.
     caption: str
         A caption to draw with the colormap.
+    width: str
+        The width of the colormap rendered
     """
     _template = ENV.get_template('color_scale.js')
 
-    def __init__(self, vmin=0., vmax=1., caption=''):
+    def __init__(self, vmin=0., vmax=1., caption='', width='40%'):
         super(ColorMap, self).__init__()
         self._name = 'ColorMap'
 
@@ -86,6 +88,7 @@ class ColorMap(MacroElement):
         self.vmax = vmax
         self.caption = caption
         self.index = [vmin, vmax]
+        self.width = width
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
@@ -144,7 +147,7 @@ class ColorMap(MacroElement):
 
     def _repr_html_(self):
         return (
-            '<svg height="50" width="500">' +
+            '<svg height="50" width="{self.width}">' +
             ''.join(
                 [('<line x1="{i}" y1="0" x2="{i}" '
                   'y2="20" style="stroke:{color};stroke-width:3;" />').format(
@@ -185,11 +188,14 @@ class LinearColormap(ColorMap):
         Values lower than `vmin` will be bound directly to `colors[0]`.
     vmax : float, default 1.
         The maximal value for the colormap.
-        Values higher than `vmax` will be bound directly to `colors[-1]`."""
+        Values higher than `vmax` will be bound directly to `colors[-1]`.
+    width : str, default '40%'
+        The width of the colormap rendered
+    """
 
-    def __init__(self, colors, index=None, vmin=0., vmax=1., caption=''):
+    def __init__(self, colors, index=None, vmin=0., vmax=1., caption='', width='40%'):
         super(LinearColormap, self).__init__(vmin=vmin, vmax=vmax,
-                                             caption=caption)
+                                             caption=caption, width=width)
 
         n = len(colors)
         if n < 2:
@@ -227,7 +233,7 @@ class LinearColormap(ColorMap):
         Parameters
         ----------
         n : int, default None
-            The number of expected colors in the ouput StepColormap.
+            The number of expected colors in the output StepColormap.
             This will be ignored if `index` is provided.
         index : list of floats, default None
             The values corresponding to each color bounds.
@@ -339,6 +345,7 @@ class LinearColormap(ColorMap):
             vmin=vmin,
             vmax=vmax,
             caption=self.caption,
+            width=self.width
             )
 
 
@@ -367,11 +374,12 @@ class StepColormap(ColorMap):
     vmax : float, default 1.
         The maximal value for the colormap.
         Values higher than `vmax` will be bound directly to `colors[-1]`.
-
+    width : str
+        The width of the colormap rendered
     """
-    def __init__(self, colors, index=None, vmin=0., vmax=1., caption=''):
+    def __init__(self, colors, index=None, vmin=0., vmax=1., caption='', width='40%'):
         super(StepColormap, self).__init__(vmin=vmin, vmax=vmax,
-                                           caption=caption)
+                                           caption=caption, width=width)
 
         n = len(colors)
         if n < 1:
@@ -427,6 +435,7 @@ class StepColormap(ColorMap):
             vmin=vmin,
             vmax=vmax,
             caption=self.caption,
+            width=self.width
             )
 
 
