@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Utilities
 -------
@@ -6,8 +5,6 @@ Utilities
 Utility module for Folium helper functions.
 
 """
-
-from __future__ import absolute_import, division, print_function
 
 import base64
 import json
@@ -17,9 +14,6 @@ import struct
 import zlib
 
 from jinja2 import Environment, PackageLoader
-
-
-from six import binary_type, text_type
 
 try:
     import pandas as pd
@@ -244,8 +238,8 @@ def image_to_url(image, colormap=None, origin='upper'):
             fileformat = 'png'
         url = 'data:image/{};base64,{}'.format(
             fileformat, base64.b64encode(image.read()).decode('utf-8'))
-    elif (not (isinstance(image, text_type) or
-               isinstance(image, binary_type))) and hasattr(image, '__iter__'):
+    elif (not (isinstance(image, str) or
+               isinstance(image, bytes))) and hasattr(image, '__iter__'):
         # We got an array-like object.
         png = write_png(image, origin=origin, colormap=colormap)
         url = 'data:image/png;base64,' + base64.b64encode(png).decode('utf-8')

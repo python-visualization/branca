@@ -24,6 +24,7 @@ copyright = '2018, Filipe Fernandes'
 author = 'Filipe Fernandes'
 
 from branca._version import get_versions
+
 version = release = get_versions()['version']
 del get_versions
 
