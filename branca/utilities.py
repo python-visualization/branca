@@ -15,6 +15,7 @@ import zlib
 
 from jinja2 import Environment, PackageLoader
 
+
 try:
     import pandas as pd
 except ImportError:
@@ -31,7 +32,7 @@ rootpath = os.path.abspath(os.path.dirname(__file__))
 
 def get_templates():
     """Get Jinja templates."""
-    return Environment(loader=PackageLoader('branca', 'templates'))
+    return Environment(loader=PackageLoader("branca", "templates"))
 
 
 def legend_scaler(legend_values, max_labels=10.0):
@@ -44,11 +45,11 @@ def legend_scaler(legend_values, max_labels=10.0):
     if len(legend_values) < max_labels:
         legend_ticks = legend_values
     else:
-        spacer = int(math.ceil(len(legend_values)/max_labels))
+        spacer = int(math.ceil(len(legend_values) / max_labels))
         legend_ticks = []
         for i in legend_values[::spacer]:
             legend_ticks += [i]
-            legend_ticks += ['']*(spacer-1)
+            legend_ticks += [""] * (spacer - 1)
     return legend_ticks
 
 
@@ -63,6 +64,7 @@ def linear_gradient(hexList, nColors):
     >>> linear_gradient([(0, 0, 0), (255, 0, 0), (255, 255, 0)], 100)
 
     """
+
     def _scale(start, finish, length, i):
         """
         Return the value correct value of a number that is in between start
@@ -73,9 +75,9 @@ def linear_gradient(hexList, nColors):
 
         fraction = float(i) / (length - 1)
         raynge = int(finish, base) - int(start, base)
-        thex = hex(int(int(start, base) + fraction * raynge)).split('x')[-1]
+        thex = hex(int(int(start, base) + fraction * raynge)).split("x")[-1]
         if len(thex) != 2:
-            thex = '0' + thex
+            thex = "0" + thex
         return thex
 
     allColors = []
@@ -88,7 +90,7 @@ def linear_gradient(hexList, nColors):
             r = _scale(start[1:3], end[1:3], nInterpolate, index)
             g = _scale(start[3:5], end[3:5], nInterpolate, index)
             b = _scale(start[5:7], end[5:7], nInterpolate, index)
-            allColors.append(''.join(['#', r, g, b]))
+            allColors.append("".join(["#", r, g, b]))
 
     # Pick only nColors colors from the total list.
     result = []
@@ -110,35 +112,38 @@ def color_brewer(color_code, n=6):
 
     # Raise an error if the n requested is greater than the maximum.
     if n > maximum_n:
-        raise ValueError('The maximum number of colors in a'
-                         ' ColorBrewer sequential color series is 253')
+        raise ValueError(
+            "The maximum number of colors in a"
+            " ColorBrewer sequential color series is 253"
+        )
     if n < minimum_n:
-        raise ValueError('The minimum number of colors in a'
-                         ' ColorBrewer sequential color series is 3')
+        raise ValueError(
+            "The minimum number of colors in a"
+            " ColorBrewer sequential color series is 3"
+        )
 
     if not isinstance(color_code, str):
-        raise ValueError('color should be a string, not a {}.'
-                         .format(type(color_code)))
-    if color_code[-2:] == '_r':
+        raise ValueError("color should be a string, not a {}.".format(type(color_code)))
+    if color_code[-2:] == "_r":
         base_code = color_code[:-2]
-        core_color_code = base_code + '_' + str(n).zfill(2)
+        core_color_code = base_code + "_" + str(n).zfill(2)
         color_reverse = True
     else:
         base_code = color_code
-        core_color_code = base_code + '_' + str(n).zfill(2)
+        core_color_code = base_code + "_" + str(n).zfill(2)
         color_reverse = False
 
-    with open(os.path.join(rootpath, '_schemes.json')) as f:
+    with open(os.path.join(rootpath, "_schemes.json")) as f:
         schemes = json.loads(f.read())
 
-    with open(os.path.join(rootpath, '_cnames.json')) as f:
+    with open(os.path.join(rootpath, "_cnames.json")) as f:
         scheme_info = json.loads(f.read())
 
-    with open(os.path.join(rootpath, 'scheme_base_codes.json')) as f:
-        core_schemes = json.loads(f.read())['codes']
+    with open(os.path.join(rootpath, "scheme_base_codes.json")) as f:
+        core_schemes = json.loads(f.read())["codes"]
 
     if base_code not in core_schemes:
-        raise ValueError(base_code + ' is not a valid ColorBrewer code')
+        raise ValueError(base_code + " is not a valid ColorBrewer code")
 
     try:
         schemes[core_color_code]
@@ -149,18 +154,22 @@ def color_brewer(color_code, n=6):
     # Only if n is greater than the scheme length do we interpolate values.
     if not explicit_scheme:
         # Check to make sure that it is not a qualitative scheme.
-        if scheme_info[base_code] == 'Qualitative':
+        if scheme_info[base_code] == "Qualitative":
             matching_quals = []
             for key in schemes:
-                if base_code + '_' in key:
-                    matching_quals.append(int(key.split('_')[1]))
+                if base_code + "_" in key:
+                    matching_quals.append(int(key.split("_")[1]))
 
-            raise ValueError('Expanded color support is not available'
-                             ' for Qualitative schemes; restrict the'
-                             ' number of colors for the ' + base_code +
-                             ' code to between ' + str(min(matching_quals)) +
-                             ' and ' + str(max(matching_quals))
-                             )
+            raise ValueError(
+                "Expanded color support is not available"
+                " for Qualitative schemes; restrict the"
+                " number of colors for the "
+                + base_code
+                + " code to between "
+                + str(min(matching_quals))
+                + " and "
+                + str(max(matching_quals))
+            )
         else:
             if not color_reverse:
                 color_scheme = linear_gradient(schemes.get(core_color_code), n)
@@ -190,16 +199,14 @@ def split_six(series=None):
 
     """
     if pd is None:
-        raise ImportError('The Pandas package is required'
-                          ' for this functionality')
+        raise ImportError("The Pandas package is required" " for this functionality")
     if np is None:
-        raise ImportError('The NumPy package is required'
-                          ' for this functionality')
+        raise ImportError("The NumPy package is required" " for this functionality")
 
     def base(x):
         if x > 0:
             base = pow(10, math.floor(math.log10(x)))
-            return round(x/base)*base
+            return round(x / base) * base
         else:
             return 0
 
@@ -209,7 +216,7 @@ def split_six(series=None):
     return [base(np.percentile(arr, x)) for x in quants]
 
 
-def image_to_url(image, colormap=None, origin='upper'):
+def image_to_url(image, colormap=None, origin="upper"):
     """Infers the type of an image argument and transforms it into a URL.
 
     Parameters
@@ -229,28 +236,30 @@ def image_to_url(image, colormap=None, origin='upper'):
         It must output iterables of length 3 or 4, with values between
         0. and 1.  Hint : you can use colormaps from `matplotlib.cm`.
     """
-    if hasattr(image, 'read'):
+    if hasattr(image, "read"):
         # We got an image file.
-        if hasattr(image, 'name'):
+        if hasattr(image, "name"):
             # We try to get the image format from the file name.
-            fileformat = image.name.lower().split('.')[-1]
+            fileformat = image.name.lower().split(".")[-1]
         else:
-            fileformat = 'png'
-        url = 'data:image/{};base64,{}'.format(
-            fileformat, base64.b64encode(image.read()).decode('utf-8'))
-    elif (not (isinstance(image, str) or
-               isinstance(image, bytes))) and hasattr(image, '__iter__'):
+            fileformat = "png"
+        url = "data:image/{};base64,{}".format(
+            fileformat, base64.b64encode(image.read()).decode("utf-8")
+        )
+    elif (not (isinstance(image, str) or isinstance(image, bytes))) and hasattr(
+        image, "__iter__"
+    ):
         # We got an array-like object.
         png = write_png(image, origin=origin, colormap=colormap)
-        url = 'data:image/png;base64,' + base64.b64encode(png).decode('utf-8')
+        url = "data:image/png;base64," + base64.b64encode(png).decode("utf-8")
     else:
         # We got an URL.
         url = json.loads(json.dumps(image))
 
-    return url.replace('\n', ' ')
+    return url.replace("\n", " ")
 
 
-def write_png(data, origin='upper', colormap=None):
+def write_png(data, origin="upper", colormap=None):
     """
     Transform an array of data into a PNG string.
     This can be written to disk using binary I/O, or encoded using base64
@@ -282,10 +291,10 @@ def write_png(data, origin='upper', colormap=None):
     PNG formatted byte string
     """
     if np is None:
-        raise ImportError('The NumPy package is required'
-                          ' for this functionality')
+        raise ImportError("The NumPy package is required" " for this functionality")
 
     if colormap is None:
+
         def colormap(x):
             return (x, x, x, 1)
 
@@ -293,16 +302,16 @@ def write_png(data, origin='upper', colormap=None):
     height, width, nblayers = array.shape
 
     if nblayers not in [1, 3, 4]:
-        raise ValueError('Data must be NxM (mono), '
-                         'NxMx3 (RGB), or NxMx4 (RGBA)')
+        raise ValueError("Data must be NxM (mono), " "NxMx3 (RGB), or NxMx4 (RGBA)")
     assert array.shape == (height, width, nblayers)
 
     if nblayers == 1:
         array = np.array(list(map(colormap, array.ravel())))
         nblayers = array.shape[1]
         if nblayers not in [3, 4]:
-            raise ValueError('colormap must provide colors of'
-                             'length 3 (RGB) or 4 (RGBA)')
+            raise ValueError(
+                "colormap must provide colors of" "length 3 (RGB) or 4 (RGBA)"
+            )
         array = array.reshape((height, width, nblayers))
     assert array.shape == (height, width, nblayers)
 
@@ -313,49 +322,66 @@ def write_png(data, origin='upper', colormap=None):
     assert nblayers == 4
 
     # Normalize to uint8 if it isn't already.
-    if array.dtype != 'uint8':
-        array = array * 255./array.max(axis=(0, 1)).reshape((1, 1, 4))
-        array = array.astype('uint8')
+    if array.dtype != "uint8":
+        array = array * 255.0 / array.max(axis=(0, 1)).reshape((1, 1, 4))
+        array = array.astype("uint8")
 
     # Eventually flip the image.
-    if origin == 'lower':
+    if origin == "lower":
         array = array[::-1, :, :]
 
     # Transform the array to bytes.
-    raw_data = b''.join([b'\x00' + array[i, :, :].tobytes()
-                         for i in range(height)])
+    raw_data = b"".join([b"\x00" + array[i, :, :].tobytes() for i in range(height)])
 
     def png_pack(png_tag, data):
         chunk_head = png_tag + data
-        return (struct.pack('!I', len(data)) +
-                chunk_head +
-                struct.pack('!I', 0xFFFFFFFF & zlib.crc32(chunk_head)))
+        return (
+            struct.pack("!I", len(data))
+            + chunk_head
+            + struct.pack("!I", 0xFFFFFFFF & zlib.crc32(chunk_head))
+        )
 
-    return b''.join([
-        b'\x89PNG\r\n\x1a\n',
-        png_pack(b'IHDR', struct.pack('!2I5B', width, height, 8, 6, 0, 0, 0)),
-        png_pack(b'IDAT', zlib.compress(raw_data, 9)),
-        png_pack(b'IEND', b'')])
+    return b"".join(
+        [
+            b"\x89PNG\r\n\x1a\n",
+            png_pack(b"IHDR", struct.pack("!2I5B", width, height, 8, 6, 0, 0, 0)),
+            png_pack(b"IDAT", zlib.compress(raw_data, 9)),
+            png_pack(b"IEND", b""),
+        ]
+    )
 
 
 def _camelify(out):
-    return (''.join(['_' + x.lower() if i < len(out)-1 and x.isupper() and out[i+1].islower()  # noqa
-         else x.lower() + '_' if i < len(out)-1 and x.islower() and out[i+1].isupper()  # noqa
-         else x.lower() for i, x in enumerate(list(out))])).lstrip('_').replace('__', '_')  # noqa
+    return (
+        (
+            "".join(
+                [
+                    "_" + x.lower()
+                    if i < len(out) - 1 and x.isupper() and out[i + 1].islower()  # noqa
+                    else x.lower() + "_"
+                    if i < len(out) - 1 and x.islower() and out[i + 1].isupper()  # noqa
+                    else x.lower()
+                    for i, x in enumerate(list(out))
+                ]
+            )
+        )
+        .lstrip("_")
+        .replace("__", "_")
+    )  # noqa
 
 
 def _parse_size(value):
     try:
         if isinstance(value, int) or isinstance(value, float):
-            value_type = 'px'
+            value_type = "px"
             value = float(value)
             assert value > 0
         else:
-            value_type = '%'
-            value = float(value.strip('%'))
+            value_type = "%"
+            value = float(value.strip("%"))
             assert 0 <= value <= 100
     except Exception:
-        msg = 'Cannot parse value {!r} as {!r}'.format
+        msg = "Cannot parse value {!r} as {!r}".format
         raise ValueError(msg(value, value_type))
     return value, value_type
 
@@ -367,8 +393,8 @@ def _locations_mirror(x):
     [[[2, 1], [4, 3]], [6, 5], [8, 7]]
 
     """
-    if hasattr(x, '__iter__'):
-        if hasattr(x[0], '__iter__'):
+    if hasattr(x, "__iter__"):
+        if hasattr(x[0], "__iter__"):
             return list(map(_locations_mirror, x))
         else:
             return list(x[::-1])
@@ -379,7 +405,7 @@ def _locations_mirror(x):
 def _locations_tolist(x):
     """Transforms recursively a list of iterables into a list of list.
     """
-    if hasattr(x, '__iter__'):
+    if hasattr(x, "__iter__"):
         return list(map(_locations_tolist, x))
     else:
         return x
@@ -419,4 +445,4 @@ def iter_points(x):
         else:
             return []
     else:
-        raise ValueError('List/tuple type expected. Got {!r}.'.format(x))
+        raise ValueError("List/tuple type expected. Got {!r}.".format(x))

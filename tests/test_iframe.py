@@ -6,6 +6,7 @@ Folium Element Module class IFrame
 """
 
 import pytest
+
 from selenium.webdriver import Firefox
 from selenium.webdriver.firefox.options import Options
 
@@ -18,18 +19,18 @@ def test_create_empty_iframe():
 
 
 def test_create_iframe():
-    iframe = elem.IFrame(html='<p>test content<p>', width=60, height=45)
+    iframe = elem.IFrame(html="<p>test content<p>", width=60, height=45)
     iframe.render()
 
 
 @pytest.mark.headless
 def test_rendering_utf8_iframe():
-    iframe = elem.IFrame(html=u'<p>Cerrahpaşa Tıp Fakültesi</p>')
+    iframe = elem.IFrame(html=u"<p>Cerrahpaşa Tıp Fakültesi</p>")
 
     options = Options()
-    options.add_argument('-headless')
+    options.add_argument("-headless")
     driver = Firefox(options=options)
 
-    driver.get('data:text/html,' + iframe.render())
+    driver.get("data:text/html," + iframe.render())
     driver.switch_to.frame(0)
-    assert u'Cerrahpaşa Tıp Fakültesi' in driver.page_source
+    assert u"Cerrahpaşa Tıp Fakültesi" in driver.page_source

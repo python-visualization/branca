@@ -25,6 +25,7 @@ author = "Filipe Fernandes"
 
 import branca
 
+
 version = release = branca.__version__
 
 
@@ -130,13 +131,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (
-        master_doc,
-        "branca.tex",
-        "branca Documentation",
-        "Filipe Fernandes",
-        "manual",
-    ),
+    (master_doc, "branca.tex", "branca Documentation", "Filipe Fernandes", "manual",),
 ]
 
 
