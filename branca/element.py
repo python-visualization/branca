@@ -335,6 +335,7 @@ class Figure(Element):
             iframe = (
             '<div style="width:{width};">'
             '<div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">'  # noqa
+            '<span style="color:#565656">Make this Notebook Trusted to load map: File -> Trust Notebook</span>'  # noqa
             '<iframe src="about:blank" style="position:absolute;width:100%;height:100%;left:0;top:0;'  # noqa
             'border:none !important;" '
             'data-html={html} onload="{onload}" '
