@@ -319,12 +319,20 @@ class Figure(Element):
         return self._template.render(this=self, kwargs=kwargs)
 
     def _repr_html_(self, **kwargs):
-        """Displays the Figure in a Jupyter notebook."""
-        # Base64-encoded HTML is stored in a data-html attribute, which is used to populate
-        # the iframe. This approach does not encounter the 2MB limit in Chrome for storing
-        # the HTML in the src attribute with a data URI. The alternative of using a srcdoc
-        # attribute is not supported in Microsoft Internet Explorer and Edge.
-        html = base64.b64encode(self.render(**kwargs).encode('utf8')).decode('utf8')
+        """Displays the Figure in a Jupyter notebook.
+
+        Base64-encoded HTML is stored in data-html attribute, which is used to populate
+        the iframe. This approach does not encounter the 2MB limit in Chrome for storing
+        the HTML in the src attribute with a data URI. The alternative of using a srcdoc
+        attribute is not supported in Microsoft Internet Explorer and Edge.
+
+        In JS we use `atob` to base64 decode, which cannot handle non-ascii bytes.
+        Use `raw_unicode_escape` which turns those characters into `'\\uxxxx'`
+
+        """
+        html = base64.b64encode(
+            self.render(**kwargs).encode('raw_unicode_escape')
+        ).decode('utf8')
         onload = (
             'this.contentDocument.open();'
             'this.contentDocument.write(atob(this.getAttribute(\'data-html\')));'
