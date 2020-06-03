@@ -36,7 +36,7 @@ pkg_data = {
 }
 pkgs = ["branca"]
 
-LICENSE = read("LICENSE.txt")
+LICENSE = "MIT"
 long_description = "{}".format(read("README.md"))
 
 # Dependencies.
