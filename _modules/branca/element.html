@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>branca.element &#8212; branca 0.4.1+1.gc02e3f0 documentation</title>
+    <title>branca.element &#8212; branca 0.4.1+2.g7a6c5ab documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -368,23 +368,24 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">iframe</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s1">&#39;&lt;div style=&quot;width:</span><span class="si">{width}</span><span class="s1">;&quot;&gt;&#39;</span>
-            <span class="s1">&#39;&lt;div style=&quot;position:relative;width:100%;height:0;padding-bottom:</span><span class="si">{ratio}</span><span class="s1">;&quot;&gt;&#39;</span>  <span class="c1"># noqa</span>
-            <span class="s1">&#39;&lt;span style=&quot;color:#565656&quot;&gt;Make this Notebook Trusted to load map: File -&gt; Trust Notebook&lt;/span&gt;&#39;</span>  <span class="c1"># noqa</span>
-            <span class="s1">&#39;&lt;iframe src=&quot;about:blank&quot; style=&quot;position:absolute;width:100%;height:100%;left:0;top:0;&#39;</span>  <span class="c1"># noqa</span>
-            <span class="s1">&#39;border:none !important;&quot; &#39;</span>
-            <span class="s1">&#39;data-html=</span><span class="si">{html}</span><span class="s1"> onload=&quot;</span><span class="si">{onload}</span><span class="s1">&quot; &#39;</span>
-            <span class="s1">&#39;allowfullscreen webkitallowfullscreen mozallowfullscreen&gt;&#39;</span>
-            <span class="s1">&#39;&lt;/iframe&gt;&#39;</span>
-            <span class="s1">&#39;&lt;/div&gt;&lt;/div&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span>
-            <span class="n">iframe</span> <span class="o">=</span> <span class="n">iframe</span><span class="p">(</span><span class="n">html</span><span class="o">=</span><span class="n">html</span><span class="p">,</span> <span class="n">onload</span><span class="o">=</span><span class="n">onload</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">)</span>
+                <span class="s1">&#39;&lt;div style=&quot;width:</span><span class="si">{width}</span><span class="s1">;&quot;&gt;&#39;</span>
+                <span class="s1">&#39;&lt;div style=&quot;position:relative;width:100%;height:0;padding-bottom:</span><span class="si">{ratio}</span><span class="s1">;&quot;&gt;&#39;</span>  <span class="c1"># noqa</span>
+                <span class="s1">&#39;&lt;span style=&quot;color:#565656&quot;&gt;Make this Notebook Trusted to load map: File -&gt; Trust Notebook&lt;/span&gt;&#39;</span>  <span class="c1"># noqa</span>
+                <span class="s1">&#39;&lt;iframe src=&quot;about:blank&quot; style=&quot;position:absolute;width:100%;height:100%;left:0;top:0;&#39;</span>  <span class="c1"># noqa</span>
+                <span class="s1">&#39;border:none !important;&quot; &#39;</span>
+                <span class="s1">&#39;data-html=</span><span class="si">{html}</span><span class="s1"> onload=&quot;</span><span class="si">{onload}</span><span class="s1">&quot; &#39;</span>
+                <span class="s1">&#39;allowfullscreen webkitallowfullscreen mozallowfullscreen&gt;&#39;</span>
+                <span class="s1">&#39;&lt;/iframe&gt;&#39;</span>
+                <span class="s1">&#39;&lt;/div&gt;&lt;/div&gt;&#39;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">html</span><span class="o">=</span><span class="n">html</span><span class="p">,</span> <span class="n">onload</span><span class="o">=</span><span class="n">onload</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">iframe</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;&lt;iframe src=&quot;about:blank&quot; width=&quot;</span><span class="si">{width}</span><span class="s1">&quot; height=&quot;</span><span class="si">{height}</span><span class="s1">&quot;&#39;</span>
-                      <span class="s1">&#39;style=&quot;border:none !important;&quot; &#39;</span>
-                      <span class="s1">&#39;data-html=</span><span class="si">{html}</span><span class="s1"> onload=&quot;</span><span class="si">{onload}</span><span class="s1">&quot; &#39;</span>
-                      <span class="s1">&#39;&quot;allowfullscreen&quot; &quot;webkitallowfullscreen&quot; &quot;mozallowfullscreen&quot;&gt;&#39;</span>  <span class="c1"># noqa</span>
-                      <span class="s1">&#39;&lt;/iframe&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span>
-            <span class="n">iframe</span> <span class="o">=</span> <span class="n">iframe</span><span class="p">(</span><span class="n">html</span><span class="o">=</span><span class="n">html</span><span class="p">,</span> <span class="n">onload</span><span class="o">=</span><span class="n">onload</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+            <span class="n">iframe</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s1">&#39;&lt;iframe src=&quot;about:blank&quot; width=&quot;</span><span class="si">{width}</span><span class="s1">&quot; height=&quot;</span><span class="si">{height}</span><span class="s1">&quot;&#39;</span>
+                <span class="s1">&#39;style=&quot;border:none !important;&quot; &#39;</span>
+                <span class="s1">&#39;data-html=</span><span class="si">{html}</span><span class="s1"> onload=&quot;</span><span class="si">{onload}</span><span class="s1">&quot; &#39;</span>
+                <span class="s1">&#39;&quot;allowfullscreen&quot; &quot;webkitallowfullscreen&quot; &quot;mozallowfullscreen&quot;&gt;&#39;</span>
+                <span class="s1">&#39;&lt;/iframe&gt;&#39;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">html</span><span class="o">=</span><span class="n">html</span><span class="p">,</span> <span class="n">onload</span><span class="o">=</span><span class="n">onload</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">iframe</span>
 
 <div class="viewcode-block" id="Figure.add_subplot"><a class="viewcode-back" href="../../element.html#branca.element.Figure.add_subplot">[docs]</a>    <span class="k">def</span> <span class="nf">add_subplot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="mf">0.05</span><span class="p">):</span>
@@ -604,19 +605,18 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">iframe</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s1">&#39;&lt;div style=&quot;width:</span><span class="si">{width}</span><span class="s1">;&quot;&gt;&#39;</span>
-            <span class="s1">&#39;&lt;div style=&quot;position:relative;width:100%;height:0;padding-bottom:</span><span class="si">{ratio}</span><span class="s1">;&quot;&gt;&#39;</span>  <span class="c1"># noqa</span>
-            <span class="s1">&#39;&lt;iframe src=&quot;</span><span class="si">{html}</span><span class="s1">&quot; style=&quot;position:absolute;width:100%;height:100%;left:0;top:0;&#39;</span>  <span class="c1"># noqa</span>
-            <span class="s1">&#39;border:none !important;&quot;&gt;&#39;</span>
-            <span class="s1">&#39;&lt;/iframe&gt;&#39;</span>
-            <span class="s1">&#39;&lt;/div&gt;&lt;/div&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span>
-            <span class="n">iframe</span> <span class="o">=</span> <span class="n">iframe</span><span class="p">(</span><span class="n">html</span><span class="o">=</span><span class="n">html</span><span class="p">,</span>
-                            <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
-                            <span class="n">ratio</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">)</span>
+                <span class="s1">&#39;&lt;div style=&quot;width:</span><span class="si">{width}</span><span class="s1">;&quot;&gt;&#39;</span>
+                <span class="s1">&#39;&lt;div style=&quot;position:relative;width:100%;height:0;padding-bottom:</span><span class="si">{ratio}</span><span class="s1">;&quot;&gt;&#39;</span>  <span class="c1"># noqa</span>
+                <span class="s1">&#39;&lt;iframe src=&quot;</span><span class="si">{html}</span><span class="s1">&quot; style=&quot;position:absolute;width:100%;height:100%;left:0;top:0;&#39;</span>  <span class="c1"># noqa</span>
+                <span class="s1">&#39;border:none !important;&quot;&gt;&#39;</span>
+                <span class="s1">&#39;&lt;/iframe&gt;&#39;</span>
+                <span class="s1">&#39;&lt;/div&gt;&lt;/div&gt;&#39;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">html</span><span class="o">=</span><span class="n">html</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">ratio</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ratio</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">iframe</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;&lt;iframe src=&quot;</span><span class="si">{html}</span><span class="s1">&quot; width=&quot;</span><span class="si">{width}</span><span class="s1">&quot; style=&quot;border:none !important;&quot; &#39;</span>
-                      <span class="s1">&#39;height=&quot;</span><span class="si">{height}</span><span class="s1">&quot;&gt;&lt;/iframe&gt;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span>
-            <span class="n">iframe</span> <span class="o">=</span> <span class="n">iframe</span><span class="p">(</span><span class="n">html</span><span class="o">=</span><span class="n">html</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+            <span class="n">iframe</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s1">&#39;&lt;iframe src=&quot;</span><span class="si">{html}</span><span class="s1">&quot; width=&quot;</span><span class="si">{width}</span><span class="s1">&quot; style=&quot;border:none !important;&quot; &#39;</span>
+                <span class="s1">&#39;height=&quot;</span><span class="si">{height}</span><span class="s1">&quot;&gt;&lt;/iframe&gt;&#39;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">html</span><span class="o">=</span><span class="n">html</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">iframe</span></div></div>
 
 
@@ -729,7 +729,7 @@
       &copy;2018, Filipe Fernandes.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
