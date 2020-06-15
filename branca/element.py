@@ -326,7 +326,8 @@ class Figure(Element):
         the HTML in the src attribute with a data URI. The alternative of using a srcdoc
         attribute is not supported in Microsoft Internet Explorer and Edge.
 
-        In JS we use `atob` to base64 decode, which cannot handle non-ascii bytes.
+        In JS we use `atob` to base64 decode, which cannot handle characters that
+        exceed the range of a 8-bit byte (0x00~0xFF).
         Use `raw_unicode_escape` which turns those characters into `'\\uxxxx'`
 
         """
