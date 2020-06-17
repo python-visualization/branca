@@ -10,6 +10,7 @@ import base64
 import json
 import warnings
 from collections import OrderedDict
+import urllib.parse
 from urllib.request import urlopen
 from uuid import uuid4
 
@@ -321,22 +322,18 @@ class Figure(Element):
     def _repr_html_(self, **kwargs):
         """Displays the Figure in a Jupyter notebook.
 
-        Base64-encoded HTML is stored in data-html attribute, which is used to populate
+        Percent-encoded HTML is stored in data-html attribute, which is used to populate
         the iframe. This approach does not encounter the 2MB limit in Chrome for storing
         the HTML in the src attribute with a data URI. The alternative of using a srcdoc
         attribute is not supported in Microsoft Internet Explorer and Edge.
 
-        In JS we use `atob` to base64 decode, which cannot handle characters that
-        exceed the range of a 8-bit byte (0x00~0xFF).
-        Use `raw_unicode_escape` which turns those characters into `'\\uxxxx'`
-
         """
-        html = base64.b64encode(
-            self.render(**kwargs).encode('raw_unicode_escape')
-        ).decode('utf8')
+        html = urllib.parse.quote(self.render(**kwargs))
         onload = (
             'this.contentDocument.open();'
-            'this.contentDocument.write(atob(this.getAttribute(\'data-html\')));'
+            'this.contentDocument.write('
+            '    decodeURIComponent(this.getAttribute(\'data-html\'))'
+            ');'
             'this.contentDocument.close();'
         )
 
