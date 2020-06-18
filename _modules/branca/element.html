@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>branca.element &#8212; branca 0.4.1+2.g7a6c5ab documentation</title>
+    <title>branca.element &#8212; branca 0.4.1+3.g5887b9b documentation</title>
     <link rel="stylesheet" href="../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
@@ -45,6 +45,7 @@
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">import</span> <span class="nn">urllib.parse</span>
 <span class="kn">from</span> <span class="nn">urllib.request</span> <span class="kn">import</span> <span class="n">urlopen</span>
 <span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">uuid4</span>
 
@@ -354,15 +355,20 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_template</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">this</span><span class="o">=</span><span class="bp">self</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Displays the Figure in a Jupyter notebook.&quot;&quot;&quot;</span>
-        <span class="c1"># Base64-encoded HTML is stored in a data-html attribute, which is used to populate</span>
-        <span class="c1"># the iframe. This approach does not encounter the 2MB limit in Chrome for storing</span>
-        <span class="c1"># the HTML in the src attribute with a data URI. The alternative of using a srcdoc</span>
-        <span class="c1"># attribute is not supported in Microsoft Internet Explorer and Edge.</span>
-        <span class="n">html</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+        <span class="sd">&quot;&quot;&quot;Displays the Figure in a Jupyter notebook.</span>
+
+<span class="sd">        Percent-encoded HTML is stored in data-html attribute, which is used to populate</span>
+<span class="sd">        the iframe. This approach does not encounter the 2MB limit in Chrome for storing</span>
+<span class="sd">        the HTML in the src attribute with a data URI. The alternative of using a srcdoc</span>
+<span class="sd">        attribute is not supported in Microsoft Internet Explorer and Edge.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">html</span> <span class="o">=</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
         <span class="n">onload</span> <span class="o">=</span> <span class="p">(</span>
             <span class="s1">&#39;this.contentDocument.open();&#39;</span>
-            <span class="s1">&#39;this.contentDocument.write(atob(this.getAttribute(</span><span class="se">\&#39;</span><span class="s1">data-html</span><span class="se">\&#39;</span><span class="s1">)));&#39;</span>
+            <span class="s1">&#39;this.contentDocument.write(&#39;</span>
+            <span class="s1">&#39;    decodeURIComponent(this.getAttribute(</span><span class="se">\&#39;</span><span class="s1">data-html</span><span class="se">\&#39;</span><span class="s1">))&#39;</span>
+            <span class="s1">&#39;);&#39;</span>
             <span class="s1">&#39;this.contentDocument.close();&#39;</span>
         <span class="p">)</span>
 
