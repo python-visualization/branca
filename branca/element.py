@@ -10,6 +10,7 @@ import base64
 import json
 import warnings
 from collections import OrderedDict
+import urllib.parse
 from urllib.request import urlopen
 from uuid import uuid4
 
@@ -319,15 +320,20 @@ class Figure(Element):
         return self._template.render(this=self, kwargs=kwargs)
 
     def _repr_html_(self, **kwargs):
-        """Displays the Figure in a Jupyter notebook."""
-        # Base64-encoded HTML is stored in a data-html attribute, which is used to populate
-        # the iframe. This approach does not encounter the 2MB limit in Chrome for storing
-        # the HTML in the src attribute with a data URI. The alternative of using a srcdoc
-        # attribute is not supported in Microsoft Internet Explorer and Edge.
-        html = base64.b64encode(self.render(**kwargs).encode('utf8')).decode('utf8')
+        """Displays the Figure in a Jupyter notebook.
+
+        Percent-encoded HTML is stored in data-html attribute, which is used to populate
+        the iframe. This approach does not encounter the 2MB limit in Chrome for storing
+        the HTML in the src attribute with a data URI. The alternative of using a srcdoc
+        attribute is not supported in Microsoft Internet Explorer and Edge.
+
+        """
+        html = urllib.parse.quote(self.render(**kwargs))
         onload = (
             'this.contentDocument.open();'
-            'this.contentDocument.write(atob(this.getAttribute(\'data-html\')));'
+            'this.contentDocument.write('
+            '    decodeURIComponent(this.getAttribute(\'data-html\'))'
+            ');'
             'this.contentDocument.close();'
         )
 

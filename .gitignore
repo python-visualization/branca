@@ -54,6 +54,7 @@ examples/foo.html
 # documentation builds
 docs/_build
 
+geckodriver.exe
 geckodriver.log
 
 # Pycharm
