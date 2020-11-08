@@ -1,3 +1,7 @@
+0.4.2
+~~~~~
+- Fix special char encoding in notebooks, store as percent-encoded (@conengmo #76)
+
 0.4.1
 ~~~~~
 - Prompt Jupyter users to trust notebook (@conengmo #75)
