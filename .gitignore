@@ -59,3 +59,4 @@ geckodriver.log
 
 # Pycharm
 .idea/
+venv/pyvenv.cfg
