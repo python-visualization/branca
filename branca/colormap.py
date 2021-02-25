@@ -82,6 +82,9 @@ class ColorMap(MacroElement):
         self.caption = caption
         self.index = [vmin, vmax]
 
+        self.width = 300
+        self.height = 50
+
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         self.color_domain = [self.vmin + (self.vmax-self.vmin) * k/499. for
@@ -139,7 +142,7 @@ class ColorMap(MacroElement):
 
     def _repr_html_(self):
         return (
-            '<svg height="50" width="500">' +
+            '<svg height="50" width="({{this._parent.get_name()}}.getSize().x)*0.9">' +
             ''.join(
                 [('<line x1="{i}" y1="0" x2="{i}" '
                   'y2="20" style="stroke:{color};stroke-width:3;" />').format(
@@ -150,7 +153,7 @@ class ColorMap(MacroElement):
                   )
                  for i in range(500)]) +
             '<text x="0" y="35">{}</text>'.format(self.vmin) +
-            '<text x="500" y="35" style="text-anchor:end;">{}</text>'.format(
+            '<text x="({{this._parent.get_name()}}.getSize().x)*0.9" y="35" style="text-anchor:end;">{}</text>'.format(
                 self.vmax) +
             '</svg>')
 
