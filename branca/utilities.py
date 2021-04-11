@@ -44,7 +44,7 @@ def legend_scaler(legend_values, max_labels=10.0):
     if len(legend_values) < max_labels:
         legend_ticks = legend_values
     else:
-        spacer = int(math.ceil(len(legend_values)/ (max_labels - 1)))
+        spacer = int(math.ceil(len(legend_values) / (max_labels - 1)))
         legend_ticks = []
         for i in legend_values[::spacer]:
             legend_ticks += [i]
