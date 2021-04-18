@@ -5,14 +5,13 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>branca.colormap &#8212; branca 0.4.1+4.gac45f1e documentation</title>
+    <title>branca.colormap &#8212; branca 0.4.2+1.g42bb2bd documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -40,7 +39,7 @@
 <p>Utility module for dealing with colormaps.</p>
 <dl class="py class">
 <dt id="branca.colormap.ColorMap">
-<em class="property">class </em><code class="sig-prename descclassname">branca.colormap.</code><code class="sig-name descname">ColorMap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vmin</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">vmax</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">caption</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.ColorMap" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">branca.colormap.</span></code><code class="sig-name descname"><span class="pre">ColorMap</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.ColorMap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="element.html#branca.element.MacroElement" title="branca.element.MacroElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.MacroElement</span></code></a></p>
 <p>A generic class for creating colormaps.</p>
 <dl class="field-list simple">
@@ -54,34 +53,34 @@
 </dl>
 <dl class="py method">
 <dt id="branca.colormap.ColorMap.render">
-<code class="sig-name descname">render</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.ColorMap.render" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">render</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.ColorMap.render" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="branca.colormap.ColorMap.rgb_bytes_tuple">
-<code class="sig-name descname">rgb_bytes_tuple</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.rgb_bytes_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.ColorMap.rgb_bytes_tuple" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">rgb_bytes_tuple</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.rgb_bytes_tuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.ColorMap.rgb_bytes_tuple" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides the color corresponding to value <cite>x</cite> in the
 form of a tuple (R,G,B) with int values between 0 and 255.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="branca.colormap.ColorMap.rgb_hex_str">
-<code class="sig-name descname">rgb_hex_str</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.rgb_hex_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.ColorMap.rgb_hex_str" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">rgb_hex_str</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.rgb_hex_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.ColorMap.rgb_hex_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides the color corresponding to value <cite>x</cite> in the
 form of a string of hexadecimal values “#RRGGBB”.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="branca.colormap.ColorMap.rgba_bytes_tuple">
-<code class="sig-name descname">rgba_bytes_tuple</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.rgba_bytes_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.ColorMap.rgba_bytes_tuple" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">rgba_bytes_tuple</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.rgba_bytes_tuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.ColorMap.rgba_bytes_tuple" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides the color corresponding to value <cite>x</cite> in the
 form of a tuple (R,G,B,A) with int values between 0 and 255.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="branca.colormap.ColorMap.rgba_floats_tuple">
-<code class="sig-name descname">rgba_floats_tuple</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.rgba_floats_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.ColorMap.rgba_floats_tuple" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">rgba_floats_tuple</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.rgba_floats_tuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.ColorMap.rgba_floats_tuple" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class has to be implemented for each class inheriting from
 Colormap. This has to be a function of the form float -&gt;
 (float, float, float, float) describing for each input float x,
@@ -91,7 +90,7 @@ Each output value being between 0 and 1.</p>
 
 <dl class="py method">
 <dt id="branca.colormap.ColorMap.rgba_hex_str">
-<code class="sig-name descname">rgba_hex_str</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.rgba_hex_str"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.ColorMap.rgba_hex_str" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">rgba_hex_str</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#ColorMap.rgba_hex_str"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.ColorMap.rgba_hex_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides the color corresponding to value <cite>x</cite> in the
 form of a string of hexadecimal values “#RRGGBBAA”.</p>
 </dd></dl>
@@ -100,7 +99,7 @@ form of a string of hexadecimal values “#RRGGBBAA”.</p>
 
 <dl class="py class">
 <dt id="branca.colormap.LinearColormap">
-<em class="property">class </em><code class="sig-prename descclassname">branca.colormap.</code><code class="sig-name descname">LinearColormap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">colors</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vmin</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">vmax</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">caption</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#LinearColormap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.LinearColormap" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">branca.colormap.</span></code><code class="sig-name descname"><span class="pre">LinearColormap</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">colors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#LinearColormap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.LinearColormap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#branca.colormap.ColorMap" title="branca.colormap.ColorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">branca.colormap.ColorMap</span></code></a></p>
 <p>Creates a ColorMap based on linear interpolation of a set of colors
 over a given index.</p>
@@ -127,21 +126,21 @@ Values higher than <cite>vmax</cite> will be bound directly to <cite>colors[-1]<
 </dl>
 <dl class="py method">
 <dt id="branca.colormap.LinearColormap.rgba_floats_tuple">
-<code class="sig-name descname">rgba_floats_tuple</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#LinearColormap.rgba_floats_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.LinearColormap.rgba_floats_tuple" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">rgba_floats_tuple</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#LinearColormap.rgba_floats_tuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.LinearColormap.rgba_floats_tuple" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides the color corresponding to value <cite>x</cite> in the
 form of a tuple (R,G,B,A) with float values between 0. and 1.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="branca.colormap.LinearColormap.scale">
-<code class="sig-name descname">scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vmin</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">vmax</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#LinearColormap.scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.LinearColormap.scale" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">scale</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#LinearColormap.scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.LinearColormap.scale" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms the colorscale so that the minimal and maximal values
 fit the given parameters.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="branca.colormap.LinearColormap.to_step">
-<code class="sig-name descname">to_step</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">quantiles</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">round_method</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#LinearColormap.to_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.LinearColormap.to_step" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">to_step</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quantiles</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">round_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#LinearColormap.to_step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.LinearColormap.to_step" title="Permalink to this definition">¶</a></dt>
 <dd><p>Splits the LinearColormap into a StepColormap.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -187,7 +186,7 @@ order-of-magnitude integer. For example, 2100 is rounded to
 
 <dl class="py class">
 <dt id="branca.colormap.StepColormap">
-<em class="property">class </em><code class="sig-prename descclassname">branca.colormap.</code><code class="sig-name descname">StepColormap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">colors</span></em>, <em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">vmin</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">vmax</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">caption</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#StepColormap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.StepColormap" title="Permalink to this definition">¶</a></dt>
+<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">branca.colormap.</span></code><code class="sig-name descname"><span class="pre">StepColormap</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">colors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caption</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#StepColormap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.StepColormap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#branca.colormap.ColorMap" title="branca.colormap.ColorMap"><code class="xref py py-class docutils literal notranslate"><span class="pre">branca.colormap.ColorMap</span></code></a></p>
 <p>Creates a ColorMap based on linear interpolation of a set of colors
 over a given index.</p>
@@ -214,21 +213,21 @@ Values higher than <cite>vmax</cite> will be bound directly to <cite>colors[-1]<
 </dl>
 <dl class="py method">
 <dt id="branca.colormap.StepColormap.rgba_floats_tuple">
-<code class="sig-name descname">rgba_floats_tuple</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#StepColormap.rgba_floats_tuple"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.StepColormap.rgba_floats_tuple" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">rgba_floats_tuple</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#StepColormap.rgba_floats_tuple"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.StepColormap.rgba_floats_tuple" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provides the color corresponding to value <cite>x</cite> in the
 form of a tuple (R,G,B,A) with float values between 0. and 1.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="branca.colormap.StepColormap.scale">
-<code class="sig-name descname">scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vmin</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">vmax</span><span class="o">=</span><span class="default_value">1.0</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#StepColormap.scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.StepColormap.scale" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">scale</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#StepColormap.scale"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.StepColormap.scale" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms the colorscale so that the minimal and maximal values
 fit the given parameters.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt id="branca.colormap.StepColormap.to_linear">
-<code class="sig-name descname">to_linear</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">index</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#StepColormap.to_linear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#branca.colormap.StepColormap.to_linear" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname"><span class="pre">to_linear</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/colormap.html#StepColormap.to_linear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.colormap.StepColormap.to_linear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transforms the StepColormap into a LinearColormap.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -304,7 +303,7 @@ If None, a regular grid between <cite>vmin</cite> and <cite>vmax</cite> is creat
       &copy;2018, Filipe Fernandes.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.3.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.4</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
