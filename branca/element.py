@@ -408,10 +408,10 @@ class Html(Element):
         (suitable for embedding html-ready code)
     width : int or str, default '100%'
         The width of the output div element.
-        Ex: 120 , '120px', '80%'
+        Ex: 120 , '80%'
     height : int or str, default '100%'
         The height of the output div element.
-        Ex: 120 , '120px', '80%'
+        Ex: 120 , '80%'
     """
     _template = Template(
         '<div id="{{this.get_name()}}" '

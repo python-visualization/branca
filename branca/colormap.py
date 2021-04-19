@@ -329,7 +329,9 @@ class LinearColormap(ColorMap):
                                               index[i+1] * i/(n-1.)) for
                   i in range(n)]
 
-        return StepColormap(colors, index=index, vmin=index[0], vmax=index[-1],
+        caption = self.caption
+
+        return StepColormap(colors, index=index, vmin=index[0], vmax=index[-1], caption=caption,
                             max_labels=max_labels)
 
     def scale(self, vmin=0., vmax=1., max_labels=10):
