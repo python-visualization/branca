@@ -70,8 +70,8 @@ class ColorMap(MacroElement):
         The right bound of the color scale.
     caption: str
         A caption to draw with the colormap.
-    max_labels : int
-        Maximum number of legend values
+    max_labels : int, default 10
+        Maximum number of legend tick labels
     """
     _template = ENV.get_template('color_scale.js')
 
@@ -184,8 +184,8 @@ class LinearColormap(ColorMap):
     vmax : float, default 1.
         The maximal value for the colormap.
         Values higher than `vmax` will be bound directly to `colors[-1]`.
-    max_labels : int
-        Maximum number of legend values"""
+    max_labels : int, default 10
+        Maximum number of legend tick labels"""
 
     def __init__(self, colors, index=None, vmin=0., vmax=1., caption='', max_labels=10):
         super(LinearColormap, self).__init__(vmin=vmin, vmax=vmax,
@@ -248,8 +248,8 @@ class LinearColormap(ColorMap):
             * If 'log10', all values will be rounded to the nearest
             order-of-magnitude integer. For example, 2100 is rounded to
             2000, 2790 to 3000.
-        max_labels : int
-            Maximum number of legend values
+        max_labels : int, default 10
+            Maximum number of legend tick labels
 
         Returns
         -------
@@ -371,8 +371,8 @@ class StepColormap(ColorMap):
     vmax : float, default 1.
         The maximal value for the colormap.
         Values higher than `vmax` will be bound directly to `colors[-1]`.
-    max_labels : int
-        Maximum number of legend values
+    max_labels : int, default 10
+        Maximum number of legend tick labels
 
     """
     def __init__(self, colors, index=None, vmin=0., vmax=1., caption='', max_labels=10):
@@ -412,8 +412,8 @@ class StepColormap(ColorMap):
                 The values corresponding to each color in the output colormap.
                 It has to be sorted.
                 If None, a regular grid between `vmin` and `vmax` is created.
-        max_labels : int
-            Maximum number of legend values
+        max_labels : int, default 10
+            Maximum number of legend tick labels
 
         """
         if index is None:
