@@ -66,10 +66,11 @@ def test_max_labels_linear(max_labels, expected):
     colorbar = cm.LinearColormap(['red'] * 10, vmin=0, vmax=9, max_labels=max_labels)
     try:
         colorbar.render()
-    except AssertionError:
-        assert colorbar.tick_labels == expected
+    except AssertionError: # rendering outside parent Figure raises error
+        pass
+    assert colorbar.tick_labels == expected
 
-        
+
 @pytest.mark.parametrize("max_labels,expected", [
     (10, [0.0, '', 2.0, '', 4.0, '', 6.0, '', 8.0, '', 10.0, '']),
     (5, [0.0, '', '', 3.0, '', '', 6.0, '', '', 9.0, '', '']),
@@ -79,5 +80,6 @@ def test_max_labels_step(max_labels, expected):
     colorbar = cm.StepColormap(['red', 'blue'] * 5, vmin=0, vmax=10, max_labels=max_labels)
     try:
         colorbar.render()
-    except AssertionError:
-        assert colorbar.tick_labels == expected
+    except AssertionError: # rendering outside parent Figure raises error
+        pass
+    assert colorbar.tick_labels == expected
