@@ -70,10 +70,12 @@ class ColorMap(MacroElement):
         The right bound of the color scale.
     caption: str
         A caption to draw with the colormap.
+    max_labels : int, default 10
+        Maximum number of legend tick labels
     """
     _template = ENV.get_template('color_scale.js')
 
-    def __init__(self, vmin=0., vmax=1., caption=''):
+    def __init__(self, vmin=0., vmax=1., caption='', max_labels=10):
         super(ColorMap, self).__init__()
         self._name = 'ColorMap'
 
@@ -81,13 +83,14 @@ class ColorMap(MacroElement):
         self.vmax = vmax
         self.caption = caption
         self.index = [vmin, vmax]
+        self.max_labels = max_labels
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         self.color_domain = [self.vmin + (self.vmax-self.vmin) * k/499. for
                              k in range(500)]
         self.color_range = [self.__call__(x) for x in self.color_domain]
-        self.tick_labels = legend_scaler(self.index)
+        self.tick_labels = legend_scaler(self.index, self.max_labels)
 
         super(ColorMap, self).render(**kwargs)
 
@@ -180,11 +183,13 @@ class LinearColormap(ColorMap):
         Values lower than `vmin` will be bound directly to `colors[0]`.
     vmax : float, default 1.
         The maximal value for the colormap.
-        Values higher than `vmax` will be bound directly to `colors[-1]`."""
+        Values higher than `vmax` will be bound directly to `colors[-1]`.
+    max_labels : int, default 10
+        Maximum number of legend tick labels"""
 
-    def __init__(self, colors, index=None, vmin=0., vmax=1., caption=''):
+    def __init__(self, colors, index=None, vmin=0., vmax=1., caption='', max_labels=10):
         super(LinearColormap, self).__init__(vmin=vmin, vmax=vmax,
-                                             caption=caption)
+                                             caption=caption, max_labels=max_labels)
 
         n = len(colors)
         if n < 2:
@@ -216,7 +221,7 @@ class LinearColormap(ColorMap):
                      in range(4))
 
     def to_step(self, n=None, index=None, data=None, method=None,
-                quantiles=None, round_method=None):
+                quantiles=None, round_method=None, max_labels=10):
         """Splits the LinearColormap into a StepColormap.
 
         Parameters
@@ -243,6 +248,8 @@ class LinearColormap(ColorMap):
             * If 'log10', all values will be rounded to the nearest
             order-of-magnitude integer. For example, 2100 is rounded to
             2000, 2790 to 3000.
+        max_labels : int, default 10
+            Maximum number of legend tick labels
 
         Returns
         -------
@@ -324,9 +331,10 @@ class LinearColormap(ColorMap):
 
         caption = self.caption
 
-        return StepColormap(colors, index=index, vmin=index[0], vmax=index[-1], caption=caption)
+        return StepColormap(colors, index=index, vmin=index[0], vmax=index[-1], caption=caption,
+                            max_labels=max_labels)
 
-    def scale(self, vmin=0., vmax=1.):
+    def scale(self, vmin=0., vmax=1., max_labels=10):
         """Transforms the colorscale so that the minimal and maximal values
         fit the given parameters.
         """
@@ -336,6 +344,7 @@ class LinearColormap(ColorMap):
             vmin=vmin,
             vmax=vmax,
             caption=self.caption,
+            max_labels=max_labels
             )
 
 
@@ -364,11 +373,13 @@ class StepColormap(ColorMap):
     vmax : float, default 1.
         The maximal value for the colormap.
         Values higher than `vmax` will be bound directly to `colors[-1]`.
+    max_labels : int, default 10
+        Maximum number of legend tick labels
 
     """
-    def __init__(self, colors, index=None, vmin=0., vmax=1., caption=''):
+    def __init__(self, colors, index=None, vmin=0., vmax=1., caption='', max_labels=10):
         super(StepColormap, self).__init__(vmin=vmin, vmax=vmax,
-                                           caption=caption)
+                                           caption=caption, max_labels=max_labels)
 
         n = len(colors)
         if n < 1:
@@ -393,7 +404,7 @@ class StepColormap(ColorMap):
         i = len([u for u in self.index if u < x])  # 0 < i < n.
         return tuple(self.colors[i-1])
 
-    def to_linear(self, index=None):
+    def to_linear(self, index=None, max_labels=10):
         """
         Transforms the StepColormap into a LinearColormap.
 
@@ -403,6 +414,8 @@ class StepColormap(ColorMap):
                 The values corresponding to each color in the output colormap.
                 It has to be sorted.
                 If None, a regular grid between `vmin` and `vmax` is created.
+        max_labels : int, default 10
+            Maximum number of legend tick labels
 
         """
         if index is None:
@@ -412,9 +425,9 @@ class StepColormap(ColorMap):
 
         colors = [self.rgba_floats_tuple(x) for x in index]
         return LinearColormap(colors, index=index,
-                              vmin=self.vmin, vmax=self.vmax)
+                              vmin=self.vmin, vmax=self.vmax, max_labels=max_labels)
 
-    def scale(self, vmin=0., vmax=1.):
+    def scale(self, vmin=0., vmax=1., max_labels=10):
         """Transforms the colorscale so that the minimal and maximal values
         fit the given parameters.
         """
@@ -424,6 +437,7 @@ class StepColormap(ColorMap):
             vmin=vmin,
             vmax=vmax,
             caption=self.caption,
+            max_labels=max_labels
             )
 
 
