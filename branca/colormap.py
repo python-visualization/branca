@@ -82,6 +82,9 @@ class ColorMap(MacroElement):
         self.caption = caption
         self.index = [vmin, vmax]
 
+        self.width = 450
+        self.height = 40
+
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         self.color_domain = [self.vmin + (self.vmax-self.vmin) * k/499. for
