@@ -8,6 +8,7 @@ flake8-print
 isort
 jupyter
 nbsphinx
+nbval
 pylint
 pytest
 pytest-cov
