@@ -4,6 +4,7 @@ Folium Colormap Module
 ----------------------
 """
 import branca.colormap as cm
+import pytest
 
 
 def test_simple_step():
@@ -55,3 +56,30 @@ def test_step_object():
     cm.step.PuBu_06.to_linear()
     cm.step.YlGn_06.scale(3, 12)
     cm.step._repr_html_()
+
+@pytest.mark.parametrize("max_labels,expected", [
+    (10, [0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0]),
+    (5, [0.0, '', 2.0, '', 4.0, '', 6.0, '', 8.0, '']),
+    (3, [0.0, '', '', '', 4.0, '', '', '', 8.0, '', '', '']),
+])
+def test_max_labels_linear(max_labels, expected):
+    colorbar = cm.LinearColormap(['red'] * 10, vmin=0, vmax=9, max_labels=max_labels)
+    try:
+        colorbar.render()
+    except AssertionError: # rendering outside parent Figure raises error
+        pass
+    assert colorbar.tick_labels == expected
+
+
+@pytest.mark.parametrize("max_labels,expected", [
+    (10, [0.0, '', 2.0, '', 4.0, '', 6.0, '', 8.0, '', 10.0, '']),
+    (5, [0.0, '', '', 3.0, '', '', 6.0, '', '', 9.0, '', '']),
+    (3, [0.0, '', '', '', 4.0, '', '', '', 8.0, '', '', '']),
+])
+def test_max_labels_step(max_labels, expected):
+    colorbar = cm.StepColormap(['red', 'blue'] * 5, vmin=0, vmax=10, max_labels=max_labels)
+    try:
+        colorbar.render()
+    except AssertionError: # rendering outside parent Figure raises error
+        pass
+    assert colorbar.tick_labels == expected
