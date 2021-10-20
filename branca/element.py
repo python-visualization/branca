@@ -61,16 +61,16 @@ class Element(object):
             self._template = ENV.get_template(template_name)
 
     def __getstate__(self):
-        """Modify object state when pickling the object
+        """Modify object state when pickling the object.
         jinja2 Environment cannot be pickled, so set
-        the ._env attribute to None. This will be re-populated
+        the ._env attribute to None. This will be added back
         when unpickling (see __setstate__)
         """
-        state = self.__dict__.copy()
+        state: dict = self.__dict__.copy()
         state["_env"] = None
         return state
 
-    def __setstate__(self, state):
+    def __setstate__(self, state: dict):
         """Re-add ._env attribute when unpickling"""
         state["_env"] = ENV
         self.__dict__.update(state)
