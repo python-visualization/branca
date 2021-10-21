@@ -12,7 +12,8 @@ import json
 import warnings
 from collections import OrderedDict
 from urllib.request import urlopen
-from uuid import uuid4
+from binascii import hexlify
+from os import urandom
 
 from jinja2 import Environment, PackageLoader, Template
 
@@ -50,7 +51,7 @@ class Element(object):
 
     def __init__(self, template=None, template_name=None):
         self._name = 'Element'
-        self._id = uuid4().hex
+        self._id = hexlify(urandom(16)).decode()
         self._env = ENV
         self._children = OrderedDict()
         self._parent = None
