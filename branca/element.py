@@ -503,6 +503,8 @@ class Div(Figure):
             figure.script.add_child(Element(script(self, kwargs)),
                                     name=self.get_name())
 
+        return super().render(**kwargs)
+
     def _repr_html_(self, **kwargs):
         """Displays the Div in a Jupyter notebook."""
         if self._parent is None:
@@ -625,3 +627,5 @@ class MacroElement(Element):
 
         for name, element in self._children.items():
             element.render(**kwargs)
+
+        return super().render(**kwargs)
