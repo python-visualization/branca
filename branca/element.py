@@ -14,7 +14,7 @@ from collections import OrderedDict
 from urllib.request import urlopen
 from binascii import hexlify
 from os import urandom
-from pathlib import PosixPath
+from pathlib import Path
 
 from jinja2 import Environment, PackageLoader, Template
 
@@ -160,7 +160,7 @@ class Element(object):
         close_file : bool, default True
             Whether the file has to be closed after write.
         """
-        if isinstance(outfile, (str, bytes, PosixPath)):
+        if isinstance(outfile, (str, bytes, Path)):
             fid = open(outfile, 'wb')
         else:
             fid = outfile
