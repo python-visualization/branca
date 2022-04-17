@@ -1,3 +1,11 @@
+0.5.0
+~~~~~
+- Support for Pathlib when saving an `Element` (@wd60622 #103)
+- Faster UUID generation for `Element` id (@bwest2397 #101)
+- Store html content in `srcdoc` instead of `data-html` (@dstein64 #96)
+- Add `max_labels` argument to color maps (@martinfleis #90)
+- Pass caption when converting colormap to steps (@ndswaef #87)
+
 0.4.2
 ~~~~~
 - Fix special char encoding in notebooks, store as percent-encoded (@conengmo #76)
