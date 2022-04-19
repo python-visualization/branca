@@ -3,7 +3,7 @@ name: Code Tests
 on:
   pull_request:
   push:
-    branches: [master]
+    branches: [master, main]
 
 jobs:
   run:
@@ -11,7 +11,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.6", "3.7", "3.8", "3.9"]
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
+      fail-fast: false
 
     steps:
     - uses: actions/checkout@v2
@@ -29,6 +30,12 @@ jobs:
         conda create --name TEST python=${{ matrix.python-version }} pip --file requirements.txt --file requirements-dev.txt
         source activate TEST
         pip install -e . --no-deps --force-reinstall
+
+    - name: Debug Installation
+      shell: bash -l {0}
+      run: |
+        source activate TEST
+        which python
         conda info --all
         conda list
 
