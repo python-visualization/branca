@@ -141,21 +141,48 @@ class ColorMap(MacroElement):
         return self.rgba_hex_str(x)
 
     def _repr_html_(self):
+        width = 500
+        nb_ticks = 7
+        delta_x = math.floor(width / (nb_ticks - 1))
+        x_ticks = [(i) * delta_x for i in range(0, nb_ticks)]
+        delta_val = delta_x * (self.vmax - self.vmin) / width
+        val_ticks = [round(self.vmin + (i) * delta_val, 1) for i in range(0, nb_ticks)]
+
         return (
-            '<svg height="50" width="500">' +
-            ''.join(
-                [('<line x1="{i}" y1="0" x2="{i}" '
-                  'y2="20" style="stroke:{color};stroke-width:3;" />').format(
-                      i=i*1,
-                      color=self.rgba_hex_str(
-                          self.vmin +
-                          (self.vmax-self.vmin)*i/499.)
-                  )
-                 for i in range(500)]) +
-            '<text x="0" y="35">{}</text>'.format(self.vmin) +
-            '<text x="500" y="35" style="text-anchor:end;">{}</text>'.format(
-                self.vmax) +
-            '</svg>')
+            '<svg height="40" width="{}">'.format(width)
+            + "".join(
+                [
+                    (
+                        '<line x1="{i}" y1="15" x2="{i}" '
+                        'y2="27" style="stroke:{color};stroke-width:2;" />'
+                    ).format(
+                        i=i * 1,
+                        color=self.rgba_hex_str(
+                            self.vmin + (self.vmax - self.vmin) * i / (width - 1)
+                        ),
+                    )
+                    for i in range(width)
+                ]
+            )
+            + '<text x="0" y="38" style="text-anchor:start; font-size:11px; font:Arial">{}</text>'.format(
+                self.vmin
+            )
+            + "".join(
+                [
+                    (
+                        '<text x="{}" y="38"; style="text-anchor:middle; font-size:11px; font:Arial">{}</text>'
+                    ).format(x_ticks[i], val_ticks[i])
+                    for i in range(1, nb_ticks - 1)
+                ]
+            )
+            + '<text x="{}" y="38" style="text-anchor:end; font-size:11px; font:Arial">{}</text>'.format(
+                width, self.vmax
+            )
+            + '<text x="0" y="12" style="font-size:11px; font:Arial">{}</text>'.format(
+                self.caption
+            )
+            + "</svg>"
+        )
 
 
 class LinearColormap(ColorMap):
