@@ -108,6 +108,9 @@ def color_brewer(color_code, n=6):
     maximum_n = 253
     minimum_n = 3
 
+    if not isinstance(n, int):
+        raise TypeError('n has to be an int, not a %s' % type(n))
+
     # Raise an error if the n requested is greater than the maximum.
     if n > maximum_n:
         raise ValueError('The maximum number of colors in a'
@@ -131,7 +134,7 @@ def color_brewer(color_code, n=6):
     with open(os.path.join(rootpath, '_schemes.json')) as f:
         schemes = json.loads(f.read())
 
-    with open(os.path.join(rootpath, '_cnames.json')) as f:
+    with open(os.path.join(rootpath, 'scheme_info.json')) as f:
         scheme_info = json.loads(f.read())
 
     with open(os.path.join(rootpath, 'scheme_base_codes.json')) as f:
@@ -140,10 +143,8 @@ def color_brewer(color_code, n=6):
     if base_code not in core_schemes:
         raise ValueError(base_code + ' is not a valid ColorBrewer code')
 
-    try:
-        schemes[core_color_code]
-        explicit_scheme = True
-    except KeyError:
+    explicit_scheme = True
+    if schemes.get(core_color_code) is None:
         explicit_scheme = False
 
     # Only if n is greater than the scheme length do we interpolate values.
@@ -162,10 +163,20 @@ def color_brewer(color_code, n=6):
                              ' and ' + str(max(matching_quals))
                              )
         else:
+            longest_scheme_name = base_code
+            longest_scheme_n = 0
+            for sn_name in schemes.keys():
+                if '_' not in sn_name:
+                    continue
+                if sn_name.split('_')[0] != base_code:
+                    continue
+                if int(sn_name.split('_')[1]) > longest_scheme_n:
+                    longest_scheme_name = sn_name
+
             if not color_reverse:
-                color_scheme = linear_gradient(schemes.get(core_color_code), n)
+                color_scheme = linear_gradient(schemes.get(longest_scheme_name), n)
             else:
-                color_scheme = linear_gradient(schemes.get(core_color_code)[::-1], n)
+                color_scheme = linear_gradient(schemes.get(longest_scheme_name)[::-1], n)
     else:
         if not color_reverse:
             color_scheme = schemes.get(core_color_code, None)
