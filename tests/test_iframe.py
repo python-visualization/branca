@@ -8,6 +8,7 @@ import os
 
 import pytest
 from selenium.webdriver import Firefox
+from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.options import Options
 
 import branca.element as elem
@@ -55,7 +56,7 @@ def test_rendering_figure_notebook():
     try:
         driver.get('file://' + filepath)
         driver.switch_to.frame(0)
-        text_div = driver.find_element_by_css_selector('div')
+        text_div = driver.find_element(By.CSS_SELECTOR, 'div')
         assert text_div.text == text
     finally:
         os.remove(filepath)
