@@ -172,6 +172,7 @@ def color_brewer(color_code, n=6):
                     continue
                 if int(sn_name.split('_')[1]) > longest_scheme_n:
                     longest_scheme_name = sn_name
+                    longest_scheme_n = int(sn_name.split('_')[1])
 
             if not color_reverse:
                 color_scheme = linear_gradient(schemes.get(longest_scheme_name), n)
