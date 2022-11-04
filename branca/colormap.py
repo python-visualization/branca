@@ -143,6 +143,11 @@ class ColorMap(MacroElement):
         return self.rgba_hex_str(x)
 
     def _repr_html_(self):
+        """Display the colormap in a Jupyter Notebook.
+
+        Does not support all the class arguments.
+
+        """
         width = 500
         nb_ticks = 7
         delta_x = math.floor(width / (nb_ticks - 1))
