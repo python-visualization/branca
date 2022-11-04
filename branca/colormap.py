@@ -84,13 +84,15 @@ class ColorMap(MacroElement):
         self.caption = caption
         self.index = [vmin, vmax]
         self.max_labels = max_labels
+        self.tick_labels = None
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         self.color_domain = [self.vmin + (self.vmax-self.vmin) * k/499. for
                              k in range(500)]
         self.color_range = [self.__call__(x) for x in self.color_domain]
-        self.tick_labels = legend_scaler(self.index, self.max_labels)
+        if self.tick_labels is None:
+            self.tick_labels = legend_scaler(self.index, self.max_labels)
 
         super(ColorMap, self).render(**kwargs)
 
@@ -212,11 +214,13 @@ class LinearColormap(ColorMap):
         The maximal value for the colormap.
         Values higher than `vmax` will be bound directly to `colors[-1]`.
     max_labels : int, default 10
-        Maximum number of legend tick labels"""
-
-    def __init__(self, colors, index=None, vmin=0., vmax=1., caption='', max_labels=10):
+        Maximum number of legend tick labels
+    tick_labels: list of floats, default None
+        If given, used as the positions of ticks."""
+    def __init__(self, colors, index=None, vmin=0., vmax=1., caption='', max_labels=10, tick_labels=None):
         super(LinearColormap, self).__init__(vmin=vmin, vmax=vmax,
                                              caption=caption, max_labels=max_labels)
+        self.tick_labels = tick_labels
 
         n = len(colors)
         if n < 2:
@@ -359,7 +363,7 @@ class LinearColormap(ColorMap):
         caption = self.caption
 
         return StepColormap(colors, index=index, vmin=index[0], vmax=index[-1], caption=caption,
-                            max_labels=max_labels)
+                            max_labels=max_labels, tick_labels=self.tick_labels)
 
     def scale(self, vmin=0., vmax=1., max_labels=10):
         """Transforms the colorscale so that the minimal and maximal values
@@ -402,11 +406,13 @@ class StepColormap(ColorMap):
         Values higher than `vmax` will be bound directly to `colors[-1]`.
     max_labels : int, default 10
         Maximum number of legend tick labels
-
+    tick_labels: list of floats, default None
+        If given, used as the positions of ticks.
     """
-    def __init__(self, colors, index=None, vmin=0., vmax=1., caption='', max_labels=10):
+    def __init__(self, colors, index=None, vmin=0., vmax=1., caption='', max_labels=10, tick_labels=None):
         super(StepColormap, self).__init__(vmin=vmin, vmax=vmax,
                                            caption=caption, max_labels=max_labels)
+        self.tick_labels = tick_labels
 
         n = len(colors)
         if n < 1:
