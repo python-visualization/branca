@@ -51,5 +51,5 @@
     {{this.get_name()}}.g.call({{this.get_name()}}.xAxis).append("text")
         .attr("class", "caption")
         .attr("y", 21)
-        .text('{{ this.caption }}');
+        .text({{ this.caption|tojson }});
 {% endmacro %}
