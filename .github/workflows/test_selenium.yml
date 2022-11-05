@@ -1,0 +1,35 @@
+name: Headless Tests
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup Conda
+      uses: s-weigand/setup-conda@v1
+      with:
+        update-conda: true
+        activate-conda: false
+        conda-channels: conda-forge
+
+    - name: Python 3.9
+      shell: bash -l {0}
+      run: |
+        conda create --name TEST python=3.9 pip --file requirements.txt --file requirements-dev.txt
+        source activate TEST
+        pip install -e . --no-deps --force-reinstall
+        conda info --all
+        conda list
+
+    - name: Tests
+      shell: bash -l {0}
+      run: |
+        source activate TEST
+        pytest -vv -rxs tests -m "headless"

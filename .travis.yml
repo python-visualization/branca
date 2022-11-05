@@ -3,34 +3,16 @@ language: minimal
 sudo: false
 
 env:
-  - MOZ_HEADLESS=1
-
-addons:
-  apt:
-    packages:
-      # Without libgtk (as of 2019-11-6), firefox cannot run properly
-      - libgtk-3-0
-  firefox: latest
-
-env:
   global:
     - secure: "JrdAJJKe+Y564LIiIaGPmw9X9utvj2lVI2MkVyZX6CQ7cJwqPUB+ukZpa6MnGUEJSoI6S7/5ZqX/cvciVAKpcYadi/snlDGq6q+lLnA+6rtB6ppy99Ib64aqm+VqDyohvvvrNtSxqhBY48DLG9UuQEcvviabpx9CG4s439/osspsA80SRXgDm/dELjU8vuIJvL1EFPeOu4a01sAHsqhknQw4F4YSWWjUr1oNjZIhSKroxCJV0o/0ok600SwTrQrbwJNO8QmEBOTw1JO1kaxDRlMAsJ5JTBaeGWdhqWQ3IRH/RogkU3ukOyyybbeoWU9ou5xG08P0r4CM3dGh44M8qrTOOCUSSNrFIG5OhAW6ZdkSR/2w76fNnW6y25jKUQ2444kd8n8+TObsp8aNl1FkCwou6/SpPluKvtaFA+I1zbk8roG58tW9anf6o9zCdIyYhSFysEoKNNihSC6xc4zHlJUHWr61f4zC0mU1Xf/djgpvj2YUQLsQ4++K6FNb6I/CN7LDl67kkOiyVCKv60J1mHVXAPJpj2Y9SxR87ob+GH+na8oFy5IMPMDoym2hPImtl2cjGvpP6RvE+gVE+mfvc4BizWfsR1zO49DUD15U1Y6jqhbcPMCgk5FoQ3ZKiH6LBeFbmV0qMjwSC6pZONgz8s/2nTUMV3VU+9SBiah51ho="
 
 matrix:
   fast_finish: true
   include:
-  - name: "python-3.6"
-    env: PY=3.6
-  - name: "python-3.7"
-    env: PY=3.7
-  - name: "python-3.8"
-    env: PY=3.8
   - name: coding_standards
-    env: PY=3.8
+    env: PY=3
   - name: docs
-    env: PY=3.8
-  - name: "tarball"
-    env: PY=3.8
+    env: PY=3
 
 before_install:
   # Install miniconda and create TEST env.
@@ -46,29 +28,11 @@ before_install:
     conda create --name TEST python=$PY --file requirements.txt --file requirements-dev.txt
     source activate TEST
     conda info --all
-  # Install firefox headless driver.
-  - |
-    wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz -O geckodriver.tar.gz
-    mkdir geckodriver
-    tar -xzf geckodriver.tar.gz -C geckodriver
-    export PATH=$PATH:$PWD/geckodriver
 
 install:
   - pip install -e . --no-deps --force-reinstall
 
 script:
-  - if [[ $TRAVIS_JOB_NAME == python-* ]]; then
-      cp -r tests/ examples/ /tmp ;
-      pushd /tmp && pytest -n 2 -rxs --cov=branca -vv tests && popd ;
-    fi
-
-  - if [[ $TRAVIS_JOB_NAME == 'tarball' ]]; then
-      python setup.py --version ;
-      pip wheel . -w dist --no-deps ;
-      check-manifest --verbose ;
-      twine check dist/* ;
-    fi
-
   - if [[ $TRAVIS_JOB_NAME == 'coding_standards' ]]; then
       pytest --flake8 -m flake8 ;
     fi
@@ -85,17 +49,3 @@ script:
 doctr:
   require-master: true
   sync: False
-
-deploy:
-  skip_cleanup: true
-  provider: pypi
-  user: "__token__"
-  password:
-    secure: "ncVXDcUpadOXESusbUv/F5mhXqzjp0fFM+llYdBOWBGpipP2B1cU/cWRUU5fkhL1KZG/0DfVboJsRnNQCebZklJ0fczW2Z2QUzL8zCAK8KLOUqr0Nk8i8Oi5eC0h8Ew+HkDNORsZUCPCjKvqcFHRuSZnVYvEqqPPguSj1fwDdyBm9kW7lfZdPeR9mr79WJs+Miv5UKXGZcQAuzCU7g3AmaizRoUfhXnSgPXd9Yp2DY5nsBUZhmqFTj1xjQwLvqp5w/BiFZGkdqMuWVP9b/HbVJEeRxWgCaDPw+XLkQa+HdfUsDGBvPWaaQ+o6OwuADdCjIHLnVmfA2/E2FSU64IBaIZ1xOkHZpm74P8Y0NF5aRogyipkqhrm0WErRWFD4OYj8ud4y9AHLCAmyyLsKCka76NSxotbTd4W4Xu9MX7fkhGOVzhYXg1GNS6SDTIMn+bujFNg5fZrZUptn6FcNa8THkh7yKrduBv2kgbBcgx0/EodH4q2Ds7yfbFvPkQD+l0mBiOPXOXflcQDOiu0CZ70X2XmLe3v3zIEf51oigEtb/KRkf7B3r/Ab+ayNdS33xbHsE8JYE/6KKjGf+fEr0f4XiidadtCbUmNGCw8fgHo7dY4g7blYMPvab7z4zcHmqekzrSTTwxw2uRtmGLWWJupmOerasRIuLsKiJxnk9oiS+k="
-  distributions: sdist bdist_wheel
-  upload_docs: no
-  on:
-    repo: python-visualization/branca
-    tags: true
-    all_branches: master
-    condition: '$TRAVIS_JOB_NAME == "tarball"'

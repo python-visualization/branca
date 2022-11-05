@@ -7,11 +7,14 @@ A generic class for creating Elements.
 """
 
 import base64
+from html import escape
 import json
 import warnings
 from collections import OrderedDict
 from urllib.request import urlopen
-from uuid import uuid4
+from binascii import hexlify
+from os import urandom
+from pathlib import Path
 
 from jinja2 import Environment, PackageLoader, Template
 
@@ -49,7 +52,7 @@ class Element(object):
 
     def __init__(self, template=None, template_name=None):
         self._name = 'Element'
-        self._id = uuid4().hex
+        self._id = hexlify(urandom(16)).decode()
         self._env = ENV
         self._children = OrderedDict()
         self._parent = None
@@ -58,6 +61,21 @@ class Element(object):
             self._template = Template(template)
         elif template_name is not None:
             self._template = ENV.get_template(template_name)
+
+    def __getstate__(self):
+        """Modify object state when pickling the object.
+        jinja2 Environment cannot be pickled, so set
+        the ._env attribute to None. This will be added back
+        when unpickling (see __setstate__)
+        """
+        state: dict = self.__dict__.copy()
+        state["_env"] = None
+        return state
+
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        state["_env"] = ENV
+        self.__dict__.update(state)
 
     def get_name(self):
         """Returns a string representation of the object.
@@ -157,7 +175,7 @@ class Element(object):
         close_file : bool, default True
             Whether the file has to be closed after write.
         """
-        if isinstance(outfile, str) or isinstance(outfile, bytes):
+        if isinstance(outfile, (str, bytes, Path)):
             fid = open(outfile, 'wb')
         else:
             fid = outfile
@@ -320,36 +338,25 @@ class Figure(Element):
 
     def _repr_html_(self, **kwargs):
         """Displays the Figure in a Jupyter notebook."""
-        # Base64-encoded HTML is stored in a data-html attribute, which is used to populate
-        # the iframe. This approach does not encounter the 2MB limit in Chrome for storing
-        # the HTML in the src attribute with a data URI. The alternative of using a srcdoc
-        # attribute is not supported in Microsoft Internet Explorer and Edge.
-        html = base64.b64encode(self.render(**kwargs).encode('utf8')).decode('utf8')
-        onload = (
-            'this.contentDocument.open();'
-            'this.contentDocument.write(atob(this.getAttribute(\'data-html\')));'
-            'this.contentDocument.close();'
-        )
-
+        html = escape(self.render(**kwargs))
         if self.height is None:
             iframe = (
-            '<div style="width:{width};">'
-            '<div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">'  # noqa
-            '<span style="color:#565656">Make this Notebook Trusted to load map: File -> Trust Notebook</span>'  # noqa
-            '<iframe src="about:blank" style="position:absolute;width:100%;height:100%;left:0;top:0;'  # noqa
-            'border:none !important;" '
-            'data-html={html} onload="{onload}" '
-            'allowfullscreen webkitallowfullscreen mozallowfullscreen>'
-            '</iframe>'
-            '</div></div>').format
-            iframe = iframe(html=html, onload=onload, width=self.width, ratio=self.ratio)
+                '<div style="width:{width};">'
+                '<div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">'  # noqa
+                '<span style="color:#565656">Make this Notebook Trusted to load map: File -> Trust Notebook</span>'  # noqa
+                '<iframe srcdoc="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;'  # noqa
+                'border:none !important;" '
+                'allowfullscreen webkitallowfullscreen mozallowfullscreen>'
+                '</iframe>'
+                '</div></div>'
+            ).format(html=html, width=self.width, ratio=self.ratio)
         else:
-            iframe = ('<iframe src="about:blank" width="{width}" height="{height}"'
-                      'style="border:none !important;" '
-                      'data-html={html} onload="{onload}" '
-                      '"allowfullscreen" "webkitallowfullscreen" "mozallowfullscreen">'  # noqa
-                      '</iframe>').format
-            iframe = iframe(html=html, onload=onload, width=self.width, height=self.height)
+            iframe = (
+                '<iframe srcdoc="{html}" width="{width}" height="{height}"'
+                'style="border:none !important;" '
+                '"allowfullscreen" "webkitallowfullscreen" "mozallowfullscreen">'
+                '</iframe>'
+            ).format(html=html, width=self.width, height=self.height)
         return iframe
 
     def add_subplot(self, x, y, n, margin=0.05):
@@ -401,10 +408,10 @@ class Html(Element):
         (suitable for embedding html-ready code)
     width : int or str, default '100%'
         The width of the output div element.
-        Ex: 120 , '120px', '80%'
+        Ex: 120 , '80%'
     height : int or str, default '100%'
         The height of the output div element.
-        Ex: 120 , '120px', '80%'
+        Ex: 120 , '80%'
     """
     _template = Template(
         '<div id="{{this.get_name()}}" '
@@ -569,19 +576,18 @@ class IFrame(Element):
 
         if self.height is None:
             iframe = (
-            '<div style="width:{width};">'
-            '<div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">'  # noqa
-            '<iframe src="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;'  # noqa
-            'border:none !important;">'
-            '</iframe>'
-            '</div></div>').format
-            iframe = iframe(html=html,
-                            width=self.width,
-                            ratio=self.ratio)
+                '<div style="width:{width};">'
+                '<div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">'  # noqa
+                '<iframe src="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;'  # noqa
+                'border:none !important;">'
+                '</iframe>'
+                '</div></div>'
+            ).format(html=html, width=self.width, ratio=self.ratio)
         else:
-            iframe = ('<iframe src="{html}" width="{width}" style="border:none !important;" '
-                      'height="{height}"></iframe>').format
-            iframe = iframe(html=html, width=self.width, height=self.height)
+            iframe = (
+                '<iframe src="{html}" width="{width}" style="border:none !important;" '
+                'height="{height}"></iframe>'
+            ).format(html=html, width=self.width, height=self.height)
         return iframe
 
 
