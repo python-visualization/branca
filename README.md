@@ -4,12 +4,7 @@
 
 # Branca
 
-This library is a spinoff from [folium](https://github.com/python-visualization/folium),
-that would host the non-map-specific features.
+This library is a spinoff from [folium](https://github.com/python-visualization/folium). It can be used to generate HTML + JS. It is based on Jinja2.
 
-It may become a HTML+JS generation library in the future.
-
-It is based on Jinja2 only.
-
-There's no documentation,
-but you can [browse the examples](http://nbviewer.jupyter.org/github/python-visualization/branca/tree/master/examples) gallery.
+- Documentation: https://python-visualization.github.io/branca/
+- Examples: http://nbviewer.jupyter.org/github/python-visualization/branca/tree/master/examples
