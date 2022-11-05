@@ -282,16 +282,18 @@ class Figure(Element):
     """
     _template = Template(
         '<!DOCTYPE html>\n'
-        '<head>'
+        '<html>\n'
+        '<head>\n'
         '{% if this.title %}<title>{{this.title}}</title>{% endif %}'
         '    {{this.header.render(**kwargs)}}\n'
         '</head>\n'
-        '<body>'
+        '<body>\n'
         '    {{this.html.render(**kwargs)}}\n'
         '</body>\n'
-        '<script>'
+        '<script>\n'
         '    {{this.script.render(**kwargs)}}\n'
         '</script>\n'
+        '</html>\n'
     )
 
     def __init__(self, width='100%', height=None, ratio='60%', title=None, figsize=None):
