@@ -62,6 +62,21 @@ class Element(object):
         elif template_name is not None:
             self._template = ENV.get_template(template_name)
 
+    def __getstate__(self):
+        """Modify object state when pickling the object.
+        jinja2 Environment cannot be pickled, so set
+        the ._env attribute to None. This will be added back
+        when unpickling (see __setstate__)
+        """
+        state: dict = self.__dict__.copy()
+        state["_env"] = None
+        return state
+
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        state["_env"] = ENV
+        self.__dict__.update(state)
+
     def get_name(self):
         """Returns a string representation of the object.
         This string has to be unique and to be a python and
