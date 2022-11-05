@@ -151,15 +151,14 @@ class ColorMap(MacroElement):
         Does not support all the class arguments.
 
         """
-        width = 500
         nb_ticks = 7
-        delta_x = math.floor(width / (nb_ticks - 1))
+        delta_x = math.floor(self.width / (nb_ticks - 1))
         x_ticks = [(i) * delta_x for i in range(0, nb_ticks)]
-        delta_val = delta_x * (self.vmax - self.vmin) / width
+        delta_val = delta_x * (self.vmax - self.vmin) / self.width
         val_ticks = [round(self.vmin + (i) * delta_val, 1) for i in range(0, nb_ticks)]
 
         return (
-            '<svg height="40" width="{}">'.format(width)
+            '<svg height="40" width="{}">'.format(self.width)
             + "".join(
                 [
                     (
@@ -168,10 +167,10 @@ class ColorMap(MacroElement):
                     ).format(
                         i=i * 1,
                         color=self.rgba_hex_str(
-                            self.vmin + (self.vmax - self.vmin) * i / (width - 1)
+                            self.vmin + (self.vmax - self.vmin) * i / (self.width - 1)
                         ),
                     )
-                    for i in range(width)
+                    for i in range(self.width)
                 ]
             )
             + '<text x="0" y="38" style="text-anchor:start; font-size:11px; font:Arial">{}</text>'.format(
@@ -186,7 +185,7 @@ class ColorMap(MacroElement):
                 ]
             )
             + '<text x="{}" y="38" style="text-anchor:end; font-size:11px; font:Arial">{}</text>'.format(
-                width, self.vmax
+                self.width, self.vmax
             )
             + '<text x="0" y="12" style="font-size:11px; font:Arial">{}</text>'.format(
                 self.caption
