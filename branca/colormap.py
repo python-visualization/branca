@@ -17,21 +17,23 @@ from branca.utilities import legend_scaler
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
-with open(os.path.join(rootpath, '_cnames.json')) as f:
+with open(os.path.join(rootpath, "_cnames.json")) as f:
     _cnames = json.loads(f.read())
 
-with open(os.path.join(rootpath, '_schemes.json')) as f:
+with open(os.path.join(rootpath, "_schemes.json")) as f:
     _schemes = json.loads(f.read())
 
 
 def _is_hex(x):
-    return x.startswith('#') and len(x) == 7
+    return x.startswith("#") and len(x) == 7
 
 
 def _parse_hex(color_code):
-    return (int(color_code[1:3], 16),
-            int(color_code[3:5], 16),
-            int(color_code[5:7], 16))
+    return (
+        int(color_code[1:3], 16),
+        int(color_code[3:5], 16),
+        int(color_code[5:7], 16),
+    )
 
 
 def _parse_color(x):
@@ -42,19 +44,19 @@ def _parse_color(x):
     elif isinstance(x, (str, bytes)):
         cname = _cnames.get(x.lower(), None)
         if cname is None:
-            raise ValueError('Unknown color {!r}.'.format(cname))
+            raise ValueError(f"Unknown color {cname!r}.")
         color_tuple = _parse_hex(cname)
     else:
-        raise ValueError('Unrecognized color code {!r}'.format(x))
-    if max(color_tuple) > 1.:
-        color_tuple = tuple(u/255. for u in color_tuple)
-    return tuple(map(float, (color_tuple+(1.,))[:4]))
+        raise ValueError(f"Unrecognized color code {x!r}")
+    if max(color_tuple) > 1.0:
+        color_tuple = tuple(u / 255.0 for u in color_tuple)
+    return tuple(map(float, (color_tuple + (1.0,))[:4]))
 
 
 def _base(x):
     if x > 0:
         base = pow(10, math.floor(math.log10(x)))
-        return round(x/base)*base
+        return round(x / base) * base
     else:
         return 0
 
@@ -73,11 +75,12 @@ class ColorMap(MacroElement):
     max_labels : int, default 10
         Maximum number of legend tick labels
     """
-    _template = ENV.get_template('color_scale.js')
 
-    def __init__(self, vmin=0., vmax=1., caption='', max_labels=10):
-        super(ColorMap, self).__init__()
-        self._name = 'ColorMap'
+    _template = ENV.get_template("color_scale.js")
+
+    def __init__(self, vmin=0.0, vmax=1.0, caption="", max_labels=10):
+        super().__init__()
+        self._name = "ColorMap"
 
         self.vmin = vmin
         self.vmax = vmax
@@ -91,19 +94,24 @@ class ColorMap(MacroElement):
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
-        self.color_domain = [self.vmin + (self.vmax-self.vmin) * k/499. for
-                             k in range(500)]
+        self.color_domain = [
+            self.vmin + (self.vmax - self.vmin) * k / 499.0 for k in range(500)
+        ]
         self.color_range = [self.__call__(x) for x in self.color_domain]
         if self.tick_labels is None:
             self.tick_labels = legend_scaler(self.index, self.max_labels)
 
-        super(ColorMap, self).render(**kwargs)
+        super().render(**kwargs)
 
         figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
+        assert isinstance(figure, Figure), (
+            "You cannot render this Element " "if it is not in a Figure."
+        )
 
-        figure.header.add_child(JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"), name='d3')  # noqa
+        figure.header.add_child(
+            JavascriptLink("https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"),
+            name="d3",
+        )  # noqa
 
     def rgba_floats_tuple(self, x):
         """
@@ -119,7 +127,7 @@ class ColorMap(MacroElement):
         """Provides the color corresponding to value `x` in the
         form of a tuple (R,G,B,A) with int values between 0 and 255.
         """
-        return tuple(int(u*255.9999) for u in self.rgba_floats_tuple(x))
+        return tuple(int(u * 255.9999) for u in self.rgba_floats_tuple(x))
 
     def rgb_bytes_tuple(self, x):
         """Provides the color corresponding to value `x` in the
@@ -131,13 +139,13 @@ class ColorMap(MacroElement):
         """Provides the color corresponding to value `x` in the
         form of a string of hexadecimal values "#RRGGBB".
         """
-        return '#%02x%02x%02x' % self.rgb_bytes_tuple(x)
+        return "#%02x%02x%02x" % self.rgb_bytes_tuple(x)
 
     def rgba_hex_str(self, x):
         """Provides the color corresponding to value `x` in the
         form of a string of hexadecimal values "#RRGGBBAA".
         """
-        return '#%02x%02x%02x%02x' % self.rgba_bytes_tuple(x)
+        return "#%02x%02x%02x%02x" % self.rgba_bytes_tuple(x)
 
     def __call__(self, x):
         """Provides the color corresponding to value `x` in the
@@ -158,7 +166,7 @@ class ColorMap(MacroElement):
         val_ticks = [round(self.vmin + (i) * delta_val, 1) for i in range(0, nb_ticks)]
 
         return (
-            '<svg height="40" width="{}">'.format(self.width)
+            f'<svg height="40" width="{self.width}">'
             + "".join(
                 [
                     (
@@ -167,28 +175,29 @@ class ColorMap(MacroElement):
                     ).format(
                         i=i * 1,
                         color=self.rgba_hex_str(
-                            self.vmin + (self.vmax - self.vmin) * i / (self.width - 1)
+                            self.vmin + (self.vmax - self.vmin) * i / (self.width - 1),
                         ),
                     )
                     for i in range(self.width)
-                ]
+                ],
             )
-            + '<text x="0" y="38" style="text-anchor:start; font-size:11px; font:Arial">{}</text>'.format(
-                self.vmin
+            + '<text x="0" y="38" style="text-anchor:start; font-size:11px; font:Arial">{}</text>'.format(  # noqa
+                self.vmin,
             )
             + "".join(
                 [
                     (
-                        '<text x="{}" y="38"; style="text-anchor:middle; font-size:11px; font:Arial">{}</text>'
+                        '<text x="{}" y="38"; style="text-anchor:middle; font-size:11px; font:Arial">{}</text>'  # noqa
                     ).format(x_ticks[i], val_ticks[i])
                     for i in range(1, nb_ticks - 1)
-                ]
+                ],
             )
             + '<text x="{}" y="38" style="text-anchor:end; font-size:11px; font:Arial">{}</text>'.format(
-                self.width, self.vmax
+                self.width,
+                self.vmax,
             )
             + '<text x="0" y="12" style="font-size:11px; font:Arial">{}</text>'.format(
-                self.caption
+                self.caption,
             )
             + "</svg>"
         )
@@ -224,16 +233,30 @@ class LinearColormap(ColorMap):
         Maximum number of legend tick labels
     tick_labels: list of floats, default None
         If given, used as the positions of ticks."""
-    def __init__(self, colors, index=None, vmin=0., vmax=1., caption='', max_labels=10, tick_labels=None):
-        super(LinearColormap, self).__init__(vmin=vmin, vmax=vmax,
-                                             caption=caption, max_labels=max_labels)
+
+    def __init__(
+        self,
+        colors,
+        index=None,
+        vmin=0.0,
+        vmax=1.0,
+        caption="",
+        max_labels=10,
+        tick_labels=None,
+    ):
+        super().__init__(
+            vmin=vmin,
+            vmax=vmax,
+            caption=caption,
+            max_labels=max_labels,
+        )
         self.tick_labels = tick_labels
 
         n = len(colors)
         if n < 2:
-            raise ValueError('You must provide at least 2 colors.')
+            raise ValueError("You must provide at least 2 colors.")
         if index is None:
-            self.index = [vmin + (vmax-vmin)*i*1./(n-1) for i in range(n)]
+            self.index = [vmin + (vmax - vmin) * i * 1.0 / (n - 1) for i in range(n)]
         else:
             self.index = list(index)
         self.colors = [_parse_color(x) for x in colors]
@@ -248,24 +271,33 @@ class LinearColormap(ColorMap):
             return self.colors[-1]
 
         i = len([u for u in self.index if u < x])  # 0 < i < n.
-        if self.index[i-1] < self.index[i]:
-            p = (x - self.index[i-1])*1./(self.index[i]-self.index[i-1])
-        elif self.index[i-1] == self.index[i]:
-            p = 1.
+        if self.index[i - 1] < self.index[i]:
+            p = (x - self.index[i - 1]) * 1.0 / (self.index[i] - self.index[i - 1])
+        elif self.index[i - 1] == self.index[i]:
+            p = 1.0
         else:
-            raise ValueError('Thresholds are not sorted.')
+            raise ValueError("Thresholds are not sorted.")
 
-        return tuple((1.-p) * self.colors[i-1][j] + p*self.colors[i][j] for j
-                     in range(4))
+        return tuple(
+            (1.0 - p) * self.colors[i - 1][j] + p * self.colors[i][j] for j in range(4)
+        )
 
-    def to_step(self, n=None, index=None, data=None, method=None,
-                quantiles=None, round_method=None, max_labels=10):
+    def to_step(
+        self,
+        n=None,
+        index=None,
+        data=None,
+        method=None,
+        quantiles=None,
+        round_method=None,
+        max_labels=10,
+    ):
         """Splits the LinearColormap into a StepColormap.
 
         Parameters
         ----------
         n : int, default None
-            The number of expected colors in the ouput StepColormap.
+            The number of expected colors in the output StepColormap.
             This will be ignored if `index` is provided.
         index : list of floats, default None
             The values corresponding to each color bounds.
@@ -278,7 +310,7 @@ class LinearColormap(ColorMap):
             It can be 'linear' for linear scale, 'log' for logarithmic,
             or 'quant' for data's quantile-based scale.
         quantiles : list of floats, default None
-            Alternatively, you can provide explicitely the quantiles you
+            Alternatively, you can provide explicitly the quantiles you
             want to use in the scale.
         round_method : str, default None
             The method used to round thresholds.
@@ -305,85 +337,108 @@ class LinearColormap(ColorMap):
         ...           round_method='log10')
 
         """
-        msg = 'You must specify either `index` or `n`'
+        msg = "You must specify either `index` or `n`"
         if index is None:
             if data is None:
                 if n is None:
                     raise ValueError(msg)
                 else:
-                    index = [self.vmin + (self.vmax-self.vmin)*i*1./n for
-                             i in range(1+n)]
+                    index = [
+                        self.vmin + (self.vmax - self.vmin) * i * 1.0 / n
+                        for i in range(1 + n)
+                    ]
                     scaled_cm = self
             else:
                 max_ = max(data)
                 min_ = min(data)
                 scaled_cm = self.scale(vmin=min_, vmax=max_)
-                method = ('quantiles' if quantiles is not None
-                          else method if method is not None
-                          else 'linear'
-                          )
-                if method.lower().startswith('lin'):
+                method = (
+                    "quantiles"
+                    if quantiles is not None
+                    else method
+                    if method is not None
+                    else "linear"
+                )
+                if method.lower().startswith("lin"):
                     if n is None:
                         raise ValueError(msg)
-                    index = [min_ + i*(max_-min_)*1./n for i in range(1+n)]
-                elif method.lower().startswith('log'):
+                    index = [min_ + i * (max_ - min_) * 1.0 / n for i in range(1 + n)]
+                elif method.lower().startswith("log"):
                     if n is None:
                         raise ValueError(msg)
                     if min_ <= 0:
-                        msg = ('Log-scale works only with strictly '
-                               'positive values.')
+                        msg = "Log-scale works only with strictly " "positive values."
                         raise ValueError(msg)
-                    index = [math.exp(
-                        math.log(min_) + i * (math.log(max_) -
-                                              math.log(min_)) * 1./n
-                    ) for i in range(1+n)]
-                elif method.lower().startswith('quant'):
+                    index = [
+                        math.exp(
+                            math.log(min_)
+                            + i * (math.log(max_) - math.log(min_)) * 1.0 / n,
+                        )
+                        for i in range(1 + n)
+                    ]
+                elif method.lower().startswith("quant"):
                     if quantiles is None:
                         if n is None:
-                            msg = ('You must specify either `index`, `n` or'
-                                   '`quantiles`.')
+                            msg = (
+                                "You must specify either `index`, `n` or" "`quantiles`."
+                            )
                             raise ValueError(msg)
                         else:
-                            quantiles = [i*1./n for i in range(1+n)]
-                    p = len(data)-1
+                            quantiles = [i * 1.0 / n for i in range(1 + n)]
+                    p = len(data) - 1
                     s = sorted(data)
-                    index = [s[int(q*p)] * (1.-(q*p) % 1) +
-                             s[min(int(q*p) + 1, p)] * ((q*p) % 1) for
-                             q in quantiles]
+                    index = [
+                        s[int(q * p)] * (1.0 - (q * p) % 1)
+                        + s[min(int(q * p) + 1, p)] * ((q * p) % 1)
+                        for q in quantiles
+                    ]
                 else:
-                    raise ValueError('Unknown method {}'.format(method))
+                    raise ValueError(f"Unknown method {method}")
         else:
             scaled_cm = self.scale(vmin=min(index), vmax=max(index))
 
-        n = len(index)-1
+        n = len(index) - 1
 
-        if round_method == 'int':
+        if round_method == "int":
             index = [round(x) for x in index]
 
-        if round_method == 'log10':
+        if round_method == "log10":
             index = [_base(x) for x in index]
 
-        colors = [scaled_cm.rgba_floats_tuple(index[i] * (1.-i/(n-1.)) +
-                                              index[i+1] * i/(n-1.)) for
-                  i in range(n)]
+        colors = [
+            scaled_cm.rgba_floats_tuple(
+                index[i] * (1.0 - i / (n - 1.0)) + index[i + 1] * i / (n - 1.0),
+            )
+            for i in range(n)
+        ]
 
         caption = self.caption
 
-        return StepColormap(colors, index=index, vmin=index[0], vmax=index[-1], caption=caption,
-                            max_labels=max_labels, tick_labels=self.tick_labels)
+        return StepColormap(
+            colors,
+            index=index,
+            vmin=index[0],
+            vmax=index[-1],
+            caption=caption,
+            max_labels=max_labels,
+            tick_labels=self.tick_labels,
+        )
 
-    def scale(self, vmin=0., vmax=1., max_labels=10):
+    def scale(self, vmin=0.0, vmax=1.0, max_labels=10):
         """Transforms the colorscale so that the minimal and maximal values
         fit the given parameters.
         """
         return LinearColormap(
             self.colors,
-            index=[vmin + (vmax-vmin)*(x-self.vmin)*1./(self.vmax-self.vmin) for x in self.index],  # noqa
+            index=[
+                vmin + (vmax - vmin) * (x - self.vmin) * 1.0 / (self.vmax - self.vmin)
+                for x in self.index
+            ],  # noqa
             vmin=vmin,
             vmax=vmax,
             caption=self.caption,
-            max_labels=max_labels
-            )
+            max_labels=max_labels,
+        )
 
 
 class StepColormap(ColorMap):
@@ -416,16 +471,30 @@ class StepColormap(ColorMap):
     tick_labels: list of floats, default None
         If given, used as the positions of ticks.
     """
-    def __init__(self, colors, index=None, vmin=0., vmax=1., caption='', max_labels=10, tick_labels=None):
-        super(StepColormap, self).__init__(vmin=vmin, vmax=vmax,
-                                           caption=caption, max_labels=max_labels)
+
+    def __init__(
+        self,
+        colors,
+        index=None,
+        vmin=0.0,
+        vmax=1.0,
+        caption="",
+        max_labels=10,
+        tick_labels=None,
+    ):
+        super().__init__(
+            vmin=vmin,
+            vmax=vmax,
+            caption=caption,
+            max_labels=max_labels,
+        )
         self.tick_labels = tick_labels
 
         n = len(colors)
         if n < 1:
-            raise ValueError('You must provide at least 1 colors.')
+            raise ValueError("You must provide at least 1 colors.")
         if index is None:
-            self.index = [vmin + (vmax-vmin)*i*1./n for i in range(n+1)]
+            self.index = [vmin + (vmax - vmin) * i * 1.0 / n for i in range(n + 1)]
         else:
             self.index = list(index)
         self.colors = [_parse_color(x) for x in colors]
@@ -442,7 +511,7 @@ class StepColormap(ColorMap):
             return self.colors[-1]
 
         i = len([u for u in self.index if u < x])  # 0 < i < n.
-        return tuple(self.colors[i-1])
+        return tuple(self.colors[i - 1])
 
     def to_linear(self, index=None, max_labels=10):
         """
@@ -459,65 +528,80 @@ class StepColormap(ColorMap):
 
         """
         if index is None:
-            n = len(self.index)-1
-            index = [self.index[i]*(1.-i/(n-1.))+self.index[i+1]*i/(n-1.) for
-                     i in range(n)]
+            n = len(self.index) - 1
+            index = [
+                self.index[i] * (1.0 - i / (n - 1.0))
+                + self.index[i + 1] * i / (n - 1.0)
+                for i in range(n)
+            ]
 
         colors = [self.rgba_floats_tuple(x) for x in index]
-        return LinearColormap(colors, index=index,
-                              vmin=self.vmin, vmax=self.vmax, max_labels=max_labels)
+        return LinearColormap(
+            colors,
+            index=index,
+            vmin=self.vmin,
+            vmax=self.vmax,
+            max_labels=max_labels,
+        )
 
-    def scale(self, vmin=0., vmax=1., max_labels=10):
+    def scale(self, vmin=0.0, vmax=1.0, max_labels=10):
         """Transforms the colorscale so that the minimal and maximal values
         fit the given parameters.
         """
         return StepColormap(
             self.colors,
-            index=[vmin + (vmax-vmin)*(x-self.vmin)*1./(self.vmax-self.vmin) for x in self.index],  # noqa
+            index=[
+                vmin + (vmax - vmin) * (x - self.vmin) * 1.0 / (self.vmax - self.vmin)
+                for x in self.index
+            ],  # noqa
             vmin=vmin,
             vmax=vmax,
             caption=self.caption,
-            max_labels=max_labels
-            )
+            max_labels=max_labels,
+        )
 
 
-class _LinearColormaps(object):
+class _LinearColormaps:
     """A class for hosting the list of built-in linear colormaps."""
+
     def __init__(self):
         self._schemes = _schemes.copy()
-        self._colormaps = {key: LinearColormap(val) for
-                           key, val in _schemes.items()}
+        self._colormaps = {key: LinearColormap(val) for key, val in _schemes.items()}
         for key, val in _schemes.items():
             setattr(self, key, LinearColormap(val))
 
     def _repr_html_(self):
-        return Template("""
+        return Template(
+            """
         <table>
         {% for key,val in this._colormaps.items() %}
         <tr><td>{{key}}</td><td>{{val._repr_html_()}}</td></tr>
         {% endfor %}</table>
-        """).render(this=self)
+        """,
+        ).render(this=self)
 
 
 linear = _LinearColormaps()
 
 
-class _StepColormaps(object):
+class _StepColormaps:
     """A class for hosting the list of built-in step colormaps."""
+
     def __init__(self):
         self._schemes = _schemes.copy()
-        self._colormaps = {key: StepColormap(val) for
-                           key, val in _schemes.items()}
+        self._colormaps = {key: StepColormap(val) for key, val in _schemes.items()}
         for key, val in _schemes.items():
             setattr(self, key, StepColormap(val))
 
     def _repr_html_(self):
-        return Template("""
+        return Template(
+            """
         <table>
         {% for key,val in this._colormaps.items() %}
         <tr><td>{{key}}</td><td>{{val._repr_html_()}}</td></tr>
         {% endfor %}</table>
-        """).render(this=self)
+        """,
+        ).render(this=self)
 
 
 step = _StepColormaps()

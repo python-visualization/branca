@@ -6,7 +6,7 @@ rootpath = os.path.abspath(os.path.dirname(__file__))
 
 
 def read(*parts):
-    return open(os.path.join(rootpath, *parts), "r").read()
+    return open(os.path.join(rootpath, *parts)).read()
 
 
 def walk_subpkg(name):
@@ -30,7 +30,7 @@ pkg_data = {
         "templates/*.html",
         "templates/*.js",
         "templates/*.txt",
-    ]
+    ],
 }
 pkgs = ["branca"]
 
