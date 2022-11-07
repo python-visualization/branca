@@ -15,6 +15,7 @@ pytest-cov
 pytest-flake8
 pytest-xdist
 selenium
+setuptools_scm
 sphinx
 twine
 wheel

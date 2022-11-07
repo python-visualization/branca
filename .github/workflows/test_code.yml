@@ -1,9 +1,6 @@
 name: Code Tests
 
-on:
-  pull_request:
-  push:
-    branches: [master, main]
+on: ["push", "pull_request"]
 
 jobs:
   run:
@@ -11,36 +8,26 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.7", "3.8", "3.9", "3.10", "3.11"]
       fail-fast: false
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - name: Setup Conda
-      uses: s-weigand/setup-conda@v1
+    - name: Setup Micromamba
+      uses: mamba-org/provision-with-micromamba@v14
       with:
-        update-conda: true
-        activate-conda: false
-        conda-channels: conda-forge
+        environment-file: false
 
     - name: Python ${{ matrix.python-version }}
       shell: bash -l {0}
       run: |
-        conda create --name TEST python=${{ matrix.python-version }} pip --file requirements.txt --file requirements-dev.txt
-        source activate TEST
+        micromamba create --name TEST python=${{ matrix.python-version }} pip --file requirements.txt --file requirements-dev.txt --channel conda-forge
+        micromamba activate TEST
         pip install -e . --no-deps --force-reinstall
-
-    - name: Debug Installation
-      shell: bash -l {0}
-      run: |
-        source activate TEST
-        which python
-        conda info --all
-        conda list
 
     - name: Tests
       shell: bash -l {0}
       run: |
-        source activate TEST
-        pytest -vv -rxs tests -m "not headless"
+        micromamba activate TEST
+        python -m pytest -vv -rxs tests -m "not headless"
