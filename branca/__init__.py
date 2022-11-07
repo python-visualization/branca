@@ -8,6 +8,6 @@ except ImportError:
 
 
 __all__ = [
-    'colormap',
-    'element',
-    ]
+    "colormap",
+    "element",
+]

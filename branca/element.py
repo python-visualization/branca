@@ -7,23 +7,23 @@ A generic class for creating Elements.
 """
 
 import base64
-from html import escape
 import json
 import warnings
-from collections import OrderedDict
-from urllib.request import urlopen
 from binascii import hexlify
+from collections import OrderedDict
+from html import escape
 from os import urandom
 from pathlib import Path
+from urllib.request import urlopen
 
 from jinja2 import Environment, PackageLoader, Template
 
 from .utilities import _camelify, _parse_size, none_max, none_min
 
-ENV = Environment(loader=PackageLoader('branca', 'templates'))
+ENV = Environment(loader=PackageLoader("branca", "templates"))
 
 
-class Element(object):
+class Element:
     """Basic Element object that does nothing.
     Other Elements may inherit from this one.
 
@@ -44,14 +44,15 @@ class Element(object):
         If no template is provided, you can also provide a filename.
 
     """
+
     _template = Template(
-                '{% for name, element in this._children.items() %}\n'
-                '    {{element.render(**kwargs)}}'
-                '{% endfor %}'
-                )
+        "{% for name, element in this._children.items() %}\n"
+        "    {{element.render(**kwargs)}}"
+        "{% endfor %}",
+    )
 
     def __init__(self, template=None, template_name=None):
-        self._name = 'Element'
+        self._name = "Element"
         self._id = hexlify(urandom(16)).decode()
         self._env = ENV
         self._children = OrderedDict()
@@ -83,7 +84,7 @@ class Element(object):
         javascript-compatible
         variable name.
         """
-        return _camelify(self._name) + '_' + self._id
+        return _camelify(self._name) + "_" + self._id
 
     def _get_self_bounds(self):
         """Computes the bounds of the object itself (not including it's children)
@@ -103,18 +104,21 @@ class Element(object):
                 [
                     none_min(bounds[0][0], child_bounds[0][0]),
                     none_min(bounds[0][1], child_bounds[0][1]),
-                    ],
+                ],
                 [
                     none_max(bounds[1][0], child_bounds[1][0]),
                     none_max(bounds[1][1], child_bounds[1][1]),
-                    ],
-                ]
+                ],
+            ]
         return bounds
 
     def add_children(self, child, name=None, index=None):
         """Add a child."""
-        warnings.warn('Method `add_children` is deprecated. Please use `add_child` instead.',
-                      FutureWarning, stacklevel=2)
+        warnings.warn(
+            "Method `add_children` is deprecated. Please use `add_child` instead.",
+            FutureWarning,
+            stacklevel=2,
+        )
         return self.add_child(child, name=name, index=index)
 
     def add_child(self, child, name=None, index=None):
@@ -124,8 +128,7 @@ class Element(object):
         if index is None:
             self._children[name] = child
         else:
-            items = [item for item in self._children.items()
-                     if item[0] != name]
+            items = [item for item in self._children.items() if item[0] != name]
             items.insert(int(index), (name, child))
             self._children = OrderedDict(items)
         child._parent = self
@@ -143,11 +146,15 @@ class Element(object):
         else:
             dict_fun = dict
         out = dict_fun()
-        out['name'] = self._name
-        out['id'] = self._id
+        out["name"] = self._name
+        out["id"] = self._id
         if depth != 0:
-            out['children'] = dict_fun([(name, child.to_dict(depth=depth-1))
-                                        for name, child in self._children.items()])  # noqa
+            out["children"] = dict_fun(
+                [
+                    (name, child.to_dict(depth=depth - 1))
+                    for name, child in self._children.items()
+                ],
+            )  # noqa
         return out
 
     def to_json(self, depth=-1, **kwargs):
@@ -176,19 +183,20 @@ class Element(object):
             Whether the file has to be closed after write.
         """
         if isinstance(outfile, (str, bytes, Path)):
-            fid = open(outfile, 'wb')
+            fid = open(outfile, "wb")
         else:
             fid = outfile
 
         root = self.get_root()
         html = root.render(**kwargs)
-        fid.write(html.encode('utf8'))
+        fid.write(html.encode("utf8"))
         if close_file:
             fid.close()
 
 
 class Link(Element):
     """An abstract class for embedding a link in the HTML."""
+
     def get_code(self):
         """Opens the link and returns the response's content."""
         if self.code is None:
@@ -197,8 +205,8 @@ class Link(Element):
 
     def to_dict(self, depth=-1, **kwargs):
         """Returns a dict representation of the object."""
-        out = super(Link, self).to_dict(depth=-1, **kwargs)
-        out['url'] = self.url
+        out = super().to_dict(depth=-1, **kwargs)
+        out["url"] = self.url
         return out
 
 
@@ -213,17 +221,18 @@ class JavascriptLink(Link):
         Whether the target document shall be loaded right now.
 
     """
+
     _template = Template(
         '{% if kwargs.get("embedded",False) %}'
-        '<script>{{this.get_code()}}</script>'
-        '{% else %}'
+        "<script>{{this.get_code()}}</script>"
+        "{% else %}"
         '<script src="{{this.url}}"></script>'
-        '{% endif %}'
+        "{% endif %}",
     )
 
     def __init__(self, url, download=False):
-        super(JavascriptLink, self).__init__()
-        self._name = 'JavascriptLink'
+        super().__init__()
+        self._name = "JavascriptLink"
         self.url = url
         self.code = None
         if download:
@@ -241,17 +250,18 @@ class CssLink(Link):
         Whether the target document shall be loaded right now.
 
     """
+
     _template = Template(
         '{% if kwargs.get("embedded",False) %}'
-        '<style>{{this.get_code()}}</style>'
-        '{% else %}'
+        "<style>{{this.get_code()}}</style>"
+        "{% else %}"
         '<link rel="stylesheet" href="{{this.url}}"/>'
-        '{% endif %}'
+        "{% endif %}",
     )
 
     def __init__(self, url, download=False):
-        super(CssLink, self).__init__()
-        self._name = 'CssLink'
+        super().__init__()
+        self._name = "CssLink"
         self.url = url
         self.code = None
         if download:
@@ -280,25 +290,33 @@ class Figure(Element):
         For example figsize=(10, 5) will result in
         width="600px", height="300px".
     """
+
     _template = Template(
-        '<!DOCTYPE html>\n'
-        '<html>\n'
-        '<head>\n'
-        '{% if this.title %}<title>{{this.title}}</title>{% endif %}'
-        '    {{this.header.render(**kwargs)}}\n'
-        '</head>\n'
-        '<body>\n'
-        '    {{this.html.render(**kwargs)}}\n'
-        '</body>\n'
-        '<script>\n'
-        '    {{this.script.render(**kwargs)}}\n'
-        '</script>\n'
-        '</html>\n'
+        "<!DOCTYPE html>\n"
+        "<html>\n"
+        "<head>\n"
+        "{% if this.title %}<title>{{this.title}}</title>{% endif %}"
+        "    {{this.header.render(**kwargs)}}\n"
+        "</head>\n"
+        "<body>\n"
+        "    {{this.html.render(**kwargs)}}\n"
+        "</body>\n"
+        "<script>\n"
+        "    {{this.script.render(**kwargs)}}\n"
+        "</script>\n"
+        "</html>\n",
     )
 
-    def __init__(self, width='100%', height=None, ratio='60%', title=None, figsize=None):
-        super(Figure, self).__init__()
-        self._name = 'Figure'
+    def __init__(
+        self,
+        width="100%",
+        height=None,
+        ratio="60%",
+        title=None,
+        figsize=None,
+    ):
+        super().__init__()
+        self._name = "Figure"
         self.header = Element()
         self.html = Element()
         self.script = Element()
@@ -312,20 +330,23 @@ class Figure(Element):
         self.ratio = ratio
         self.title = title
         if figsize is not None:
-            self.width = str(60*figsize[0])+'px'
-            self.height = str(60*figsize[1])+'px'
+            self.width = str(60 * figsize[0]) + "px"
+            self.height = str(60 * figsize[1]) + "px"
 
         # Create the meta tag.
-        self.header.add_child(Element(
-            '<meta http-equiv="content-type" content="text/html; charset=UTF-8" />'),  # noqa
-            name='meta_http')
+        self.header.add_child(
+            Element(
+                '<meta http-equiv="content-type" content="text/html; charset=UTF-8" />',
+            ),  # noqa
+            name="meta_http",
+        )
 
     def to_dict(self, depth=-1, **kwargs):
         """Returns a dict representation of the object."""
-        out = super(Figure, self).to_dict(depth=depth, **kwargs)
-        out['header'] = self.header.to_dict(depth=depth-1, **kwargs)
-        out['html'] = self.html.to_dict(depth=depth-1, **kwargs)
-        out['script'] = self.script.to_dict(depth=depth-1, **kwargs)
+        out = super().to_dict(depth=depth, **kwargs)
+        out["header"] = self.header.to_dict(depth=depth - 1, **kwargs)
+        out["html"] = self.html.to_dict(depth=depth - 1, **kwargs)
+        out["script"] = self.script.to_dict(depth=depth - 1, **kwargs)
         return out
 
     def get_root(self):
@@ -348,16 +369,16 @@ class Figure(Element):
                 '<span style="color:#565656">Make this Notebook Trusted to load map: File -> Trust Notebook</span>'  # noqa
                 '<iframe srcdoc="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;'  # noqa
                 'border:none !important;" '
-                'allowfullscreen webkitallowfullscreen mozallowfullscreen>'
-                '</iframe>'
-                '</div></div>'
+                "allowfullscreen webkitallowfullscreen mozallowfullscreen>"
+                "</iframe>"
+                "</div></div>"
             ).format(html=html, width=self.width, ratio=self.ratio)
         else:
             iframe = (
                 '<iframe srcdoc="{html}" width="{width}" height="{height}"'
                 'style="border:none !important;" '
                 '"allowfullscreen" "webkitallowfullscreen" "mozallowfullscreen">'
-                '</iframe>'
+                "</iframe>"
             ).format(html=html, width=self.width, height=self.height)
         return iframe
 
@@ -374,26 +395,27 @@ class Figure(Element):
             The cell number in the grid, counted from 1 to x*y.
 
         Example:
-        >>> fig.add_subplot(3,2,5)
+        >>> fig.add_subplot(3, 2, 5)
         # Create a div in the 5th cell of a 3rows x 2columns
         grid(bottom-left corner).
         """
-        width = 1./y
-        height = 1./x
-        left = ((n-1) % y)*width
-        top = ((n-1)//y)*height
+        width = 1.0 / y
+        height = 1.0 / x
+        left = ((n - 1) % y) * width
+        top = ((n - 1) // y) * height
 
-        left = left+width*margin
-        top = top+height*margin
-        width = width*(1-2.*margin)
-        height = height*(1-2.*margin)
+        left = left + width * margin
+        top = top + height * margin
+        width = width * (1 - 2.0 * margin)
+        height = height * (1 - 2.0 * margin)
 
-        div = Div(position='absolute',
-                  width='{}%'.format(100.*width),
-                  height='{}%'.format(100.*height),
-                  left='{}%'.format(100.*left),
-                  top='{}%'.format(100.*top),
-                  )
+        div = Div(
+            position="absolute",
+            width=f"{100.0 * width}%",
+            height=f"{100.0 * height}%",
+            left=f"{100.0 * left}%",
+            top=f"{100.0 * top}%",
+        )
         self.add_child(div)
         return div
 
@@ -415,15 +437,16 @@ class Html(Element):
         The height of the output div element.
         Ex: 120 , '80%'
     """
+
     _template = Template(
         '<div id="{{this.get_name()}}" '
         'style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">'  # noqa
-        '{% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>'
+        "{% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>",
     )  # noqa
 
-    def __init__(self, data, script=False, width='100%', height='100%'):
-        super(Html, self).__init__()
-        self._name = 'Html'
+    def __init__(self, data, script=False, width="100%", height="100%"):
+        super().__init__()
+        self._name = "Html"
         self.script = script
         self.data = data
 
@@ -448,25 +471,32 @@ class Div(Figure):
         The position policy of the div.
         Usual values are 'relative', 'absolute', 'fixed', 'static'.
     """
+
     _template = Template(
-        '{% macro header(this, kwargs) %}'
-        '<style> #{{this.get_name()}} {\n'
-        '        position : {{this.position}};\n'
-        '        width : {{this.width[0]}}{{this.width[1]}};\n'
-        '        height: {{this.height[0]}}{{this.height[1]}};\n'
-        '        left: {{this.left[0]}}{{this.left[1]}};\n'
-        '        top: {{this.top[0]}}{{this.top[1]}};\n'
-        '    </style>'
-        '{% endmacro %}'
-        '{% macro html(this, kwargs) %}'
+        "{% macro header(this, kwargs) %}"
+        "<style> #{{this.get_name()}} {\n"
+        "        position : {{this.position}};\n"
+        "        width : {{this.width[0]}}{{this.width[1]}};\n"
+        "        height: {{this.height[0]}}{{this.height[1]}};\n"
+        "        left: {{this.left[0]}}{{this.left[1]}};\n"
+        "        top: {{this.top[0]}}{{this.top[1]}};\n"
+        "    </style>"
+        "{% endmacro %}"
+        "{% macro html(this, kwargs) %}"
         '<div id="{{this.get_name()}}">{{this.html.render(**kwargs)}}</div>'
-        '{% endmacro %}'
+        "{% endmacro %}",
     )
 
-    def __init__(self, width='100%', height='100%',
-                 left='0%', top='0%', position='relative'):
+    def __init__(
+        self,
+        width="100%",
+        height="100%",
+        left="0%",
+        top="0%",
+        position="relative",
+    ):
         super(Figure, self).__init__()
-        self._name = 'Div'
+        self._name = "Div"
 
         # Size Parameters.
         self.width = _parse_size(width)
@@ -477,10 +507,10 @@ class Div(Figure):
 
         self.header = Element()
         self.html = Element(
-            '{% for name, element in this._children.items() %}'
-            '{{element.render(**kwargs)}}'
-            '{% endfor %}'
-            )
+            "{% for name, element in this._children.items() %}"
+            "{{element.render(**kwargs)}}"
+            "{% endfor %}",
+        )
         self.script = Element()
 
         self.header._parent = self
@@ -494,8 +524,9 @@ class Div(Figure):
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         figure = self._parent
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
+        assert isinstance(figure, Figure), (
+            "You cannot render this Element " "if it is not in a Figure."
+        )
 
         for name, element in self._children.items():
             element.render(**kwargs)
@@ -506,20 +537,17 @@ class Div(Figure):
         for name, element in self.script._children.items():
             figure.script.add_child(element, name=name)
 
-        header = self._template.module.__dict__.get('header', None)
+        header = self._template.module.__dict__.get("header", None)
         if header is not None:
-            figure.header.add_child(Element(header(self, kwargs)),
-                                    name=self.get_name())
+            figure.header.add_child(Element(header(self, kwargs)), name=self.get_name())
 
-        html = self._template.module.__dict__.get('html', None)
+        html = self._template.module.__dict__.get("html", None)
         if html is not None:
-            figure.html.add_child(Element(html(self, kwargs)),
-                                  name=self.get_name())
+            figure.html.add_child(Element(html(self, kwargs)), name=self.get_name())
 
-        script = self._template.module.__dict__.get('script', None)
+        script = self._template.module.__dict__.get("script", None)
         if script is not None:
-            figure.script.add_child(Element(script(self, kwargs)),
-                                    name=self.get_name())
+            figure.script.add_child(Element(script(self, kwargs)), name=self.get_name())
 
     def _repr_html_(self, **kwargs):
         """Displays the Div in a Jupyter notebook."""
@@ -554,17 +582,17 @@ class IFrame(Element):
         For example figsize=(10, 5) will result in
         width="600px", height="300px".
     """
-    def __init__(self, html=None, width='100%', height=None, ratio='60%',
-                 figsize=None):
-        super(IFrame, self).__init__()
-        self._name = 'IFrame'
+
+    def __init__(self, html=None, width="100%", height=None, ratio="60%", figsize=None):
+        super().__init__()
+        self._name = "IFrame"
 
         self.width = width
         self.height = height
         self.ratio = ratio
         if figsize is not None:
-            self.width = str(60*figsize[0])+'px'
-            self.height = str(60*figsize[1])+'px'
+            self.width = str(60 * figsize[0]) + "px"
+            self.height = str(60 * figsize[1]) + "px"
 
         if isinstance(html, str) or isinstance(html, bytes):
             self.add_child(Element(html))
@@ -573,8 +601,12 @@ class IFrame(Element):
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
-        html = super(IFrame, self).render(**kwargs)
-        html = "data:text/html;charset=utf-8;base64," + base64.b64encode(html.encode('utf8')).decode('utf8')  # noqa
+        html = super().render(**kwargs)
+        html = "data:text/html;charset=utf-8;base64," + base64.b64encode(
+            html.encode("utf8"),
+        ).decode(
+            "utf8",
+        )  # noqa
 
         if self.height is None:
             iframe = (
@@ -582,8 +614,8 @@ class IFrame(Element):
                 '<div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">'  # noqa
                 '<iframe src="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;'  # noqa
                 'border:none !important;">'
-                '</iframe>'
-                '</div></div>'
+                "</iframe>"
+                "</div></div>"
             ).format(html=html, width=self.width, ratio=self.ratio)
         else:
             iframe = (
@@ -614,32 +646,31 @@ class MacroElement(Element):
         {% endmacro %}
 
     """
-    _template = Template(u'')
+
+    _template = Template("")
 
     def __init__(self):
-        super(MacroElement, self).__init__()
-        self._name = 'MacroElement'
+        super().__init__()
+        self._name = "MacroElement"
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         figure = self.get_root()
-        assert isinstance(figure, Figure), ('You cannot render this Element '
-                                            'if it is not in a Figure.')
+        assert isinstance(figure, Figure), (
+            "You cannot render this Element " "if it is not in a Figure."
+        )
 
-        header = self._template.module.__dict__.get('header', None)
+        header = self._template.module.__dict__.get("header", None)
         if header is not None:
-            figure.header.add_child(Element(header(self, kwargs)),
-                                    name=self.get_name())
+            figure.header.add_child(Element(header(self, kwargs)), name=self.get_name())
 
-        html = self._template.module.__dict__.get('html', None)
+        html = self._template.module.__dict__.get("html", None)
         if html is not None:
-            figure.html.add_child(Element(html(self, kwargs)),
-                                  name=self.get_name())
+            figure.html.add_child(Element(html(self, kwargs)), name=self.get_name())
 
-        script = self._template.module.__dict__.get('script', None)
+        script = self._template.module.__dict__.get("script", None)
         if script is not None:
-            figure.script.add_child(Element(script(self, kwargs)),
-                                    name=self.get_name())
+            figure.script.add_child(Element(script(self, kwargs)), name=self.get_name())
 
         for name, element in self._children.items():
             element.render(**kwargs)
