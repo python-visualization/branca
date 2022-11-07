@@ -2,8 +2,6 @@ import os
 
 from setuptools import setup
 
-import versioneer
-
 rootpath = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -47,7 +45,6 @@ install_requires = [t.strip() for t in tests_require]
 
 setup(
     name="branca",
-    version=versioneer.get_version(),
     description="Generate complex HTML+JS pages with Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -56,17 +53,23 @@ setup(
     keywords="data visualization",
     classifiers=[
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
         "License :: OSI Approved :: MIT License",
         "Development Status :: 5 - Production/Stable",
     ],
     packages=pkgs,
     package_data=pkg_data,
     include_package_data=True,
-    cmdclass=versioneer.get_cmdclass(),
+    use_scm_version={
+        "write_to": "branca/_version.py",
+        "write_to_template": '__version__ = "{version}"',
+        "tag_regex": r"^(?P<prefix>v)?(?P<version>[^\+]+)(?P<suffix>.*)?$",
+    },
     tests_require=["pytest"],
     license=LICENSE,
     install_requires=install_requires,

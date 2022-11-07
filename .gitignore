@@ -59,3 +59,4 @@ geckodriver.log
 
 # Pycharm
 .idea/
+branca/_version.py
