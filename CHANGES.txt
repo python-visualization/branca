@@ -1,3 +1,14 @@
+0.6.0
+~~~~~
+- Properly escape colormap caption (@Conengmo #117)
+- Multiple fixes in color_brewer (@ajabep #115)
+- Expose colorbar size variables (@Conengmo #77)
+- Proper html tags in Figure template (@desrod #67)
+- Make Element class pickleable (@bwest2397 #99)
+- Improve colorbar representation in notebooks (@HaudinFlorence #110)
+- Allow custom ticks on colorbar (@kota7 #113)
+
+
 0.5.0
 ~~~~~
 - Support for Pathlib when saving an `Element` (@wd60622 #103)
