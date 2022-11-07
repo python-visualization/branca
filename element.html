@@ -1,17 +1,20 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>branca.element &#8212; branca 0.4.2+6.ga872bef documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>branca.element &#8212; branca 0.6.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -33,18 +36,19 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-branca.element">
-<span id="branca-element"></span><h1><a class="reference internal" href="#module-branca.element" title="branca.element"><code class="xref py py-mod docutils literal notranslate"><span class="pre">branca.element</span></code></a><a class="headerlink" href="#module-branca.element" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="element">
-<h2>Element<a class="headerlink" href="#element" title="Permalink to this headline">¶</a></h2>
+  <section id="module-branca.element">
+<span id="branca-element"></span><h1><a class="reference internal" href="#module-branca.element" title="branca.element"><code class="xref py py-mod docutils literal notranslate"><span class="pre">branca.element</span></code></a><a class="headerlink" href="#module-branca.element" title="Permalink to this heading">¶</a></h1>
+<section id="element">
+<h2>Element<a class="headerlink" href="#element" title="Permalink to this heading">¶</a></h2>
 <p>A generic class for creating Elements.</p>
+</section>
 <dl class="py class">
-<dt id="branca.element.CssLink">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">branca.element.</span></code><code class="sig-name descname"><span class="pre">CssLink</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#CssLink"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.CssLink" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#branca.element.Link" title="branca.element.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.Link</span></code></a></p>
+<dt class="sig sig-object py" id="branca.element.CssLink">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">branca.element.</span></span><span class="sig-name descname"><span class="pre">CssLink</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#CssLink"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.CssLink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#branca.element.Link" title="branca.element.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a></p>
 <p>Create a CssLink object based on a url.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>url</strong> (<em>str</em>) – The url to be linked</p></li>
 <li><p><strong>download</strong> (<em>bool</em><em>, </em><em>default False</em>) – Whether the target document shall be loaded right now.</p></li>
@@ -54,12 +58,12 @@
 </dd></dl>
 
 <dl class="py class">
-<dt id="branca.element.Div">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">branca.element.</span></code><code class="sig-name descname"><span class="pre">Div</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'100%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'100%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'relative'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Div"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Div" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#branca.element.Figure" title="branca.element.Figure"><code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.Figure</span></code></a></p>
+<dt class="sig sig-object py" id="branca.element.Div">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">branca.element.</span></span><span class="sig-name descname"><span class="pre">Div</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'100%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'100%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">top</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'0%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'relative'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Div"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Div" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#branca.element.Figure" title="branca.element.Figure"><code class="xref py py-class docutils literal notranslate"><span class="pre">Figure</span></code></a></p>
 <p>Create a Div to be embedded in a Figure.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>width</strong> (<em>int</em><em> or </em><em>str</em><em>, </em><em>default '100%'</em>) – The width of the div in pixels (int) or percentage (str).</p></li>
 <li><p><strong>height</strong> (<em>int</em><em> or </em><em>str</em><em>, </em><em>default '100%'</em>) – The height of the div in pixels (int) or percentage (str).</p></li>
@@ -71,27 +75,27 @@ Usual values are ‘relative’, ‘absolute’, ‘fixed’, ‘static’.</p><
 </dd>
 </dl>
 <dl class="py method">
-<dt id="branca.element.Div.get_root">
-<code class="sig-name descname"><span class="pre">get_root</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Div.get_root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Div.get_root" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Div.get_root">
+<span class="sig-name descname"><span class="pre">get_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Div.get_root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Div.get_root" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the root of the elements tree.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="branca.element.Div.render">
-<code class="sig-name descname"><span class="pre">render</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Div.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Div.render" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Div.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Div.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Div.render" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="branca.element.Element">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">branca.element.</span></code><code class="sig-name descname"><span class="pre">Element</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Element">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">branca.element.</span></span><span class="sig-name descname"><span class="pre">Element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Basic Element object that does nothing.
 Other Elements may inherit from this one.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>template</strong> (<em>str</em><em>, </em><em>default None</em>) – <p>A jinaj2-compatible template string for rendering the element.
 If None, template will be:</p>
@@ -107,33 +111,33 @@ If None, template will be:</p>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="branca.element.Element.add_child">
-<code class="sig-name descname"><span class="pre">add_child</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">child</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.add_child"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.add_child" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Element.add_child">
+<span class="sig-name descname"><span class="pre">add_child</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">child</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.add_child"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.add_child" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a child.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="branca.element.Element.add_children">
-<code class="sig-name descname"><span class="pre">add_children</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">child</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.add_children"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.add_children" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Element.add_children">
+<span class="sig-name descname"><span class="pre">add_children</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">child</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.add_children"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.add_children" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a child.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="branca.element.Element.add_to">
-<code class="sig-name descname"><span class="pre">add_to</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.add_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.add_to" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Element.add_to">
+<span class="sig-name descname"><span class="pre">add_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.add_to"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.add_to" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add element to a parent.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="branca.element.Element.get_bounds">
-<code class="sig-name descname"><span class="pre">get_bounds</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.get_bounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.get_bounds" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Element.get_bounds">
+<span class="sig-name descname"><span class="pre">get_bounds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.get_bounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.get_bounds" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the bounds of the object and all it’s children
 in the form [[lat_min, lon_min], [lat_max, lon_max]].</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="branca.element.Element.get_name">
-<code class="sig-name descname"><span class="pre">get_name</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.get_name" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Element.get_name">
+<span class="sig-name descname"><span class="pre">get_name</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.get_name"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.get_name" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a string representation of the object.
 This string has to be unique and to be a python and
 javascript-compatible
@@ -141,23 +145,23 @@ variable name.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="branca.element.Element.get_root">
-<code class="sig-name descname"><span class="pre">get_root</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.get_root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.get_root" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Element.get_root">
+<span class="sig-name descname"><span class="pre">get_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.get_root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.get_root" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the root of the elements tree.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="branca.element.Element.render">
-<code class="sig-name descname"><span class="pre">render</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.render" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Element.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.render" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="branca.element.Element.save">
-<code class="sig-name descname"><span class="pre">save</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">close_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.save" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Element.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">outfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">close_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>Saves an Element into a file.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>outfile</strong> (<em>str</em><em> or </em><em>file object</em>) – The file (or filename) where you want to output the html.</p></li>
 <li><p><strong>close_file</strong> (<em>bool</em><em>, </em><em>default True</em>) – Whether the file has to be closed after write.</p></li>
@@ -167,26 +171,26 @@ variable name.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="branca.element.Element.to_dict">
-<code class="sig-name descname"><span class="pre">to_dict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ordered</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.to_dict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Element.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ordered</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a dict representation of the object.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="branca.element.Element.to_json">
-<code class="sig-name descname"><span class="pre">to_json</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.to_json" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Element.to_json">
+<span class="sig-name descname"><span class="pre">to_json</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Element.to_json"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Element.to_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a JSON representation of the object.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="branca.element.Figure">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">branca.element.</span></code><code class="sig-name descname"><span class="pre">Figure</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'100%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'60%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Figure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#branca.element.Element" title="branca.element.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.Element</span></code></a></p>
+<dt class="sig sig-object py" id="branca.element.Figure">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">branca.element.</span></span><span class="sig-name descname"><span class="pre">Figure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'100%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'60%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Figure"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Figure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#branca.element.Element" title="branca.element.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a></p>
 <p>Create a Figure object, to plot things into it.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>width</strong> (<em>str</em><em>, </em><em>default &quot;100%&quot;</em>) – The width of the Figure.
 It may be a percentage or pixel value (like “300px”).</p></li>
@@ -195,7 +199,7 @@ It may be a percentage or a pixel value (like “300px”).</p></li>
 <li><p><strong>ratio</strong> (<em>str</em><em>, </em><em>default &quot;60%&quot;</em>) – A percentage defining the aspect ratio of the Figure.
 It will be ignored if height is not None.</p></li>
 <li><p><strong>title</strong> (<em>str</em><em>, </em><em>default None</em>) – Figure title.</p></li>
-<li><p><strong>figsize</strong> (<em>tuple of two int</em><em>, </em><em>default None</em>) – If you’re a matplotlib addict, you can overwrite width and
+<li><p><strong>figsize</strong> (<em>tuple</em><em> of </em><em>two int</em><em>, </em><em>default None</em>) – If you’re a matplotlib addict, you can overwrite width and
 height. Values will be converted into pixels in using 60 dpi.
 For example figsize=(10, 5) will result in
 width=”600px”, height=”300px”.</p></li>
@@ -203,11 +207,11 @@ width=”600px”, height=”300px”.</p></li>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="branca.element.Figure.add_subplot">
-<code class="sig-name descname"><span class="pre">add_subplot</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Figure.add_subplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Figure.add_subplot" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Figure.add_subplot">
+<span class="sig-name descname"><span class="pre">add_subplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">margin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.05</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Figure.add_subplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Figure.add_subplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a div child subplot in a matplotlib.figure.add_subplot style.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>x</strong> (<em>int</em>) – The number of rows in the grid.</p></li>
 <li><p><strong>y</strong> (<em>int</em>) – The number of columns in the grid.</p></li>
@@ -216,40 +220,40 @@ width=”600px”, height=”300px”.</p></li>
 <li><p><strong>fig.add_subplot</strong><strong>(</strong><strong>3</strong> (<em>&gt;&gt;&gt;</em>) – </p></li>
 <li><p><strong>2</strong> – </p></li>
 <li><p><strong>5</strong><strong>)</strong> – </p></li>
-<li><p><strong>Create a div in the 5th cell of a 3rows x 2columns</strong> (<em>#</em>) – </p></li>
-<li><p><strong>corner</strong><strong>)</strong><strong></strong> (<em>grid</em><em>(</em><em>bottom-left</em>) – </p></li>
+<li><p><strong>2columns</strong> (<em># Create a div in the 5th cell</em><em> of </em><em>a 3rows x</em>) – </p></li>
+<li><p><strong>corner</strong><strong>)</strong><strong>.</strong> (<em>grid</em><em>(</em><em>bottom-left</em>) – </p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt id="branca.element.Figure.get_root">
-<code class="sig-name descname"><span class="pre">get_root</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Figure.get_root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Figure.get_root" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Figure.get_root">
+<span class="sig-name descname"><span class="pre">get_root</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Figure.get_root"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Figure.get_root" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the root of the elements tree.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="branca.element.Figure.render">
-<code class="sig-name descname"><span class="pre">render</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Figure.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Figure.render" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Figure.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Figure.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Figure.render" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="branca.element.Figure.to_dict">
-<code class="sig-name descname"><span class="pre">to_dict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Figure.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Figure.to_dict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Figure.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Figure.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Figure.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a dict representation of the object.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="branca.element.Html">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">branca.element.</span></code><code class="sig-name descname"><span class="pre">Html</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">script</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'100%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'100%'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Html"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Html" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#branca.element.Element" title="branca.element.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.Element</span></code></a></p>
+<dt class="sig sig-object py" id="branca.element.Html">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">branca.element.</span></span><span class="sig-name descname"><span class="pre">Html</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">script</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'100%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'100%'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Html"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Html" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#branca.element.Element" title="branca.element.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a></p>
 <p>Create an HTML div object for embedding data.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<em>str</em>) – The HTML data to be embedded.</p></li>
 <li><p><strong>script</strong> (<em>bool</em>) – If True, data will be embedded without escaping
@@ -264,12 +268,12 @@ Ex: 120 , ‘80%’</p></li>
 </dd></dl>
 
 <dl class="py class">
-<dt id="branca.element.IFrame">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">branca.element.</span></code><code class="sig-name descname"><span class="pre">IFrame</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'100%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'60%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#IFrame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.IFrame" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#branca.element.Element" title="branca.element.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.Element</span></code></a></p>
+<dt class="sig sig-object py" id="branca.element.IFrame">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">branca.element.</span></span><span class="sig-name descname"><span class="pre">IFrame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'100%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'60%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#IFrame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.IFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#branca.element.Element" title="branca.element.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a></p>
 <p>Create a Figure object, to plot things into it.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>html</strong> (<em>str</em><em>, </em><em>default None</em>) – Eventual HTML code that you want to put in the frame.</p></li>
 <li><p><strong>width</strong> (<em>str</em><em>, </em><em>default &quot;100%&quot;</em>) – The width of the Figure.
@@ -278,7 +282,7 @@ It may be a percentage or pixel value (like “300px”).</p></li>
 It may be a percentage or a pixel value (like “300px”).</p></li>
 <li><p><strong>ratio</strong> (<em>str</em><em>, </em><em>default &quot;60%&quot;</em>) – A percentage defining the aspect ratio of the Figure.
 It will be ignored if height is not None.</p></li>
-<li><p><strong>figsize</strong> (<em>tuple of two int</em><em>, </em><em>default None</em>) – If you’re a matplotlib addict, you can overwrite width and
+<li><p><strong>figsize</strong> (<em>tuple</em><em> of </em><em>two int</em><em>, </em><em>default None</em>) – If you’re a matplotlib addict, you can overwrite width and
 height. Values will be converted into pixels in using 60 dpi.
 For example figsize=(10, 5) will result in
 width=”600px”, height=”300px”.</p></li>
@@ -286,20 +290,20 @@ width=”600px”, height=”300px”.</p></li>
 </dd>
 </dl>
 <dl class="py method">
-<dt id="branca.element.IFrame.render">
-<code class="sig-name descname"><span class="pre">render</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#IFrame.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.IFrame.render" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.IFrame.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#IFrame.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.IFrame.render" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="branca.element.JavascriptLink">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">branca.element.</span></code><code class="sig-name descname"><span class="pre">JavascriptLink</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#JavascriptLink"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.JavascriptLink" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#branca.element.Link" title="branca.element.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.Link</span></code></a></p>
+<dt class="sig sig-object py" id="branca.element.JavascriptLink">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">branca.element.</span></span><span class="sig-name descname"><span class="pre">JavascriptLink</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#JavascriptLink"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.JavascriptLink" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#branca.element.Link" title="branca.element.Link"><code class="xref py py-class docutils literal notranslate"><span class="pre">Link</span></code></a></p>
 <p>Create a JavascriptLink object based on a url.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>url</strong> (<em>str</em>) – The url to be linked</p></li>
 <li><p><strong>download</strong> (<em>bool</em><em>, </em><em>default False</em>) – Whether the target document shall be loaded right now.</p></li>
@@ -309,28 +313,28 @@ width=”600px”, height=”300px”.</p></li>
 </dd></dl>
 
 <dl class="py class">
-<dt id="branca.element.Link">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">branca.element.</span></code><code class="sig-name descname"><span class="pre">Link</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Link" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#branca.element.Element" title="branca.element.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.Element</span></code></a></p>
+<dt class="sig sig-object py" id="branca.element.Link">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">branca.element.</span></span><span class="sig-name descname"><span class="pre">Link</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">template</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Link"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Link" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#branca.element.Element" title="branca.element.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a></p>
 <p>An abstract class for embedding a link in the HTML.</p>
 <dl class="py method">
-<dt id="branca.element.Link.get_code">
-<code class="sig-name descname"><span class="pre">get_code</span></code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Link.get_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Link.get_code" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Link.get_code">
+<span class="sig-name descname"><span class="pre">get_code</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Link.get_code"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Link.get_code" title="Permalink to this definition">¶</a></dt>
 <dd><p>Opens the link and returns the response’s content.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="branca.element.Link.to_dict">
-<code class="sig-name descname"><span class="pre">to_dict</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-</span> <span class="pre">1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Link.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Link.to_dict" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.Link.to_dict">
+<span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#Link.to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.Link.to_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a dict representation of the object.</p>
 </dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt id="branca.element.MacroElement">
-<em class="property"><span class="pre">class</span> </em><code class="sig-prename descclassname"><span class="pre">branca.element.</span></code><code class="sig-name descname"><span class="pre">MacroElement</span></code><a class="reference internal" href="_modules/branca/element.html#MacroElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.MacroElement" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#branca.element.Element" title="branca.element.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">branca.element.Element</span></code></a></p>
+<dt class="sig sig-object py" id="branca.element.MacroElement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">branca.element.</span></span><span class="sig-name descname"><span class="pre">MacroElement</span></span><a class="reference internal" href="_modules/branca/element.html#MacroElement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.MacroElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#branca.element.Element" title="branca.element.Element"><code class="xref py py-class docutils literal notranslate"><span class="pre">Element</span></code></a></p>
 <p>This is a parent class for Elements defined by a macro template.
 To compute your own element, all you have to do is:</p>
 <ul>
@@ -353,15 +357,14 @@ To compute your own element, all you have to do is:</p>
 </li>
 </ul>
 <dl class="py method">
-<dt id="branca.element.MacroElement.render">
-<code class="sig-name descname"><span class="pre">render</span></code><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#MacroElement.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.MacroElement.render" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="branca.element.MacroElement.render">
+<span class="sig-name descname"><span class="pre">render</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/branca/element.html#MacroElement.render"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#branca.element.MacroElement.render" title="Permalink to this definition">¶</a></dt>
 <dd><p>Renders the HTML representation of the element.</p>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-</div>
+</section>
 
 
           </div>
@@ -380,10 +383,51 @@ To compute your own element, all you have to do is:</p>
 
 
 <h3>Navigation</h3>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">branca.element</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#element">Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#branca.element.CssLink"><code class="docutils literal notranslate"><span class="pre">CssLink</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#branca.element.Div"><code class="docutils literal notranslate"><span class="pre">Div</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Div.get_root"><code class="docutils literal notranslate"><span class="pre">Div.get_root()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Div.render"><code class="docutils literal notranslate"><span class="pre">Div.render()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#branca.element.Element"><code class="docutils literal notranslate"><span class="pre">Element</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Element.add_child"><code class="docutils literal notranslate"><span class="pre">Element.add_child()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Element.add_children"><code class="docutils literal notranslate"><span class="pre">Element.add_children()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Element.add_to"><code class="docutils literal notranslate"><span class="pre">Element.add_to()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Element.get_bounds"><code class="docutils literal notranslate"><span class="pre">Element.get_bounds()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Element.get_name"><code class="docutils literal notranslate"><span class="pre">Element.get_name()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Element.get_root"><code class="docutils literal notranslate"><span class="pre">Element.get_root()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Element.render"><code class="docutils literal notranslate"><span class="pre">Element.render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Element.save"><code class="docutils literal notranslate"><span class="pre">Element.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Element.to_dict"><code class="docutils literal notranslate"><span class="pre">Element.to_dict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Element.to_json"><code class="docutils literal notranslate"><span class="pre">Element.to_json()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#branca.element.Figure"><code class="docutils literal notranslate"><span class="pre">Figure</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Figure.add_subplot"><code class="docutils literal notranslate"><span class="pre">Figure.add_subplot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Figure.get_root"><code class="docutils literal notranslate"><span class="pre">Figure.get_root()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Figure.render"><code class="docutils literal notranslate"><span class="pre">Figure.render()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Figure.to_dict"><code class="docutils literal notranslate"><span class="pre">Figure.to_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#branca.element.Html"><code class="docutils literal notranslate"><span class="pre">Html</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#branca.element.IFrame"><code class="docutils literal notranslate"><span class="pre">IFrame</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.IFrame.render"><code class="docutils literal notranslate"><span class="pre">IFrame.render()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#branca.element.JavascriptLink"><code class="docutils literal notranslate"><span class="pre">JavascriptLink</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#branca.element.Link"><code class="docutils literal notranslate"><span class="pre">Link</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Link.get_code"><code class="docutils literal notranslate"><span class="pre">Link.get_code()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.Link.to_dict"><code class="docutils literal notranslate"><span class="pre">Link.to_dict()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#branca.element.MacroElement"><code class="docutils literal notranslate"><span class="pre">MacroElement</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#branca.element.MacroElement.render"><code class="docutils literal notranslate"><span class="pre">MacroElement.render()</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="colormap.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">branca.colormap</span></code></a></li>
@@ -402,12 +446,12 @@ To compute your own element, all you have to do is:</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script>$('#searchbox').show(0);</script>
+<script>document.getElementById('searchbox').style.display = "block"</script>
 
 
 
@@ -424,7 +468,7 @@ To compute your own element, all you have to do is:</p>
       &copy;2018, Filipe Fernandes.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.4</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
