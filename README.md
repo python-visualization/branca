@@ -7,4 +7,4 @@
 This library is a spinoff from [folium](https://github.com/python-visualization/folium). It can be used to generate HTML + JS. It is based on Jinja2.
 
 - Documentation: https://python-visualization.github.io/branca/
-- Examples: http://nbviewer.jupyter.org/github/python-visualization/branca/tree/master/examples
+- Examples: https://nbviewer.org/github/python-visualization/branca/tree/main/examples/
