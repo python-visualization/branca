@@ -1,6 +1,14 @@
+
 name: Publish to PyPI
 
-on: ["push", "pull_request"]
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  release:
+    types:
+      - published
 
 defaults:
   run:
@@ -38,8 +46,8 @@ jobs:
         python -m twine check *
 
     - name: Publish a Python distribution to PyPI
-      if: ${{ github.event_name == 'release' }}
-      uses: pypa/gh-action-pypi-publish@v1.5.1
+      if: success() && github.event_name == 'release'
+      uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
         password: ${{ secrets.PYPI_PASSWORD }}
