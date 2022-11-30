@@ -104,3 +104,31 @@ def test_color_avoid_unexpected_error():
         for n in [str(color_brewer_minimum_n), float(color_brewer_minimum_n), "abc"]:
             with pytest.raises(TypeError):
                 ut.color_brewer(sname, n)
+
+
+@pytest.mark.parametrize(
+    "value,result",
+    [
+        (1, (1.0, "px")),
+        ("1 px", (1.0, "px")),
+        ("80 % ", (80.0, "%")),
+        ("100%   ", (100.0, "%")),
+        ("3 vw", (3.0, "vw")),
+        ("3.14 rem", (3.14, "rem")),
+    ],
+)
+def test_parse_size(value, result):
+    assert ut._parse_size(value) == result
+
+
+@pytest.mark.parametrize(
+    "value",
+    [
+        "what?",
+        "1.21 jigawatts",
+        ut._parse_size,
+    ],
+)
+def test_parse_size_exceptions(value):
+    with pytest.raises((ValueError, TypeError)):
+        ut._parse_size(value)
