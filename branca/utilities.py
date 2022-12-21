@@ -391,6 +391,8 @@ def _parse_size(value):
     if isinstance(value, (int, float)):
         return float(value), "px"
     elif isinstance(value, str):
+        # match digits or a point, possibly followed by a space,
+        # followed by a unit: either 1 to 5 letters or a percent sign
         match = re.fullmatch(r"([\d.]+)\s?(\w{1,5}|%)", value.strip())
         if match:
             return float(match.group(1)), match.group(2)
