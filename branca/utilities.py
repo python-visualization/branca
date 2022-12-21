@@ -10,6 +10,7 @@ import base64
 import json
 import math
 import os
+import re
 import struct
 import zlib
 
@@ -387,19 +388,22 @@ def _camelify(out):
 
 
 def _parse_size(value):
-    try:
-        if isinstance(value, int) or isinstance(value, float):
-            value_type = "px"
-            value = float(value)
-            assert value > 0
+    if isinstance(value, (int, float)):
+        return float(value), "px"
+    elif isinstance(value, str):
+        # match digits or a point, possibly followed by a space,
+        # followed by a unit: either 1 to 5 letters or a percent sign
+        match = re.fullmatch(r"([\d.]+)\s?(\w{1,5}|%)", value.strip())
+        if match:
+            return float(match.group(1)), match.group(2)
         else:
-            value_type = "%"
-            value = float(value.strip("%"))
-            assert 0 <= value <= 100
-    except Exception:
-        msg = "Cannot parse value {!r} as {!r}".format
-        raise ValueError(msg(value, value_type))
-    return value, value_type
+            raise ValueError(
+                f"Cannot parse {value!r}, it should be a number followed by a unit.",
+            )
+    else:
+        raise TypeError(
+            f"Cannot parse {value!r}, it should be a number or a string containing a number and a unit.",
+        )
 
 
 def _locations_mirror(x):
