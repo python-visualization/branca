@@ -304,8 +304,8 @@ def write_png(
     origin : ['upper' | 'lower'], optional, default 'upper'
         Place the [0,0] index of the array in the upper left or lower left
         corner of the axes.
-    colormap : ColorMap subclass or callable, used only for `mono` image.
-        Used to transform mono images into RGB. You have three options:
+    colormap : ColorMap subclass or callable, optional
+        Only needed to transform mono images into RGB. You have three options:
         - use a subclass of `ColorMap` like `LinearColorMap`
         - use a colormap from `matplotlib.cm`
         - use a custom function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)].
