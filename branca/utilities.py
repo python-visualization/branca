@@ -284,7 +284,7 @@ def image_to_url(image, colormap=None, origin="upper"):
 def write_png(
     data: Any,
     origin: str = "upper",
-    colormap: Union[ColorMap, Callable, None] = None,
+    colormap: Union["ColorMap", Callable, None] = None,
 ) -> bytes:
     """
     Transform an array of data into a PNG string.
@@ -315,6 +315,8 @@ def write_png(
     -------
     PNG formatted byte string
     """
+    from branca.colormap import ColorMap
+
     if np is None:
         raise ImportError("The NumPy package is required" " for this functionality")
 

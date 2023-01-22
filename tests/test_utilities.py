@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 
 import branca.utilities as ut
+from branca.colormap import LinearColormap
 
 rootpath = Path(os.path.dirname(os.path.abspath(__file__))) / ".." / "branca"
 color_brewer_minimum_n = 3
@@ -132,3 +133,36 @@ def test_parse_size(value, result):
 def test_parse_size_exceptions(value):
     with pytest.raises((ValueError, TypeError)):
         ut._parse_size(value)
+
+
+def test_write_png_mono():
+    mono_image = [
+        [0.24309289, 0.75997446, 0.02971671, 0.52830537],
+        [0.62339252, 0.65369358, 0.41545387, 0.03307279],
+    ]
+
+    mono_png = b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x04\x00\x00\x00\x02\x08\x06\x00\x00\x00\x7f\xa8}c\x00\x00\x00)IDATx\xdac\x08\x0c\x0c\xfc\x0f\x02\x9c\x9c\x9c\xff7n\xdc\xf8\x9f\xe1\xe2\xc5\x8b\xffo\xdf\xbe\xfd\xbf\xbb\xbb\xfb?77\xf7\x7f\x00f\x87\x14\xdd\x0c\r;\xc0\x00\x00\x00\x00IEND\xaeB`\x82"  # noqa E501
+    assert ut.write_png(mono_image) == mono_png
+
+    colormap = LinearColormap(colors=["red", "yellow", "green"])
+    color_png = b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x04\x00\x00\x00\x02\x08\x06\x00\x00\x00\x7f\xa8}c\x00\x00\x00)IDATx\xdac\xf8_\xcf\xf0\xbf\xea\x10\xc3\xff\xff\xfc\x0c\xff?\xfcg\xf8\xcfp\xe0\x19\xc3\xff\r\xf7\x80\x02\xb7\x80X\x90\xe1?\x00N\xca\x13\xcd\xfb\xad\r\xb8\x00\x00\x00\x00IEND\xaeB`\x82"  # noqa E501
+    assert ut.write_png(mono_image, colormap=colormap) == color_png
+
+
+def test_write_png_rgb():
+    image_rgb = [
+        [
+            [0.8952778565195247, 0.6196806506704735, 0.2696137085302287],
+            [0.3940794236804127, 0.9432178293916365, 0.16500617914697335],
+            [0.5566755388192485, 0.10469673377265687, 0.27346260130585975],
+            [0.2029951628162342, 0.5357152681832641, 0.13692921080346832],
+        ],
+        [
+            [0.5186482474007286, 0.8625240370164696, 0.6965561989987038],
+            [0.04425586727957387, 0.45448042432657076, 0.8552600511205423],
+            [0.696453974598333, 0.7508742900711168, 0.9646572952994652],
+            [0.7471809029502141, 0.3218907599994758, 0.789193070740859],
+        ],
+    ]
+    png = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x04\x00\x00\x00\x02\x08\x06\x00\x00\x00\x7f\xa8}c\x00\x00\x00-IDATx\xda\x01"\x00\xdd\xff\x00\xff\xa7G\xffp\xff+\xff\x9e\x1cH\xff9\x90$\xff\x00\x93\xe9\xb8\xff\x0cz\xe2\xff\xc6\xca\xff\xff\xd4W\xd0\xffYw\x15\x95\xcf\xb9@D\x00\x00\x00\x00IEND\xaeB`\x82'  # noqa E501
+    assert ut.write_png(image_rgb) == png
