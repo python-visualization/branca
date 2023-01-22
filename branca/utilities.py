@@ -322,7 +322,7 @@ def write_png(
 
     if isinstance(colormap, ColorMap):
         colormap_callable = colormap.rgba_floats_tuple
-    elif isinstance(colormap, Callable):
+    elif callable(colormap):
         colormap_callable = colormap
     else:
         colormap_callable = lambda x: (x, x, x, 1)  # noqa E731
