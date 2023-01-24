@@ -9,6 +9,7 @@ isort
 jupyter
 nbsphinx
 nbval
+numpy
 pylint
 pytest
 pytest-cov

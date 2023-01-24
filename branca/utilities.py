@@ -12,7 +12,9 @@ import math
 import os
 import re
 import struct
+import typing
 import zlib
+from typing import Any, Callable, Union
 
 from jinja2 import Environment, PackageLoader
 
@@ -25,6 +27,9 @@ try:
     import numpy as np
 except ImportError:
     np = None
+
+if typing.TYPE_CHECKING:
+    from branca.colormap import ColorMap
 
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
@@ -276,7 +281,11 @@ def image_to_url(image, colormap=None, origin="upper"):
     return url.replace("\n", " ")
 
 
-def write_png(data, origin="upper", colormap=None):
+def write_png(
+    data: Any,
+    origin: str = "upper",
+    colormap: Union["ColorMap", Callable, None] = None,
+) -> bytes:
     """
     Transform an array of data into a PNG string.
     This can be written to disk using binary I/O, or encoded using base64
@@ -292,28 +301,31 @@ def write_png(data, origin="upper", colormap=None):
     ----------
     data: numpy array or equivalent list-like object.
          Must be NxM (mono), NxMx3 (RGB) or NxMx4 (RGBA)
-
     origin : ['upper' | 'lower'], optional, default 'upper'
         Place the [0,0] index of the array in the upper left or lower left
         corner of the axes.
-
-    colormap : callable, used only for `mono` image.
-        Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
-        for transforming a mono image into RGB.
-        It must output iterables of length 3 or 4, with values between
-        0. and 1.  Hint: you can use colormaps from `matplotlib.cm`.
+    colormap : ColorMap subclass or callable, optional
+        Only needed to transform mono images into RGB. You have three options:
+        - use a subclass of `ColorMap` like `LinearColorMap`
+        - use a colormap from `matplotlib.cm`
+        - use a custom function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)].
+          It must output iterables of length 3 or 4 with values between 0 and 1.
 
     Returns
     -------
     PNG formatted byte string
     """
+    from branca.colormap import ColorMap
+
     if np is None:
         raise ImportError("The NumPy package is required" " for this functionality")
 
-    if colormap is None:
-
-        def colormap(x):
-            return (x, x, x, 1)
+    if isinstance(colormap, ColorMap):
+        colormap_callable = colormap.rgba_floats_tuple
+    elif callable(colormap):
+        colormap_callable = colormap
+    else:
+        colormap_callable = lambda x: (x, x, x, 1)  # noqa E731
 
     array = np.atleast_3d(data)
     height, width, nblayers = array.shape
@@ -323,7 +335,7 @@ def write_png(data, origin="upper", colormap=None):
     assert array.shape == (height, width, nblayers)
 
     if nblayers == 1:
-        array = np.array(list(map(colormap, array.ravel())))
+        array = np.array(list(map(colormap_callable, array.ravel())))
         nblayers = array.shape[1]
         if nblayers not in [3, 4]:
             raise ValueError(
@@ -340,7 +352,9 @@ def write_png(data, origin="upper", colormap=None):
 
     # Normalize to uint8 if it isn't already.
     if array.dtype != "uint8":
-        array = array * 255.0 / array.max(axis=(0, 1)).reshape((1, 1, 4))
+        with np.errstate(divide="ignore", invalid="ignore"):
+            array = array * 255.0 / array.max(axis=(0, 1)).reshape((1, 1, 4))
+            array[~np.isfinite(array)] = 0
         array = array.astype("uint8")
 
     # Eventually flip the image.
