@@ -14,7 +14,7 @@ import re
 import struct
 import typing
 import zlib
-from typing import Any, Callable, Union
+from typing import Any, Callable, Union, Optional
 
 from jinja2 import Environment, PackageLoader
 
@@ -285,6 +285,8 @@ def write_png(
     data: Any,
     origin: str = "upper",
     colormap: Union["ColorMap", Callable, None] = None,
+    vmin: Optional[float] = None,
+    vmax: Optional[float] = None,
 ) -> bytes:
     """
     Transform an array of data into a PNG string.
@@ -310,7 +312,12 @@ def write_png(
         - use a colormap from `matplotlib.cm`
         - use a custom function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)].
           It must output iterables of length 3 or 4 with values between 0 and 1.
-
+    vmin: float, optional
+        The minimum value to use for normalization. If not provided, the
+        minimum value in the data array will be used.
+    vmax: float, optional
+        The maximum value to use for normalization. If not provided, the
+        maximum value in the data array will be used.
     Returns
     -------
     PNG formatted byte string
@@ -352,8 +359,12 @@ def write_png(
 
     # Normalize to uint8 if it isn't already.
     if array.dtype != "uint8":
+        if vmin is None:
+            vmin = array.min()
+        if vmax is None:
+            vmax = array.max()
         with np.errstate(divide="ignore", invalid="ignore"):
-            array = array * 255.0 / array.max(axis=(0, 1)).reshape((1, 1, 4))
+            array = (array - vmin) * 255.0 / (vmax - vmin)
             array[~np.isfinite(array)] = 0
         array = array.astype("uint8")
 
