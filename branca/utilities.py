@@ -324,6 +324,15 @@ def write_png(
     """
     from branca.colormap import ColorMap
 
+    if vmin is None:
+        vmin = np.nanmin(data)
+    if vmax is None:
+        vmax = np.nanmax(data)
+    if vmax > 255:
+        scale_factor = (vmax/255)
+    elif vmax <= 255:
+        scale_factor = (255/vmax)
+    data = (data - vmin) / (vmax - vmin) * scale_factor
     if np is None:
         raise ImportError("The NumPy package is required" " for this functionality")
 
@@ -359,12 +368,8 @@ def write_png(
 
     # Normalize to uint8 if it isn't already.
     if array.dtype != "uint8":
-        if vmin is None:
-            vmin = array.min()
-        if vmax is None:
-            vmax = array.max()
         with np.errstate(divide="ignore", invalid="ignore"):
-            array = (array - vmin) * 255.0 / (vmax - vmin)
+            array = array * 255.0 / array.max(axis=(0, 1)).reshape((1, 1, 4))
             array[~np.isfinite(array)] = 0
         array = array.astype("uint8")
 
