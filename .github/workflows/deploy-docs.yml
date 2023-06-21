@@ -20,30 +20,26 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Setup Mamba
-      uses: mamba-org/provision-with-micromamba@v14
+    - name: Setup Micromamba
+      uses: mamba-org/setup-micromamba@v1
       with:
-        environment-file: false
+        environment-name: TEST
+        init-shell: bash
+        create-args: >-
+          python=3 --file requirements.txt --file requirements-dev.txt --channel conda-forge
 
-    - name: Build environment
+    - name: Install branca
       shell: bash -l {0}
       run: |
-        micromamba create --name TEST python=3 --file requirements.txt --file requirements-dev.txt --channel conda-forge
-        micromamba activate TEST
         python -m pip install -e . --no-deps --force-reinstall
-
-    - name: Get the version
-      id: get_version
-      run: echo ::set-output name=VERSION::$(python setup.py --version)
 
     - name: Build documentation
       shell: bash -l {0}
-      run: |
+      run: >
         set -e
-        micromamba activate TEST
-        pushd docs
-        make clean html linkcheck
-        popd
+        && pushd docs
+        && make clean html linkcheck
+        && popd
 
     - name: Deploy
       if: success() && github.event_name == 'release'
