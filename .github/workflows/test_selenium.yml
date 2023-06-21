@@ -12,20 +12,20 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Setup Micromamba
-      uses: mamba-org/provision-with-micromamba@v14
+    - name: Setup Micromamba Python 3
+      uses: mamba-org/setup-micromamba@v1
       with:
-        environment-file: false
+        environment-name: TEST
+        init-shell: bash
+        create-args: >-
+          python=3 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge
 
-    - name: Python 3
+    - name: Install branca
       shell: bash -l {0}
       run: |
-        micromamba create --name TEST python=3 pip --file requirements.txt --file requirements-dev.txt --channel conda-forge
-        micromamba activate TEST
-        pip install -e . --no-deps --force-reinstall
+        python -m pip install -e . --no-deps --force-reinstall
 
     - name: Tests
       shell: bash -l {0}
       run: |
-        micromamba activate TEST
         pytest -vv -rxs tests -m "headless"

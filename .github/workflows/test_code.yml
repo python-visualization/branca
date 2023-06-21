@@ -16,8 +16,6 @@ jobs:
         # We only run latest Python on macOS and Windows to save resources.
         include:
           - os: ubuntu-latest
-            python-version: "3.7"
-          - os: ubuntu-latest
             python-version: "3.8"
           - os: ubuntu-latest
             python-version: "3.9"
@@ -27,20 +25,20 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Setup Micromamba
-      uses: mamba-org/provision-with-micromamba@v14
+    - name: Setup Micromamba Python ${{ matrix.python-version }}
+      uses: mamba-org/setup-micromamba@v1
       with:
-        environment-file: false
+        environment-name: TEST
+        init-shell: bash
+        create-args: >-
+          python=${{ matrix.python-version }} pip --file requirements.txt --file requirements-dev.txt --channel conda-forge
 
-    - name: Python ${{ matrix.python-version }}
+    - name: Install branca
       shell: bash -l {0}
       run: |
-        micromamba create --name TEST python=${{ matrix.python-version }} pip --file requirements.txt --file requirements-dev.txt --channel conda-forge
-        micromamba activate TEST
-        pip install -e . --no-deps --force-reinstall
+        python -m pip install -e . --no-deps --force-reinstall
 
     - name: Tests
       shell: bash -l {0}
       run: |
-        micromamba activate TEST
         python -m pytest -vv -rxs tests -m "not headless"
