@@ -498,7 +498,7 @@ class StepColormap(ColorMap):
         if index is None:
             self.index = [vmin + (vmax - vmin) * i * 1.0 / n for i in range(n + 1)]
         else:
-            if any(index[i] > index[i+1] for i in range(len(index)-1)):
+            if any(index[i] > index[i + 1] for i in range(len(index) - 1)):
                 raise ValueError("The value in index must be in ascending order")
             self.index = list(index)
         self.colors = [_parse_color(x) for x in colors]
