@@ -270,7 +270,9 @@ class LinearColormap(ColorMap):
         if x >= self.index[-1]:
             return self.colors[-1]
 
-        i = len([u for u in self.index if u < x])  # 0 < i < n.
+        # get the index of the first entry in self.index that is larger than x
+        i = next(i for i, v in enumerate(self.index) if v > x)
+
         if self.index[i - 1] < self.index[i]:
             p = (x - self.index[i - 1]) * 1.0 / (self.index[i] - self.index[i - 1])
         elif self.index[i - 1] == self.index[i]:
@@ -496,6 +498,8 @@ class StepColormap(ColorMap):
         if index is None:
             self.index = [vmin + (vmax - vmin) * i * 1.0 / n for i in range(n + 1)]
         else:
+            if any(index[i] > index[i+1] for i in range(len(index)-1)):
+                raise ValueError("The value in index must be in ascending order")
             self.index = list(index)
         self.colors = [_parse_color(x) for x in colors]
 
@@ -510,8 +514,12 @@ class StepColormap(ColorMap):
         if x >= self.index[-1]:
             return self.colors[-1]
 
-        i = len([u for u in self.index if u < x])  # 0 < i < n.
-        return tuple(self.colors[i - 1])
+        # get the index of the first entry in self.index that is larger than x
+        # subtract 1 to get the index of the last entry that is less or equal to x
+        i = next(i for i, v in enumerate(self.index) if v > x) - 1
+
+        # return the color at index i
+        return tuple(self.colors[i])
 
     def to_linear(self, index=None, max_labels=10):
         """
