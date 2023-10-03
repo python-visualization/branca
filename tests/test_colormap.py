@@ -53,7 +53,8 @@ def test_step_color_indexing():
 def test_step_color_indexing_larger_index():
     # add an upper bound to the last color, which doesn't do much but shouldn't fail
     step = cm.StepColormap(
-        colors=["black", "red", "lime", "blue"], index=[1, 2, 4, 5, 10],
+        colors=["black", "red", "lime", "blue"],
+        index=[1, 2, 4, 5, 10],
     )
     assert step(4.99) == green
     assert step(5) == blue
@@ -63,7 +64,8 @@ def test_step_color_indexing_larger_index():
 
 def test_linear_color_indexing():
     linear = cm.LinearColormap(
-        colors=["black", "red", "lime", "blue"], index=[1, 2, 4, 5],
+        colors=["black", "red", "lime", "blue"],
+        index=[1, 2, 4, 5],
     )
     assert linear(1) == black
     assert linear(2) == red
