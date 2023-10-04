@@ -28,6 +28,52 @@ def test_simple_linear():
     linear._repr_html_()
 
 
+black = "#000000ff"
+red = "#ff0000ff"
+green = "#00ff00ff"
+blue = "#0000ffff"
+
+
+def test_step_color_indexing():
+    step = cm.StepColormap(colors=["black", "red", "lime", "blue"], index=[1, 2, 4, 5])
+    assert step(0.99) == black
+    assert step(1) == black
+    assert step(1.01) == black
+    assert step(1.99) == black
+    assert step(2) == red
+    assert step(2.01) == red
+    assert step(3.99) == red
+    assert step(4) == green
+    assert step(4.01) == green
+    assert step(4.99) == green
+    assert step(5) == blue
+    assert step(5.01) == blue
+
+
+def test_step_color_indexing_larger_index():
+    # add an upper bound to the last color, which doesn't do much but shouldn't fail
+    step = cm.StepColormap(
+        colors=["black", "red", "lime", "blue"],
+        index=[1, 2, 4, 5, 10],
+    )
+    assert step(4.99) == green
+    assert step(5) == blue
+    assert step(10) == blue
+    assert step(20) == blue
+
+
+def test_linear_color_indexing():
+    linear = cm.LinearColormap(
+        colors=["black", "red", "lime", "blue"],
+        index=[1, 2, 4, 5],
+    )
+    assert linear(1) == black
+    assert linear(2) == red
+    assert linear(4) == green
+    assert linear(5) == blue
+    assert linear(3) == "#7f7f00ff"
+
+
 def test_linear_to_step():
     some_list = [30.6, 50, 51, 52, 53, 54, 55, 60, 70, 100]
     lc = cm.linear.YlOrRd_06

@@ -457,7 +457,8 @@ class StepColormap(ColorMap):
         * HTML-like string (e.g: `"#ffff00`)
         * a color name or shortcut (e.g: `"y"` or `"yellow"`)
     index : list of floats, default None
-        The values corresponding to each color.
+        The bounds of the colors. The lower value is inclusive,
+        the upper value is exclusive.
         It has to be sorted, and have the same length as `colors`.
         If None, a regular grid between `vmin` and `vmax` is created.
     vmin : float, default 0.
@@ -510,7 +511,7 @@ class StepColormap(ColorMap):
         if x >= self.index[-1]:
             return self.colors[-1]
 
-        i = len([u for u in self.index if u < x])  # 0 < i < n.
+        i = len([u for u in self.index if u <= x])  # 0 < i < n.
         return tuple(self.colors[i - 1])
 
     def to_linear(self, index=None, max_labels=10):
