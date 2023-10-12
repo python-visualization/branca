@@ -252,7 +252,6 @@ class JavascriptLink(Link):
             self.get_code()
 
 
-
 class CssLink(Link):
     """Create a CssLink object based on a url.
 
@@ -281,7 +280,6 @@ class CssLink(Link):
         self.code = None
         if download:
             self.get_code()
-
 
 
 class Figure(Element):
