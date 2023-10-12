@@ -44,6 +44,7 @@ class Element:
         If no template is provided, you can also provide a filename.
 
     """
+
     _template_str = (
         "{% for name, element in this._children.items() %}\n"
         "    {{element.render(**kwargs)}}"
@@ -58,7 +59,7 @@ class Element:
         self._children = OrderedDict()
         self._parent = None
         self.template = template
-        self.template_name = template_name 
+        self.template_name = template_name
 
         if self.template is not None:
             self._template = Template(self.template)
@@ -81,11 +82,11 @@ class Element:
         state["_env"] = ENV
 
         state["_template"] = Template(self._template_str)
-        
+
         if state["template"] is not None:
             state["_template"] = Template(state["template"])
         elif state["template_name"] is not None:
-            state["_template"] = ENV.get_template(state["template_name"] )
+            state["_template"] = ENV.get_template(state["template_name"])
 
         self.__dict__.update(state)
 
@@ -255,6 +256,7 @@ class JavascriptLink(Link):
         super().__setstate__(state)
         self._template = Template(self._template_str)
 
+
 class CssLink(Link):
     """Create a CssLink object based on a url.
 
@@ -266,6 +268,7 @@ class CssLink(Link):
         Whether the target document shall be loaded right now.
 
     """
+
     _template_str = (
         '{% if kwargs.get("embedded",False) %}'
         "<style>{{this.get_code()}}</style>"
@@ -287,6 +290,7 @@ class CssLink(Link):
         """Re-add ._env attribute when unpickling"""
         super().__setstate__(state)
         self._template = Template(self._template_str)
+
 
 class Figure(Element):
     """Create a Figure object, to plot things into it.
@@ -463,6 +467,7 @@ class Html(Element):
         The height of the output div element.
         Ex: 120 , '80%'
     """
+
     _template_str = (
         '<div id="{{this.get_name()}}" '
         'style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">'  # noqa
@@ -683,6 +688,7 @@ class MacroElement(Element):
         {% endmacro %}
 
     """
+
     _template_str = ""
     _template = Template(_template_str)
 
