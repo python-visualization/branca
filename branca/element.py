@@ -44,12 +44,12 @@ class Element:
         If no template is provided, you can also provide a filename.
 
     """
-
-    _template = Template(
+    _template_str = (
         "{% for name, element in this._children.items() %}\n"
         "    {{element.render(**kwargs)}}"
-        "{% endfor %}",
+        "{% endfor %}"
     )
+    _template = Template(_template_str)
 
     def __init__(self, template=None, template_name=None):
         self._name = "Element"
@@ -57,11 +57,13 @@ class Element:
         self._env = ENV
         self._children = OrderedDict()
         self._parent = None
+        self.template = template
+        self.template_name = template_name 
 
-        if template is not None:
-            self._template = Template(template)
-        elif template_name is not None:
-            self._template = ENV.get_template(template_name)
+        if self.template is not None:
+            self._template = Template(self.template)
+        elif self.template_name is not None:
+            self._template = ENV.get_template(self.template_name)
 
     def __getstate__(self):
         """Modify object state when pickling the object.
@@ -71,11 +73,20 @@ class Element:
         """
         state: dict = self.__dict__.copy()
         state["_env"] = None
+        state["_template"] = None
         return state
 
     def __setstate__(self, state: dict):
         """Re-add ._env attribute when unpickling"""
         state["_env"] = ENV
+
+        state["_template"] = Template(self._template_str)
+        
+        if state["template"] is not None:
+            state["_template"] = Template(state["template"])
+        elif state["template_name"] is not None:
+            state["_template"] = ENV.get_template(state["template_name"] )
+
         self.__dict__.update(state)
 
     def get_name(self):
@@ -222,13 +233,14 @@ class JavascriptLink(Link):
 
     """
 
-    _template = Template(
+    _template_str = (
         '{% if kwargs.get("embedded",False) %}'
         "<script>{{this.get_code()}}</script>"
         "{% else %}"
         '<script src="{{this.url}}"></script>'
-        "{% endif %}",
+        "{% endif %}"
     )
+    _template = Template(_template_str)
 
     def __init__(self, url, download=False):
         super().__init__()
@@ -238,6 +250,10 @@ class JavascriptLink(Link):
         if download:
             self.get_code()
 
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
 class CssLink(Link):
     """Create a CssLink object based on a url.
@@ -250,14 +266,14 @@ class CssLink(Link):
         Whether the target document shall be loaded right now.
 
     """
-
-    _template = Template(
+    _template_str = (
         '{% if kwargs.get("embedded",False) %}'
         "<style>{{this.get_code()}}</style>"
         "{% else %}"
         '<link rel="stylesheet" href="{{this.url}}"/>'
-        "{% endif %}",
+        "{% endif %}"
     )
+    _template = Template(_template_str)
 
     def __init__(self, url, download=False):
         super().__init__()
@@ -267,6 +283,10 @@ class CssLink(Link):
         if download:
             self.get_code()
 
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
 class Figure(Element):
     """Create a Figure object, to plot things into it.
@@ -291,7 +311,7 @@ class Figure(Element):
         width="600px", height="300px".
     """
 
-    _template = Template(
+    _template_str = (
         "<!DOCTYPE html>\n"
         "<html>\n"
         "<head>\n"
@@ -304,8 +324,9 @@ class Figure(Element):
         "<script>\n"
         "    {{this.script.render(**kwargs)}}\n"
         "</script>\n"
-        "</html>\n",
+        "</html>\n"
     )
+    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -340,6 +361,11 @@ class Figure(Element):
             ),  # noqa
             name="meta_http",
         )
+
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
     def to_dict(self, depth=-1, **kwargs):
         """Returns a dict representation of the object."""
@@ -437,12 +463,12 @@ class Html(Element):
         The height of the output div element.
         Ex: 120 , '80%'
     """
-
-    _template = Template(
+    _template_str = (
         '<div id="{{this.get_name()}}" '
         'style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">'  # noqa
-        "{% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>",
-    )  # noqa
+        "{% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>"
+    )
+    _template = Template(_template_str)
 
     def __init__(self, data, script=False, width="100%", height="100%"):
         super().__init__()
@@ -452,6 +478,11 @@ class Html(Element):
 
         self.width = _parse_size(width)
         self.height = _parse_size(height)
+
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
 
 class Div(Figure):
@@ -472,7 +503,7 @@ class Div(Figure):
         Usual values are 'relative', 'absolute', 'fixed', 'static'.
     """
 
-    _template = Template(
+    _template_str = (
         "{% macro header(this, kwargs) %}"
         "<style> #{{this.get_name()}} {\n"
         "        position : {{this.position}};\n"
@@ -484,8 +515,9 @@ class Div(Figure):
         "{% endmacro %}"
         "{% macro html(this, kwargs) %}"
         '<div id="{{this.get_name()}}">{{this.html.render(**kwargs)}}</div>'
-        "{% endmacro %}",
+        "{% endmacro %}"
     )
+    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -516,6 +548,11 @@ class Div(Figure):
         self.header._parent = self
         self.html._parent = self
         self.script._parent = self
+
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
     def get_root(self):
         """Returns the root of the elements tree."""
@@ -646,12 +683,17 @@ class MacroElement(Element):
         {% endmacro %}
 
     """
-
-    _template = Template("")
+    _template_str = ""
+    _template = Template(_template_str)
 
     def __init__(self):
         super().__init__()
         self._name = "MacroElement"
+
+    def __setstate__(self, state: dict):
+        """Re-add ._env attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = Template(self._template_str)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
