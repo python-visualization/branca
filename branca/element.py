@@ -250,10 +250,6 @@ class JavascriptLink(Link):
         if download:
             self.get_code()
 
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 class CssLink(Link):
     """Create a CssLink object based on a url.
@@ -283,10 +279,6 @@ class CssLink(Link):
         if download:
             self.get_code()
 
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
 class Figure(Element):
     """Create a Figure object, to plot things into it.
@@ -361,11 +353,6 @@ class Figure(Element):
             ),  # noqa
             name="meta_http",
         )
-
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
     def to_dict(self, depth=-1, **kwargs):
         """Returns a dict representation of the object."""
@@ -479,11 +466,6 @@ class Html(Element):
         self.width = _parse_size(width)
         self.height = _parse_size(height)
 
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
-
 
 class Div(Figure):
     """Create a Div to be embedded in a Figure.
@@ -548,11 +530,6 @@ class Div(Figure):
         self.header._parent = self
         self.html._parent = self
         self.script._parent = self
-
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
     def get_root(self):
         """Returns the root of the elements tree."""
@@ -689,11 +666,6 @@ class MacroElement(Element):
     def __init__(self):
         super().__init__()
         self._name = "MacroElement"
-
-    def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        super().__setstate__(state)
-        self._template = Template(self._template_str)
 
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""

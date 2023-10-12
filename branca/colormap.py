@@ -92,6 +92,11 @@ class ColorMap(MacroElement):
         self.width = 450
         self.height = 40
 
+    def __setstate__(self, state: dict):
+        """Re-add ._template attribute when unpickling"""
+        super().__setstate__(state)
+        self._template = ENV.get_template("color_scale.js")
+
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         self.color_domain = [
