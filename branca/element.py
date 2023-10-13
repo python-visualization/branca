@@ -45,12 +45,11 @@ class Element:
 
     """
 
-    _template_str = (
+    _template = Template(
         "{% for name, element in this._children.items() %}\n"
         "    {{element.render(**kwargs)}}"
-        "{% endfor %}"
+        "{% endfor %}",
     )
-    _template = Template(_template_str)
 
     def __init__(self, template=None, template_name=None):
         self._name = "Element"
@@ -81,7 +80,7 @@ class Element:
         """Re-add ._env attribute when unpickling"""
         state["_env"] = ENV
 
-        state["_template"] = Template(self._template_str)
+        state["_template"] = self._template
 
         if state["template"] is not None:
             state["_template"] = Template(state["template"])
@@ -234,14 +233,13 @@ class JavascriptLink(Link):
 
     """
 
-    _template_str = (
+    _template = Template(
         '{% if kwargs.get("embedded",False) %}'
         "<script>{{this.get_code()}}</script>"
         "{% else %}"
         '<script src="{{this.url}}"></script>'
-        "{% endif %}"
+        "{% endif %}",
     )
-    _template = Template(_template_str)
 
     def __init__(self, url, download=False):
         super().__init__()
@@ -250,7 +248,6 @@ class JavascriptLink(Link):
         self.code = None
         if download:
             self.get_code()
-
 
 
 class CssLink(Link):
@@ -265,14 +262,13 @@ class CssLink(Link):
 
     """
 
-    _template_str = (
+    _template = Template(
         '{% if kwargs.get("embedded",False) %}'
         "<style>{{this.get_code()}}</style>"
         "{% else %}"
         '<link rel="stylesheet" href="{{this.url}}"/>'
-        "{% endif %}"
+        "{% endif %}",
     )
-    _template = Template(_template_str)
 
     def __init__(self, url, download=False):
         super().__init__()
@@ -281,7 +277,6 @@ class CssLink(Link):
         self.code = None
         if download:
             self.get_code()
-
 
 
 class Figure(Element):
@@ -307,7 +302,7 @@ class Figure(Element):
         width="600px", height="300px".
     """
 
-    _template_str = (
+    _template = Template(
         "<!DOCTYPE html>\n"
         "<html>\n"
         "<head>\n"
@@ -320,9 +315,8 @@ class Figure(Element):
         "<script>\n"
         "    {{this.script.render(**kwargs)}}\n"
         "</script>\n"
-        "</html>\n"
+        "</html>\n",
     )
-    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -455,12 +449,11 @@ class Html(Element):
         Ex: 120 , '80%'
     """
 
-    _template_str = (
+    _template = Template(
         '<div id="{{this.get_name()}}" '
         'style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">'  # noqa
-        "{% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>"
-    )
-    _template = Template(_template_str)
+        "{% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>",
+    )  # noqa
 
     def __init__(self, data, script=False, width="100%", height="100%"):
         super().__init__()
@@ -490,7 +483,7 @@ class Div(Figure):
         Usual values are 'relative', 'absolute', 'fixed', 'static'.
     """
 
-    _template_str = (
+    _template = Template(
         "{% macro header(this, kwargs) %}"
         "<style> #{{this.get_name()}} {\n"
         "        position : {{this.position}};\n"
@@ -502,9 +495,8 @@ class Div(Figure):
         "{% endmacro %}"
         "{% macro html(this, kwargs) %}"
         '<div id="{{this.get_name()}}">{{this.html.render(**kwargs)}}</div>'
-        "{% endmacro %}"
+        "{% endmacro %}",
     )
-    _template = Template(_template_str)
 
     def __init__(
         self,
@@ -666,8 +658,7 @@ class MacroElement(Element):
 
     """
 
-    _template_str = ""
-    _template = Template(_template_str)
+    _template = Template("")
 
     def __init__(self):
         super().__init__()
