@@ -57,6 +57,8 @@ class Element:
         self._env = ENV
         self._children = OrderedDict()
         self._parent = None
+        self._template_str = template
+        self._template_name = template_name
 
         if template is not None:
             self._template = Template(template)
@@ -71,11 +73,18 @@ class Element:
         """
         state: dict = self.__dict__.copy()
         state["_env"] = None
+        state.pop("_template", None)
         return state
 
     def __setstate__(self, state: dict):
         """Re-add ._env attribute when unpickling"""
         state["_env"] = ENV
+
+        if state["_template_str"] is not None:
+            state["_template"] = Template(state["_template_str"])
+        elif state["_template_name"] is not None:
+            state["_template"] = ENV.get_template(state["_template_name"])
+
         self.__dict__.update(state)
 
     def get_name(self):
