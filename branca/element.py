@@ -57,13 +57,13 @@ class Element:
         self._env = ENV
         self._children = OrderedDict()
         self._parent = None
-        self.template = template
-        self.template_name = template_name
+        self._template_str = template
+        self._template_name = template_name
 
-        if self.template is not None:
-            self._template = Template(self.template)
-        elif self.template_name is not None:
-            self._template = ENV.get_template(self.template_name)
+        if template is not None:
+            self._template = Template(template)
+        elif template_name is not None:
+            self._template = ENV.get_template(template_name)
 
     def __getstate__(self):
         """Modify object state when pickling the object.
@@ -82,10 +82,10 @@ class Element:
 
         state["_template"] = self._template
 
-        if state["template"] is not None:
-            state["_template"] = Template(state["template"])
-        elif state["template_name"] is not None:
-            state["_template"] = ENV.get_template(state["template_name"])
+        if state["_template_str"] is not None:
+            state["_template"] = Template(state["_template_str"])
+        elif state["_template_name"] is not None:
+            state["_template"] = ENV.get_template(state["_template_name"])
 
         self.__dict__.update(state)
 
