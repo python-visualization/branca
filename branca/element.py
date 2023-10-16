@@ -73,14 +73,12 @@ class Element:
         """
         state: dict = self.__dict__.copy()
         state["_env"] = None
-        state["_template"] = None
+        state.pop("_template", None)
         return state
 
     def __setstate__(self, state: dict):
         """Re-add ._env attribute when unpickling"""
         state["_env"] = ENV
-
-        state["_template"] = self._template
 
         if state["_template_str"] is not None:
             state["_template"] = Template(state["_template_str"])
