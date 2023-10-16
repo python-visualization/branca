@@ -1,3 +1,6 @@
 [build-system]
 requires = ["setuptools>=41.2", "setuptools_scm"]
 build-backend = "setuptools.build_meta"
+
+[tool.mypy]
+ignore_missing_imports = true
