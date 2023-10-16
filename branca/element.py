@@ -54,7 +54,6 @@ class Element:
     def __init__(self, template=None, template_name=None):
         self._name = "Element"
         self._id = hexlify(urandom(16)).decode()
-        self._env = ENV
         self._children = OrderedDict()
         self._parent = None
         self._template_str = template
@@ -67,19 +66,16 @@ class Element:
 
     def __getstate__(self):
         """Modify object state when pickling the object.
-        jinja2 Environment cannot be pickled, so set
-        the ._env attribute to None. This will be added back
-        when unpickling (see __setstate__)
+
+        jinja2 Templates cannot be pickled, so remove the instance attribute
+        if it exists. It will be added back when unpickling (see __setstate__).
         """
         state: dict = self.__dict__.copy()
-        state["_env"] = None
         state.pop("_template", None)
         return state
 
     def __setstate__(self, state: dict):
-        """Re-add ._env attribute when unpickling"""
-        state["_env"] = ENV
-
+        """Re-add _template instance attribute when unpickling"""
         if state["_template_str"] is not None:
             state["_template"] = Template(state["_template_str"])
         elif state["_template_name"] is not None:
