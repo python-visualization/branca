@@ -116,6 +116,8 @@ def test_color_avoid_unexpected_error():
         ("100%   ", (100.0, "%")),
         ("3 vw", (3.0, "vw")),
         ("3.14 rem", (3.14, "rem")),
+        ((1, "px"), (1.0, "px")),
+        ((80.0, "%"), (80.0, "%")),
     ],
 )
 def test_parse_size(value, result):
@@ -128,6 +130,7 @@ def test_parse_size(value, result):
         "what?",
         "1.21 jigawatts",
         ut._parse_size,
+        (1.21, 4.9),
     ],
 )
 def test_parse_size_exceptions(value):

@@ -420,7 +420,7 @@ def _parse_size(value):
         and isinstance(value[1], str)
     ):
         # value had been already parsed
-        return value
+        return (float(value[0]), value[1])
     else:
         raise TypeError(
             f"Cannot parse {value!r}, it should be a number or a string containing a number and a unit.",
