@@ -414,6 +414,13 @@ def _parse_size(value):
             raise ValueError(
                 f"Cannot parse {value!r}, it should be a number followed by a unit.",
             )
+    elif (
+        isinstance(value, tuple)
+        and isinstance(value[0], (int, float))
+        and isinstance(value[1], str)
+    ):
+        # value had been already parsed
+        return (float(value[0]), value[1])
     else:
         raise TypeError(
             f"Cannot parse {value!r}, it should be a number or a string containing a number and a unit.",
