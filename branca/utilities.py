@@ -14,7 +14,7 @@ import re
 import struct
 import typing
 import zlib
-from typing import Any, Callable, Union
+from typing import Any, Callable, Tuple, Union
 
 from jinja2 import Environment, PackageLoader
 
@@ -26,13 +26,16 @@ except ImportError:
 try:
     import numpy as np
 except ImportError:
-    np = None
+    np = None  # type: ignore
 
 if typing.TYPE_CHECKING:
     from branca.colormap import ColorMap
 
 
 rootpath = os.path.abspath(os.path.dirname(__file__))
+
+
+TypeParseSize = Union[int, float, str, Tuple[float, str]]
 
 
 def get_templates():
@@ -401,7 +404,7 @@ def _camelify(out):
     )  # noqa
 
 
-def _parse_size(value):
+def _parse_size(value: TypeParseSize) -> Tuple[float, str]:
     if isinstance(value, (int, float)):
         return float(value), "px"
     elif isinstance(value, str):
