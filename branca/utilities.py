@@ -14,7 +14,7 @@ import re
 import struct
 import typing
 import zlib
-from typing import Any, Callable, Tuple, Union, List, Sequence
+from typing import Any, Callable, List, Sequence, Tuple, Union
 
 from jinja2 import Environment, PackageLoader
 
@@ -39,7 +39,7 @@ def get_templates() -> Environment:
 
 
 def legend_scaler(
-    legend_values: Sequence[float], max_labels: int = 10
+    legend_values: Sequence[float], max_labels: int = 10,
 ) -> list[Union[float, str]]:
     """
     Downsamples the number of legend values so that there isn't a collision
