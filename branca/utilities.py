@@ -14,7 +14,7 @@ import re
 import struct
 import typing
 import zlib
-from typing import Any, Callable, Tuple, Union
+from typing import Any, Callable, Tuple, Union, List, Sequence
 
 from jinja2 import Environment, PackageLoader
 
@@ -27,26 +27,29 @@ if typing.TYPE_CHECKING:
     from branca.colormap import ColorMap
 
 
-rootpath = os.path.abspath(os.path.dirname(__file__))
+rootpath: str = os.path.abspath(os.path.dirname(__file__))
 
 
 TypeParseSize = Union[int, float, str, Tuple[float, str]]
 
 
-def get_templates():
+def get_templates() -> Environment:
     """Get Jinja templates."""
     return Environment(loader=PackageLoader("branca", "templates"))
 
 
-def legend_scaler(legend_values, max_labels=10.0):
+def legend_scaler(
+    legend_values: Sequence[float], max_labels: int = 10
+) -> list[Union[float, str]]:
     """
     Downsamples the number of legend values so that there isn't a collision
     of text on the legend colorbar (within reason). The colorbar seems to
     support ~10 entries as a maximum.
 
     """
+    legend_ticks: List[Union[float, str]]
     if len(legend_values) < max_labels:
-        legend_ticks = legend_values
+        legend_ticks = list(legend_values)
     else:
         spacer = int(math.ceil(len(legend_values) / max_labels))
         legend_ticks = []
@@ -56,16 +59,11 @@ def legend_scaler(legend_values, max_labels=10.0):
     return legend_ticks
 
 
-def linear_gradient(hexList, nColors):
+def linear_gradient(hexList: List[str], nColors: int) -> List[str]:
     """
     Given a list of hexcode values, will return a list of length
     nColors where the colors are linearly interpolated between the
     (r, g, b) tuples that are given.
-
-    Examples
-    --------
-    >>> linear_gradient([(0, 0, 0), (255, 0, 0), (255, 255, 0)], 100)
-
     """
 
     def _scale(start, finish, length, i):
@@ -83,7 +81,7 @@ def linear_gradient(hexList, nColors):
             thex = "0" + thex
         return thex
 
-    allColors = []
+    allColors: List[str] = []
     # Separate (R, G, B) pairs.
     for start, end in zip(hexList[:-1], hexList[1:]):
         # Linearly interpolate between pair of hex ###### values and
@@ -96,7 +94,7 @@ def linear_gradient(hexList, nColors):
             allColors.append("".join(["#", r, g, b]))
 
     # Pick only nColors colors from the total list.
-    result = []
+    result: List[str] = []
     for counter in range(nColors):
         fraction = float(counter) / (nColors - 1)
         index = int(fraction * (len(allColors) - 1))

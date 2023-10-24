@@ -112,10 +112,14 @@ class ColorMap(MacroElement):
         self.vmin = vmin
         self.vmax = vmax
         self.caption = caption
+<<<<<<< HEAD
         self.text_color = text_color
         self.index = [vmin, vmax]
+=======
+        self.index: List[float] = [vmin, vmax]
+>>>>>>> ec6251d... utilities.py wip
         self.max_labels = max_labels
-        self.tick_labels: Optional[Sequence[float]] = None
+        self.tick_labels: Optional[Sequence[Union[float, str]]] = None
 
         self.width = 450
         self.height = 40
