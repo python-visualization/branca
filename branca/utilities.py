@@ -40,7 +40,7 @@ def get_templates() -> Environment:
 
 def legend_scaler(
     legend_values: Sequence[float], max_labels: int = 10,
-) -> list[Union[float, str]]:
+) -> List[Union[float, str]]:
     """
     Downsamples the number of legend values so that there isn't a collision
     of text on the legend colorbar (within reason). The colorbar seems to
