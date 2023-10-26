@@ -1,5 +1,7 @@
 0.7.0
 ~~~~~
+- Make all Element with Template pickable natively (@BastienGauthier #144)
+- Make _parse_size robust to already parsed values (@BastienGauthier #142)
 - StepColormap: inclusive lower bound (@MxMartin #141)
 - Add color schemes: plasma, inferno, magma (@FlorinAndrei #131)
 - Allow branca ColorMap in write_png (@Conengmo #126)
