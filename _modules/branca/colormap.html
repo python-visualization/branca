@@ -1,19 +1,15 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>branca.colormap &#8212; branca 0.6.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
+    <title>branca.colormap &#8212; branca 0.7.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=4f649999" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css?v=039e1c02" />
+    <script src="../../_static/documentation_options.js?v=fe7df9b0"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
@@ -53,21 +49,23 @@
 
 <span class="n">rootpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rootpath</span><span class="p">,</span> <span class="s1">&#39;_cnames.json&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rootpath</span><span class="p">,</span> <span class="s2">&quot;_cnames.json&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">_cnames</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rootpath</span><span class="p">,</span> <span class="s1">&#39;_schemes.json&#39;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">rootpath</span><span class="p">,</span> <span class="s2">&quot;_schemes.json&quot;</span><span class="p">))</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
     <span class="n">_schemes</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
 
 
 <span class="k">def</span> <span class="nf">_is_hex</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;#&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span>
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;#&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">==</span> <span class="mi">7</span>
 
 
 <span class="k">def</span> <span class="nf">_parse_hex</span><span class="p">(</span><span class="n">color_code</span><span class="p">):</span>
-    <span class="k">return</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">color_code</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="mi">16</span><span class="p">),</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">color_code</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">],</span> <span class="mi">16</span><span class="p">),</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">color_code</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">],</span> <span class="mi">16</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">(</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">color_code</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="mi">16</span><span class="p">),</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">color_code</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">5</span><span class="p">],</span> <span class="mi">16</span><span class="p">),</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">color_code</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">7</span><span class="p">],</span> <span class="mi">16</span><span class="p">),</span>
+    <span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_parse_color</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -78,25 +76,27 @@
     <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)):</span>
         <span class="n">cname</span> <span class="o">=</span> <span class="n">_cnames</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">cname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown color </span><span class="si">{!r}</span><span class="s1">.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cname</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown color </span><span class="si">{</span><span class="n">cname</span><span class="si">!r}</span><span class="s2">.&quot;</span><span class="p">)</span>
         <span class="n">color_tuple</span> <span class="o">=</span> <span class="n">_parse_hex</span><span class="p">(</span><span class="n">cname</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unrecognized color code </span><span class="si">{!r}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-    <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">color_tuple</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1.</span><span class="p">:</span>
-        <span class="n">color_tuple</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">u</span><span class="o">/</span><span class="mf">255.</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">color_tuple</span><span class="p">)</span>
-    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="p">(</span><span class="n">color_tuple</span><span class="o">+</span><span class="p">(</span><span class="mf">1.</span><span class="p">,))[:</span><span class="mi">4</span><span class="p">]))</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unrecognized color code </span><span class="si">{</span><span class="n">x</span><span class="si">!r}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">color_tuple</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+        <span class="n">color_tuple</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">u</span> <span class="o">/</span> <span class="mf">255.0</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="n">color_tuple</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="p">(</span><span class="n">color_tuple</span> <span class="o">+</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,))[:</span><span class="mi">4</span><span class="p">]))</span>
 
 
 <span class="k">def</span> <span class="nf">_base</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">base</span> <span class="o">=</span> <span class="nb">pow</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
-        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">x</span><span class="o">/</span><span class="n">base</span><span class="p">)</span><span class="o">*</span><span class="n">base</span>
+        <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="n">base</span><span class="p">)</span> <span class="o">*</span> <span class="n">base</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
 
 
-<div class="viewcode-block" id="ColorMap"><a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap">[docs]</a><span class="k">class</span> <span class="nc">ColorMap</span><span class="p">(</span><span class="n">MacroElement</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A generic class for creating colormaps.</span>
+<div class="viewcode-block" id="ColorMap">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap">[docs]</a>
+<span class="k">class</span> <span class="nc">ColorMap</span><span class="p">(</span><span class="n">MacroElement</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A generic class for creating colormaps.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -109,11 +109,12 @@
 <span class="sd">    max_labels : int, default 10</span>
 <span class="sd">        Maximum number of legend tick labels</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">_template</span> <span class="o">=</span> <span class="n">ENV</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s1">&#39;color_scale.js&#39;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">max_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">ColorMap</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s1">&#39;ColorMap&#39;</span>
+    <span class="n">_template</span> <span class="o">=</span> <span class="n">ENV</span><span class="o">.</span><span class="n">get_template</span><span class="p">(</span><span class="s2">&quot;color_scale.js&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">max_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="s2">&quot;ColorMap&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">=</span> <span class="n">vmin</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">=</span> <span class="n">vmax</span>
@@ -125,24 +126,34 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="mi">450</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="mi">40</span>
 
-<div class="viewcode-block" id="ColorMap.render"><a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap.render">[docs]</a>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Renders the HTML representation of the element.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">color_domain</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span> <span class="o">*</span> <span class="n">k</span><span class="o">/</span><span class="mf">499.</span> <span class="k">for</span>
-                             <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">)]</span>
+<div class="viewcode-block" id="ColorMap.render">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap.render">[docs]</a>
+    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Renders the HTML representation of the element.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">color_domain</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span> <span class="o">*</span> <span class="n">k</span> <span class="o">/</span> <span class="mf">499.0</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">500</span><span class="p">)</span>
+        <span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">color_range</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">color_domain</span><span class="p">]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tick_labels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">tick_labels</span> <span class="o">=</span> <span class="n">legend_scaler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_labels</span><span class="p">)</span>
 
-        <span class="nb">super</span><span class="p">(</span><span class="n">ColorMap</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="n">figure</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_root</span><span class="p">()</span>
-        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">figure</span><span class="p">,</span> <span class="n">Figure</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;You cannot render this Element &#39;</span>
-                                            <span class="s1">&#39;if it is not in a Figure.&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">figure</span><span class="p">,</span> <span class="n">Figure</span><span class="p">),</span> <span class="p">(</span>
+            <span class="s2">&quot;You cannot render this Element &quot;</span> <span class="s2">&quot;if it is not in a Figure.&quot;</span>
+        <span class="p">)</span>
 
-        <span class="n">figure</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span><span class="n">JavascriptLink</span><span class="p">(</span><span class="s2">&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;d3&#39;</span><span class="p">)</span>  <span class="c1"># noqa</span></div>
+        <span class="n">figure</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">add_child</span><span class="p">(</span>
+            <span class="n">JavascriptLink</span><span class="p">(</span><span class="s2">&quot;https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js&quot;</span><span class="p">),</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;d3&quot;</span><span class="p">,</span>
+        <span class="p">)</span>  <span class="c1"># noqa</span></div>
 
-<div class="viewcode-block" id="ColorMap.rgba_floats_tuple"><a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap.rgba_floats_tuple">[docs]</a>    <span class="k">def</span> <span class="nf">rgba_floats_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ColorMap.rgba_floats_tuple">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap.rgba_floats_tuple">[docs]</a>
+    <span class="k">def</span> <span class="nf">rgba_floats_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This class has to be implemented for each class inheriting from</span>
 <span class="sd">        Colormap. This has to be a function of the form float -&gt;</span>
 <span class="sd">        (float, float, float, float) describing for each input float x,</span>
@@ -151,38 +162,51 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
-<div class="viewcode-block" id="ColorMap.rgba_bytes_tuple"><a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap.rgba_bytes_tuple">[docs]</a>    <span class="k">def</span> <span class="nf">rgba_bytes_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
+
+<div class="viewcode-block" id="ColorMap.rgba_bytes_tuple">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap.rgba_bytes_tuple">[docs]</a>
+    <span class="k">def</span> <span class="nf">rgba_bytes_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
 <span class="sd">        form of a tuple (R,G,B,A) with int values between 0 and 255.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">u</span><span class="o">*</span><span class="mf">255.9999</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgba_floats_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">u</span> <span class="o">*</span> <span class="mf">255.9999</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgba_floats_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="ColorMap.rgb_bytes_tuple"><a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap.rgb_bytes_tuple">[docs]</a>    <span class="k">def</span> <span class="nf">rgb_bytes_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
+
+<div class="viewcode-block" id="ColorMap.rgb_bytes_tuple">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap.rgb_bytes_tuple">[docs]</a>
+    <span class="k">def</span> <span class="nf">rgb_bytes_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
 <span class="sd">        form of a tuple (R,G,B) with int values between 0 and 255.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgba_bytes_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)[:</span><span class="mi">3</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="ColorMap.rgb_hex_str"><a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap.rgb_hex_str">[docs]</a>    <span class="k">def</span> <span class="nf">rgb_hex_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
+
+<div class="viewcode-block" id="ColorMap.rgb_hex_str">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap.rgb_hex_str">[docs]</a>
+    <span class="k">def</span> <span class="nf">rgb_hex_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
 <span class="sd">        form of a string of hexadecimal values &quot;#RRGGBB&quot;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s1">&#39;#</span><span class="si">%02x%02x%02x</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgb_bytes_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s2">&quot;#</span><span class="si">%02x%02x%02x</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgb_bytes_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ColorMap.rgba_hex_str"><a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap.rgba_hex_str">[docs]</a>    <span class="k">def</span> <span class="nf">rgba_hex_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
+
+<div class="viewcode-block" id="ColorMap.rgba_hex_str">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.ColorMap.rgba_hex_str">[docs]</a>
+    <span class="k">def</span> <span class="nf">rgba_hex_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
 <span class="sd">        form of a string of hexadecimal values &quot;#RRGGBBAA&quot;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s1">&#39;#</span><span class="si">%02x%02x%02x%02x</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgba_bytes_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="s2">&quot;#</span><span class="si">%02x%02x%02x%02x</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgba_bytes_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
 <span class="sd">        form of a string of hexadecimal values &quot;#RRGGBBAA&quot;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rgba_hex_str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Display the colormap in a Jupyter Notebook.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the colormap in a Jupyter Notebook.</span>
 
 <span class="sd">        Does not support all the class arguments.</span>
 
@@ -194,7 +218,7 @@
         <span class="n">val_ticks</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">*</span> <span class="n">delta_val</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nb_ticks</span><span class="p">)]</span>
 
         <span class="k">return</span> <span class="p">(</span>
-            <span class="s1">&#39;&lt;svg height=&quot;40&quot; width=&quot;</span><span class="si">{}</span><span class="s1">&quot;&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+            <span class="sa">f</span><span class="s1">&#39;&lt;svg height=&quot;40&quot; width=&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="si">}</span><span class="s1">&quot;&gt;&#39;</span>
             <span class="o">+</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="p">(</span>
@@ -203,35 +227,39 @@
                     <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                         <span class="n">i</span><span class="o">=</span><span class="n">i</span> <span class="o">*</span> <span class="mi">1</span><span class="p">,</span>
                         <span class="n">color</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rgba_hex_str</span><span class="p">(</span>
-                            <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span>
                         <span class="p">),</span>
                     <span class="p">)</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
-                <span class="p">]</span>
+                <span class="p">],</span>
             <span class="p">)</span>
-            <span class="o">+</span> <span class="s1">&#39;&lt;text x=&quot;0&quot; y=&quot;38&quot; style=&quot;text-anchor:start; font-size:11px; font:Arial&quot;&gt;</span><span class="si">{}</span><span class="s1">&lt;/text&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span>
+            <span class="o">+</span> <span class="s1">&#39;&lt;text x=&quot;0&quot; y=&quot;38&quot; style=&quot;text-anchor:start; font-size:11px; font:Arial&quot;&gt;</span><span class="si">{}</span><span class="s1">&lt;/text&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>  <span class="c1"># noqa</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="o">+</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
                 <span class="p">[</span>
                     <span class="p">(</span>
-                        <span class="s1">&#39;&lt;text x=&quot;</span><span class="si">{}</span><span class="s1">&quot; y=&quot;38&quot;; style=&quot;text-anchor:middle; font-size:11px; font:Arial&quot;&gt;</span><span class="si">{}</span><span class="s1">&lt;/text&gt;&#39;</span>
+                        <span class="s1">&#39;&lt;text x=&quot;</span><span class="si">{}</span><span class="s1">&quot; y=&quot;38&quot;; style=&quot;text-anchor:middle; font-size:11px; font:Arial&quot;&gt;</span><span class="si">{}</span><span class="s1">&lt;/text&gt;&#39;</span>  <span class="c1"># noqa</span>
                     <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">x_ticks</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">val_ticks</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
                     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nb_ticks</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="p">]</span>
+                <span class="p">],</span>
             <span class="p">)</span>
             <span class="o">+</span> <span class="s1">&#39;&lt;text x=&quot;</span><span class="si">{}</span><span class="s1">&quot; y=&quot;38&quot; style=&quot;text-anchor:end; font-size:11px; font:Arial&quot;&gt;</span><span class="si">{}</span><span class="s1">&lt;/text&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmax</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">vmax</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="o">+</span> <span class="s1">&#39;&lt;text x=&quot;0&quot; y=&quot;12&quot; style=&quot;font-size:11px; font:Arial&quot;&gt;</span><span class="si">{}</span><span class="s1">&lt;/text&gt;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">caption</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">caption</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="o">+</span> <span class="s2">&quot;&lt;/svg&gt;&quot;</span>
         <span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="LinearColormap"><a class="viewcode-back" href="../../colormap.html#branca.colormap.LinearColormap">[docs]</a><span class="k">class</span> <span class="nc">LinearColormap</span><span class="p">(</span><span class="n">ColorMap</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Creates a ColorMap based on linear interpolation of a set of colors</span>
+
+<div class="viewcode-block" id="LinearColormap">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.LinearColormap">[docs]</a>
+<span class="k">class</span> <span class="nc">LinearColormap</span><span class="p">(</span><span class="n">ColorMap</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a ColorMap based on linear interpolation of a set of colors</span>
 <span class="sd">    over a given index.</span>
 
 <span class="sd">    Parameters</span>
@@ -260,22 +288,38 @@
 <span class="sd">        Maximum number of legend tick labels</span>
 <span class="sd">    tick_labels: list of floats, default None</span>
 <span class="sd">        If given, used as the positions of ticks.&quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">max_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">tick_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">LinearColormap</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
-                                             <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span> <span class="n">max_labels</span><span class="o">=</span><span class="n">max_labels</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">colors</span><span class="p">,</span>
+        <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">max_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">tick_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+            <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span>
+            <span class="n">max_labels</span><span class="o">=</span><span class="n">max_labels</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tick_labels</span> <span class="o">=</span> <span class="n">tick_labels</span>
 
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;You must provide at least 2 colors.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;You must provide at least 2 colors.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="n">vmax</span><span class="o">-</span><span class="n">vmin</span><span class="p">)</span><span class="o">*</span><span class="n">i</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="n">vmax</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">*</span> <span class="n">i</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">_parse_color</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">colors</span><span class="p">]</span>
 
-<div class="viewcode-block" id="LinearColormap.rgba_floats_tuple"><a class="viewcode-back" href="../../colormap.html#branca.colormap.LinearColormap.rgba_floats_tuple">[docs]</a>    <span class="k">def</span> <span class="nf">rgba_floats_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
+<div class="viewcode-block" id="LinearColormap.rgba_floats_tuple">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.LinearColormap.rgba_floats_tuple">[docs]</a>
+    <span class="k">def</span> <span class="nf">rgba_floats_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Provides the color corresponding to value `x` in the</span>
 <span class="sd">        form of a tuple (R,G,B,A) with float values between 0. and 1.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
@@ -284,24 +328,36 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="n">i</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="k">if</span> <span class="n">u</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">])</span>  <span class="c1"># 0 &lt; i &lt; n.</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
-            <span class="n">p</span> <span class="o">=</span> <span class="mf">1.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="mf">1.0</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Thresholds are not sorted.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Thresholds are not sorted.&quot;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="nb">tuple</span><span class="p">((</span><span class="mf">1.</span><span class="o">-</span><span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span>
-                     <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">))</span></div>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span>
+            <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">p</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">p</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+        <span class="p">)</span></div>
 
-<div class="viewcode-block" id="LinearColormap.to_step"><a class="viewcode-back" href="../../colormap.html#branca.colormap.LinearColormap.to_step">[docs]</a>    <span class="k">def</span> <span class="nf">to_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">round_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Splits the LinearColormap into a StepColormap.</span>
+
+<div class="viewcode-block" id="LinearColormap.to_step">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.LinearColormap.to_step">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_step</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">n</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">quantiles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">round_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Splits the LinearColormap into a StepColormap.</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        n : int, default None</span>
-<span class="sd">            The number of expected colors in the ouput StepColormap.</span>
+<span class="sd">            The number of expected colors in the output StepColormap.</span>
 <span class="sd">            This will be ignored if `index` is provided.</span>
 <span class="sd">        index : list of floats, default None</span>
 <span class="sd">            The values corresponding to each color bounds.</span>
@@ -314,7 +370,7 @@
 <span class="sd">            It can be &#39;linear&#39; for linear scale, &#39;log&#39; for logarithmic,</span>
 <span class="sd">            or &#39;quant&#39; for data&#39;s quantile-based scale.</span>
 <span class="sd">        quantiles : list of floats, default None</span>
-<span class="sd">            Alternatively, you can provide explicitely the quantiles you</span>
+<span class="sd">            Alternatively, you can provide explicitly the quantiles you</span>
 <span class="sd">            want to use in the scale.</span>
 <span class="sd">        round_method : str, default None</span>
 <span class="sd">            The method used to round thresholds.</span>
@@ -341,89 +397,119 @@
 <span class="sd">        ...           round_method=&#39;log10&#39;)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;You must specify either `index` or `n`&#39;</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;You must specify either `index` or `n`&quot;</span>
         <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span><span class="o">*</span><span class="n">i</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="n">n</span> <span class="k">for</span>
-                             <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">n</span><span class="p">)]</span>
+                    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span> <span class="o">*</span> <span class="n">i</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">n</span>
+                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n</span><span class="p">)</span>
+                    <span class="p">]</span>
                     <span class="n">scaled_cm</span> <span class="o">=</span> <span class="bp">self</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">max_</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
                 <span class="n">min_</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
                 <span class="n">scaled_cm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">min_</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">max_</span><span class="p">)</span>
-                <span class="n">method</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;quantiles&#39;</span> <span class="k">if</span> <span class="n">quantiles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-                          <span class="k">else</span> <span class="n">method</span> <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
-                          <span class="k">else</span> <span class="s1">&#39;linear&#39;</span>
-                          <span class="p">)</span>
-                <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;lin&#39;</span><span class="p">):</span>
+                <span class="n">method</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;quantiles&quot;</span>
+                    <span class="k">if</span> <span class="n">quantiles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                    <span class="k">else</span> <span class="n">method</span>
+                    <span class="k">if</span> <span class="n">method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                    <span class="k">else</span> <span class="s2">&quot;linear&quot;</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;lin&quot;</span><span class="p">):</span>
                     <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-                    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">min_</span> <span class="o">+</span> <span class="n">i</span><span class="o">*</span><span class="p">(</span><span class="n">max_</span><span class="o">-</span><span class="n">min_</span><span class="p">)</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="n">n</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">n</span><span class="p">)]</span>
-                <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">):</span>
+                    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">min_</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_</span> <span class="o">-</span> <span class="n">min_</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">n</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n</span><span class="p">)]</span>
+                <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">):</span>
                     <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">min_</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
-                        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Log-scale works only with strictly &#39;</span>
-                               <span class="s1">&#39;positive values.&#39;</span><span class="p">)</span>
+                        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Log-scale works only with strictly &quot;</span> <span class="s2">&quot;positive values.&quot;</span>
                         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-                    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
-                        <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">min_</span><span class="p">)</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">max_</span><span class="p">)</span> <span class="o">-</span>
-                                              <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">min_</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1.</span><span class="o">/</span><span class="n">n</span>
-                    <span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">n</span><span class="p">)]</span>
-                <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;quant&#39;</span><span class="p">):</span>
+                    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span>
+                            <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">min_</span><span class="p">)</span>
+                            <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">max_</span><span class="p">)</span> <span class="o">-</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">min_</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">n</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n</span><span class="p">)</span>
+                    <span class="p">]</span>
+                <span class="k">elif</span> <span class="n">method</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;quant&quot;</span><span class="p">):</span>
                     <span class="k">if</span> <span class="n">quantiles</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                         <span class="k">if</span> <span class="n">n</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;You must specify either `index`, `n` or&#39;</span>
-                                   <span class="s1">&#39;`quantiles`.&#39;</span><span class="p">)</span>
+                            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="s2">&quot;You must specify either `index`, `n` or&quot;</span> <span class="s2">&quot;`quantiles`.&quot;</span>
+                            <span class="p">)</span>
                             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="n">quantiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="n">n</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">n</span><span class="p">)]</span>
-                    <span class="n">p</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+                            <span class="n">quantiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">n</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">n</span><span class="p">)]</span>
+                    <span class="n">p</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
                     <span class="n">s</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-                    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">p</span><span class="p">)]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">p</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span>
-                             <span class="n">s</span><span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">q</span><span class="o">*</span><span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">)]</span> <span class="o">*</span> <span class="p">((</span><span class="n">q</span><span class="o">*</span><span class="n">p</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span>
-                             <span class="n">q</span> <span class="ow">in</span> <span class="n">quantiles</span><span class="p">]</span>
+                    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span>
+                        <span class="n">s</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">p</span><span class="p">)]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">p</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="n">s</span><span class="p">[</span><span class="nb">min</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="n">p</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">p</span><span class="p">)]</span> <span class="o">*</span> <span class="p">((</span><span class="n">q</span> <span class="o">*</span> <span class="n">p</span><span class="p">)</span> <span class="o">%</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">quantiles</span>
+                    <span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Unknown method </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">method</span><span class="p">))</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown method </span><span class="si">{</span><span class="n">method</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">scaled_cm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="nb">min</span><span class="p">(</span><span class="n">index</span><span class="p">),</span> <span class="n">vmax</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
 
-        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">index</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">index</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 
-        <span class="k">if</span> <span class="n">round_method</span> <span class="o">==</span> <span class="s1">&#39;int&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">round_method</span> <span class="o">==</span> <span class="s2">&quot;int&quot;</span><span class="p">:</span>
             <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="n">round_method</span> <span class="o">==</span> <span class="s1">&#39;log10&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">round_method</span> <span class="o">==</span> <span class="s2">&quot;log10&quot;</span><span class="p">:</span>
             <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">_base</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]</span>
 
-        <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">scaled_cm</span><span class="o">.</span><span class="n">rgba_floats_tuple</span><span class="p">(</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">i</span><span class="o">/</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mf">1.</span><span class="p">))</span> <span class="o">+</span>
-                                              <span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">i</span><span class="o">/</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mf">1.</span><span class="p">))</span> <span class="k">for</span>
-                  <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+        <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">scaled_cm</span><span class="o">.</span><span class="n">rgba_floats_tuple</span><span class="p">(</span>
+                <span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">i</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span> <span class="o">+</span> <span class="n">index</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">),</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="p">]</span>
 
         <span class="n">caption</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">caption</span>
 
-        <span class="k">return</span> <span class="n">StepColormap</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">vmax</span><span class="o">=</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span>
-                            <span class="n">max_labels</span><span class="o">=</span><span class="n">max_labels</span><span class="p">,</span> <span class="n">tick_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_labels</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">StepColormap</span><span class="p">(</span>
+            <span class="n">colors</span><span class="p">,</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span>
+            <span class="n">max_labels</span><span class="o">=</span><span class="n">max_labels</span><span class="p">,</span>
+            <span class="n">tick_labels</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tick_labels</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
-<div class="viewcode-block" id="LinearColormap.scale"><a class="viewcode-back" href="../../colormap.html#branca.colormap.LinearColormap.scale">[docs]</a>    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">max_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Transforms the colorscale so that the minimal and maximal values</span>
+
+<div class="viewcode-block" id="LinearColormap.scale">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.LinearColormap.scale">[docs]</a>
+    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">max_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transforms the colorscale so that the minimal and maximal values</span>
 <span class="sd">        fit the given parameters.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">LinearColormap</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">,</span>
-            <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="n">vmax</span><span class="o">-</span><span class="n">vmin</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">],</span>  <span class="c1"># noqa</span>
+            <span class="n">index</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="n">vmax</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span>
+            <span class="p">],</span>  <span class="c1"># noqa</span>
             <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
             <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
             <span class="n">caption</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">caption</span><span class="p">,</span>
-            <span class="n">max_labels</span><span class="o">=</span><span class="n">max_labels</span>
-            <span class="p">)</span></div></div>
+            <span class="n">max_labels</span><span class="o">=</span><span class="n">max_labels</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
 
 
-<div class="viewcode-block" id="StepColormap"><a class="viewcode-back" href="../../colormap.html#branca.colormap.StepColormap">[docs]</a><span class="k">class</span> <span class="nc">StepColormap</span><span class="p">(</span><span class="n">ColorMap</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Creates a ColorMap based on linear interpolation of a set of colors</span>
+
+<div class="viewcode-block" id="StepColormap">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.StepColormap">[docs]</a>
+<span class="k">class</span> <span class="nc">StepColormap</span><span class="p">(</span><span class="n">ColorMap</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Creates a ColorMap based on linear interpolation of a set of colors</span>
 <span class="sd">    over a given index.</span>
 
 <span class="sd">    Parameters</span>
@@ -438,7 +524,8 @@
 <span class="sd">        * HTML-like string (e.g: `&quot;#ffff00`)</span>
 <span class="sd">        * a color name or shortcut (e.g: `&quot;y&quot;` or `&quot;yellow&quot;`)</span>
 <span class="sd">    index : list of floats, default None</span>
-<span class="sd">        The values corresponding to each color.</span>
+<span class="sd">        The bounds of the colors. The lower value is inclusive,</span>
+<span class="sd">        the upper value is exclusive.</span>
 <span class="sd">        It has to be sorted, and have the same length as `colors`.</span>
 <span class="sd">        If None, a regular grid between `vmin` and `vmax` is created.</span>
 <span class="sd">    vmin : float, default 0.</span>
@@ -452,22 +539,38 @@
 <span class="sd">    tick_labels: list of floats, default None</span>
 <span class="sd">        If given, used as the positions of ticks.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">caption</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">max_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">tick_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">StepColormap</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
-                                           <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span> <span class="n">max_labels</span><span class="o">=</span><span class="n">max_labels</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">colors</span><span class="p">,</span>
+        <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">caption</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="n">max_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">tick_labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+            <span class="n">caption</span><span class="o">=</span><span class="n">caption</span><span class="p">,</span>
+            <span class="n">max_labels</span><span class="o">=</span><span class="n">max_labels</span><span class="p">,</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">tick_labels</span> <span class="o">=</span> <span class="n">tick_labels</span>
 
         <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;You must provide at least 1 colors.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;You must provide at least 1 colors.&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="n">vmax</span><span class="o">-</span><span class="n">vmin</span><span class="p">)</span><span class="o">*</span><span class="n">i</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="n">n</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">)]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="n">vmax</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">*</span> <span class="n">i</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">n</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="n">_parse_color</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">colors</span><span class="p">]</span>
 
-<div class="viewcode-block" id="StepColormap.rgba_floats_tuple"><a class="viewcode-back" href="../../colormap.html#branca.colormap.StepColormap.rgba_floats_tuple">[docs]</a>    <span class="k">def</span> <span class="nf">rgba_floats_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="StepColormap.rgba_floats_tuple">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.StepColormap.rgba_floats_tuple">[docs]</a>
+    <span class="k">def</span> <span class="nf">rgba_floats_tuple</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Provides the color corresponding to value `x` in the</span>
 <span class="sd">        form of a tuple (R,G,B,A) with float values between 0. and 1.</span>
 
@@ -477,11 +580,14 @@
         <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">i</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="k">if</span> <span class="n">u</span> <span class="o">&lt;</span> <span class="n">x</span><span class="p">])</span>  <span class="c1"># 0 &lt; i &lt; n.</span>
-        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span></div>
+        <span class="n">i</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="k">if</span> <span class="n">u</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">])</span>  <span class="c1"># 0 &lt; i &lt; n.</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="StepColormap.to_linear"><a class="viewcode-back" href="../../colormap.html#branca.colormap.StepColormap.to_linear">[docs]</a>    <span class="k">def</span> <span class="nf">to_linear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="StepColormap.to_linear">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.StepColormap.to_linear">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_linear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Transforms the StepColormap into a LinearColormap.</span>
 
 <span class="sd">        Parameters</span>
@@ -495,65 +601,85 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
-            <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">i</span><span class="o">/</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mf">1.</span><span class="p">))</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">i</span><span class="o">/</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mf">1.</span><span class="p">)</span> <span class="k">for</span>
-                     <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)]</span>
+            <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">i</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">))</span>
+                <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">i</span> <span class="o">/</span> <span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+            <span class="p">]</span>
 
         <span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">rgba_floats_tuple</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">index</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">LinearColormap</span><span class="p">(</span><span class="n">colors</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
-                              <span class="n">vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span><span class="p">,</span> <span class="n">max_labels</span><span class="o">=</span><span class="n">max_labels</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">LinearColormap</span><span class="p">(</span>
+            <span class="n">colors</span><span class="p">,</span>
+            <span class="n">index</span><span class="o">=</span><span class="n">index</span><span class="p">,</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">,</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span><span class="p">,</span>
+            <span class="n">max_labels</span><span class="o">=</span><span class="n">max_labels</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
-<div class="viewcode-block" id="StepColormap.scale"><a class="viewcode-back" href="../../colormap.html#branca.colormap.StepColormap.scale">[docs]</a>    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">max_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Transforms the colorscale so that the minimal and maximal values</span>
+
+<div class="viewcode-block" id="StepColormap.scale">
+<a class="viewcode-back" href="../../colormap.html#branca.colormap.StepColormap.scale">[docs]</a>
+    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">max_labels</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transforms the colorscale so that the minimal and maximal values</span>
 <span class="sd">        fit the given parameters.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">StepColormap</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">colors</span><span class="p">,</span>
-            <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="n">vmax</span><span class="o">-</span><span class="n">vmin</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span><span class="o">*</span><span class="mf">1.</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span><span class="p">],</span>  <span class="c1"># noqa</span>
+            <span class="n">index</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">vmin</span> <span class="o">+</span> <span class="p">(</span><span class="n">vmax</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">vmax</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">vmin</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">index</span>
+            <span class="p">],</span>  <span class="c1"># noqa</span>
             <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
             <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
             <span class="n">caption</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">caption</span><span class="p">,</span>
-            <span class="n">max_labels</span><span class="o">=</span><span class="n">max_labels</span>
-            <span class="p">)</span></div></div>
+            <span class="n">max_labels</span><span class="o">=</span><span class="n">max_labels</span><span class="p">,</span>
+        <span class="p">)</span></div>
+</div>
 
 
-<span class="k">class</span> <span class="nc">_LinearColormaps</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A class for hosting the list of built-in linear colormaps.&quot;&quot;&quot;</span>
+
+<span class="k">class</span> <span class="nc">_LinearColormaps</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for hosting the list of built-in linear colormaps.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_schemes</span> <span class="o">=</span> <span class="n">_schemes</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_colormaps</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">LinearColormap</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span>
-                           <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">_schemes</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_colormaps</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">LinearColormap</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">_schemes</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">_schemes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">LinearColormap</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        &lt;table&gt;</span>
-<span class="s2">        {</span><span class="si">% f</span><span class="s2">or key,val in this._colormaps.items() %}</span>
-<span class="s2">        &lt;tr&gt;&lt;td&gt;{{key}}&lt;/td&gt;&lt;td&gt;{{val._repr_html_()}}&lt;/td&gt;&lt;/tr&gt;</span>
-<span class="s2">        {</span><span class="si">% e</span><span class="s2">ndfor %}&lt;/table&gt;</span>
-<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">this</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Template</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        &lt;table&gt;</span>
+<span class="sd">        {% for key,val in this._colormaps.items() %}</span>
+<span class="sd">        &lt;tr&gt;&lt;td&gt;{{key}}&lt;/td&gt;&lt;td&gt;{{val._repr_html_()}}&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="sd">        {% endfor %}&lt;/table&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">this</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 
 <span class="n">linear</span> <span class="o">=</span> <span class="n">_LinearColormaps</span><span class="p">()</span>
 
 
-<span class="k">class</span> <span class="nc">_StepColormaps</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;A class for hosting the list of built-in step colormaps.&quot;&quot;&quot;</span>
+<span class="k">class</span> <span class="nc">_StepColormaps</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for hosting the list of built-in step colormaps.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_schemes</span> <span class="o">=</span> <span class="n">_schemes</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_colormaps</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">StepColormap</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span>
-                           <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">_schemes</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_colormaps</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">StepColormap</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">_schemes</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">_schemes</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">StepColormap</span><span class="p">(</span><span class="n">val</span><span class="p">))</span>
 
     <span class="k">def</span> <span class="nf">_repr_html_</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">Template</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">        &lt;table&gt;</span>
-<span class="s2">        {</span><span class="si">% f</span><span class="s2">or key,val in this._colormaps.items() %}</span>
-<span class="s2">        &lt;tr&gt;&lt;td&gt;{{key}}&lt;/td&gt;&lt;td&gt;{{val._repr_html_()}}&lt;/td&gt;&lt;/tr&gt;</span>
-<span class="s2">        {</span><span class="si">% e</span><span class="s2">ndfor %}&lt;/table&gt;</span>
-<span class="s2">        &quot;&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">this</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Template</span><span class="p">(</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        &lt;table&gt;</span>
+<span class="sd">        {% for key,val in this._colormaps.items() %}</span>
+<span class="sd">        &lt;tr&gt;&lt;td&gt;{{key}}&lt;/td&gt;&lt;td&gt;{{val._repr_html_()}}&lt;/td&gt;&lt;/tr&gt;</span>
+<span class="sd">        {% endfor %}&lt;/table&gt;</span>
+<span class="sd">        &quot;&quot;&quot;</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">this</span><span class="o">=</span><span class="bp">self</span><span class="p">)</span>
 
 
 <span class="n">step</span> <span class="o">=</span> <span class="n">_StepColormaps</span><span class="p">()</span>
@@ -616,8 +742,8 @@
       &copy;2018, Filipe Fernandes.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 7.2.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
     </div>
 
