@@ -355,9 +355,7 @@ class LinearColormap(ColorMap):
                 method = (
                     "quantiles"
                     if quantiles is not None
-                    else method
-                    if method is not None
-                    else "linear"
+                    else method if method is not None else "linear"
                 )
                 if method.lower().startswith("lin"):
                     if n is None:
