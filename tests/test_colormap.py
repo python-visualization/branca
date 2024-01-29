@@ -2,6 +2,7 @@
 Folium Colormap Module
 ----------------------
 """
+
 import pytest
 
 import branca.colormap as cm

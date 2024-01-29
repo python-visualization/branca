@@ -387,11 +387,19 @@ def _camelify(out):
         (
             "".join(
                 [
-                    "_" + x.lower()
-                    if i < len(out) - 1 and x.isupper() and out[i + 1].islower()  # noqa
-                    else x.lower() + "_"
-                    if i < len(out) - 1 and x.islower() and out[i + 1].isupper()  # noqa
-                    else x.lower()
+                    (
+                        "_" + x.lower()
+                        if i < len(out) - 1
+                        and x.isupper()
+                        and out[i + 1].islower()  # noqa
+                        else (
+                            x.lower() + "_"
+                            if i < len(out) - 1
+                            and x.islower()
+                            and out[i + 1].isupper()  # noqa
+                            else x.lower()
+                        )
+                    )
                     for i, x in enumerate(list(out))
                 ],
             )
