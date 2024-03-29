@@ -73,7 +73,7 @@ class ColorMap(MacroElement):
     caption: str
         A caption to draw with the colormap.
     text_color: str
-        A color for the text.
+        The color for the text.
     max_labels : int, default 10
         Maximum number of legend tick labels
     """
