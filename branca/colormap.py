@@ -80,7 +80,9 @@ class ColorMap(MacroElement):
 
     _template = ENV.get_template("color_scale.js")
 
-    def __init__(self, vmin=0.0, vmax=1.0, caption="", text_color="black", max_labels=10):
+    def __init__(
+        self, vmin=0.0, vmax=1.0, caption="", text_color="black", max_labels=10,
+    ):
         super().__init__()
         self._name = "ColorMap"
 
