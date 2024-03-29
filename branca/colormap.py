@@ -72,19 +72,22 @@ class ColorMap(MacroElement):
         The right bound of the color scale.
     caption: str
         A caption to draw with the colormap.
+    text_color: str
+        A color for the text.
     max_labels : int, default 10
         Maximum number of legend tick labels
     """
 
     _template = ENV.get_template("color_scale.js")
 
-    def __init__(self, vmin=0.0, vmax=1.0, caption="", max_labels=10):
+    def __init__(self, vmin=0.0, vmax=1.0, caption="", text_color="black", max_labels=10):
         super().__init__()
         self._name = "ColorMap"
 
         self.vmin = vmin
         self.vmax = vmax
         self.caption = caption
+        self.text_color = text_color
         self.index = [vmin, vmax]
         self.max_labels = max_labels
         self.tick_labels = None
@@ -181,22 +184,25 @@ class ColorMap(MacroElement):
                     for i in range(self.width)
                 ],
             )
-            + '<text x="0" y="38" style="text-anchor:start; font-size:11px; font:Arial">{}</text>'.format(  # noqa
+            + '<text x="0" y="38" style="text-anchor:start; font-size:11px; font:Arial; fill:{}">{}</text>'.format(  # noqa
+                self.text_color,
                 self.vmin,
             )
             + "".join(
                 [
                     (
-                        '<text x="{}" y="38"; style="text-anchor:middle; font-size:11px; font:Arial">{}</text>'  # noqa
-                    ).format(x_ticks[i], val_ticks[i])
+                        '<text x="{}" y="38"; style="text-anchor:middle; font-size:11px; font:Arial; fill:{}">{}</text>'  # noqa
+                    ).format(x_ticks[i], self.text_color, val_ticks[i])
                     for i in range(1, nb_ticks - 1)
                 ],
             )
-            + '<text x="{}" y="38" style="text-anchor:end; font-size:11px; font:Arial">{}</text>'.format(
+            + '<text x="{}" y="38" style="text-anchor:end; font-size:11px; font:Arial; fill:{}">{}</text>'.format(
                 self.width,
+                self.text_color,
                 self.vmax,
             )
-            + '<text x="0" y="12" style="font-size:11px; font:Arial">{}</text>'.format(
+            + '<text x="0" y="12" style="font-size:11px; font:Arial; fill:{}">{}</text>'.format(
+                self.text_color,
                 self.caption,
             )
             + "</svg>"
@@ -241,6 +247,7 @@ class LinearColormap(ColorMap):
         vmin=0.0,
         vmax=1.0,
         caption="",
+        text_color="",
         max_labels=10,
         tick_labels=None,
     ):
@@ -248,6 +255,7 @@ class LinearColormap(ColorMap):
             vmin=vmin,
             vmax=vmax,
             caption=caption,
+            text_color=text_color,
             max_labels=max_labels,
         )
         self.tick_labels = tick_labels
@@ -411,6 +419,7 @@ class LinearColormap(ColorMap):
         ]
 
         caption = self.caption
+        text_color = self.text_color
 
         return StepColormap(
             colors,
@@ -418,6 +427,7 @@ class LinearColormap(ColorMap):
             vmin=index[0],
             vmax=index[-1],
             caption=caption,
+            text_color=text_color,
             max_labels=max_labels,
             tick_labels=self.tick_labels,
         )
@@ -435,6 +445,7 @@ class LinearColormap(ColorMap):
             vmin=vmin,
             vmax=vmax,
             caption=self.caption,
+            text_color=self.text_color,
             max_labels=max_labels,
         )
 
@@ -478,6 +489,7 @@ class StepColormap(ColorMap):
         vmin=0.0,
         vmax=1.0,
         caption="",
+        text_color="",
         max_labels=10,
         tick_labels=None,
     ):
@@ -485,6 +497,7 @@ class StepColormap(ColorMap):
             vmin=vmin,
             vmax=vmax,
             caption=caption,
+            text_color=text_color,
             max_labels=max_labels,
         )
         self.tick_labels = tick_labels
@@ -556,6 +569,7 @@ class StepColormap(ColorMap):
             vmin=vmin,
             vmax=vmax,
             caption=self.caption,
+            text_color=self.text_color,
             max_labels=max_labels,
         )
 
