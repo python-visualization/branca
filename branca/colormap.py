@@ -80,9 +80,7 @@ class ColorMap(MacroElement):
 
     _template = ENV.get_template("color_scale.js")
 
-    def __init__(
-        self, vmin=0.0, vmax=1.0, caption="", text_color="black", max_labels=10,
-    ):
+    def __init__(self, vmin=0.0, vmax=1.0, caption="", text_color="black", max_labels=10):
         super().__init__()
         self._name = "ColorMap"
 
@@ -186,19 +184,22 @@ class ColorMap(MacroElement):
                     for i in range(self.width)
                 ],
             )
-            + '<text x="0" y="38" style="text-anchor:start; font-size:11px; font:Arial; fill:{}">{}</text>'.format(  # noqa
+            + ('<text x="0" y="38" style="text-anchor:start; font-size:11px;'
+               ' font:Arial; fill:{}">{}</text>').format(
                 self.text_color,
                 self.vmin,
             )
             + "".join(
                 [
                     (
-                        '<text x="{}" y="38"; style="text-anchor:middle; font-size:11px; font:Arial; fill:{}">{}</text>'  # noqa
+                        '<text x="{}" y="38"; style="text-anchor:middle; font-size:11px;'
+                        ' font:Arial; fill:{}">{}</text>'
                     ).format(x_ticks[i], self.text_color, val_ticks[i])
                     for i in range(1, nb_ticks - 1)
                 ],
             )
-            + '<text x="{}" y="38" style="text-anchor:end; font-size:11px; font:Arial; fill:{}">{}</text>'.format(
+            + ('<text x="{}" y="38" style="text-anchor:end; font-size:11px;'
+               ' font:Arial; fill:{}">{}</text>').format(
                 self.width,
                 self.text_color,
                 self.vmax,
