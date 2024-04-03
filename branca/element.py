@@ -583,6 +583,9 @@ class Div(Figure):
             "You cannot render this Element " "if it is not in a Figure."
         )
 
+        for name, element in self._children.items():
+            element.render(**kwargs)
+
         for name, element in self.header._children.items():
             figure.header.add_child(element, name=name)
 
@@ -600,8 +603,6 @@ class Div(Figure):
         script = self._template.module.__dict__.get("script", None)
         if script is not None:
             figure.script.add_child(Element(script(self, kwargs)), name=self.get_name())
-
-        return figure.render()
 
     def _repr_html_(self, **kwargs) -> str:
         """Displays the Div in a Jupyter notebook."""
@@ -733,4 +734,5 @@ class MacroElement(Element):
         if script is not None:
             figure.script.add_child(Element(script(self, kwargs)), name=self.get_name())
 
-        return figure.render()
+        for name, element in self._children.items():
+            element.render(**kwargs)
