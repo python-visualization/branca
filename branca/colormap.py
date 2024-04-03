@@ -95,9 +95,13 @@ class ColorMap(MacroElement):
     def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         self.color_domain = [
-            self.vmin + (self.vmax - self.vmin) * k / 499.0 for k in range(500)
+            float(self.vmin + (self.vmax - self.vmin) * k / 499.0) for k in range(500)
         ]
         self.color_range = [self.__call__(x) for x in self.color_domain]
+
+        # sanitize possible numpy floats to native python floats
+        self.index = [float(i) for i in self.index]
+
         if self.tick_labels is None:
             self.tick_labels = legend_scaler(self.index, self.max_labels)
 
