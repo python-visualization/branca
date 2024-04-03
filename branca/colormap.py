@@ -98,7 +98,7 @@ class ColorMap(MacroElement):
             float(self.vmin + (self.vmax - self.vmin) * k / 499.0) for k in range(500)
         ]
         self.color_range = [self.__call__(x) for x in self.color_domain]
-        
+
         # sanitize possible numpy floats to native python floats
         self.index = [float(i) for i in self.index]
 
