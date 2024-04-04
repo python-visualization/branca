@@ -249,6 +249,10 @@ class LinearColormap(ColorMap):
     vmax : float, default 1.
         The maximal value for the colormap.
         Values higher than `vmax` will be bound directly to `colors[-1]`.
+    caption: str
+        A caption to draw with the colormap.
+    text_color: str
+        The color for the text.
     max_labels : int, default 10
         Maximum number of legend tick labels
     tick_labels: list of floats, default None
@@ -261,7 +265,7 @@ class LinearColormap(ColorMap):
         vmin=0.0,
         vmax=1.0,
         caption="",
-        text_color="",
+        text_color="black",
         max_labels=10,
         tick_labels=None,
     ):
@@ -490,6 +494,10 @@ class StepColormap(ColorMap):
     vmax : float, default 1.
         The maximal value for the colormap.
         Values higher than `vmax` will be bound directly to `colors[-1]`.
+    caption: str
+        A caption to draw with the colormap.
+    text_color: str
+        The color for the text.
     max_labels : int, default 10
         Maximum number of legend tick labels
     tick_labels: list of floats, default None
@@ -503,7 +511,7 @@ class StepColormap(ColorMap):
         vmin=0.0,
         vmax=1.0,
         caption="",
-        text_color="",
+        text_color="black",
         max_labels=10,
         tick_labels=None,
     ):
@@ -567,6 +575,8 @@ class StepColormap(ColorMap):
             index=index,
             vmin=self.vmin,
             vmax=self.vmax,
+            caption=self.caption,
+            text_color=self.text_color,
             max_labels=max_labels,
         )
 
