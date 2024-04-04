@@ -14,7 +14,7 @@ import re
 import struct
 import typing
 import zlib
-from typing import Any, Callable, List, Sequence, Tuple, Union, Optional
+from typing import Any, Callable, List, Optional, Sequence, Tuple, Union
 
 from jinja2 import Environment, PackageLoader
 
@@ -200,7 +200,11 @@ def color_brewer(color_code: str, n: int = 6) -> List[str]:
     return color_scheme
 
 
-def image_to_url(image: Any, colormap: Union["ColorMap", Callable, None] = None, origin: str = "upper") -> str:
+def image_to_url(
+    image: Any,
+    colormap: Union["ColorMap", Callable, None] = None,
+    origin: str = "upper",
+) -> str:
     """Infers the type of an image argument and transforms it into a URL.
 
     Parameters
@@ -353,14 +357,10 @@ def _camelify(out: str) -> str:
                 [
                     (
                         "_" + x.lower()
-                        if i < len(out) - 1
-                        and x.isupper()
-                        and out[i + 1].islower()
+                        if i < len(out) - 1 and x.isupper() and out[i + 1].islower()
                         else (
                             x.lower() + "_"
-                            if i < len(out) - 1
-                            and x.islower()
-                            and out[i + 1].isupper()
+                            if i < len(out) - 1 and x.islower() and out[i + 1].isupper()
                             else x.lower()
                         )
                     )

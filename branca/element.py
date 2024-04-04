@@ -184,7 +184,7 @@ class Element:
                 [
                     (name, child.to_dict(depth=depth - 1))
                     for name, child in self._children.items()
-                ]
+                ],
             )
         return out
 
