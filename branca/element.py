@@ -184,8 +184,8 @@ class Element:
                 [
                     (name, child.to_dict(depth=depth - 1))
                     for name, child in self._children.items()
-                ],
-            )  # noqa
+                ]
+            )
         return out
 
     def to_json(self, depth: int = -1, **kwargs) -> str:
@@ -554,8 +554,8 @@ class Div(Figure):
         self._name = "Div"
 
         # Size Parameters.
-        self.width = _parse_size(width)
-        self.height = _parse_size(height)
+        self.width = _parse_size(width)  # type: ignore
+        self.height = _parse_size(height)  # type: ignore
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
@@ -576,7 +576,7 @@ class Div(Figure):
         """Returns the root of the elements tree."""
         return self
 
-    def render(self, **kwargs) -> str:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         figure = self._parent
         assert isinstance(figure, Figure), (
@@ -666,9 +666,7 @@ class IFrame(Element):
         html = super().render(**kwargs)
         html = "data:text/html;charset=utf-8;base64," + base64.b64encode(
             html.encode("utf8"),
-        ).decode(
-            "utf8",
-        )  # noqa
+        ).decode("utf8")
 
         if self.height is None:
             iframe = (
@@ -715,7 +713,7 @@ class MacroElement(Element):
         super().__init__()
         self._name = "MacroElement"
 
-    def render(self, **kwargs) -> str:
+    def render(self, **kwargs):
         """Renders the HTML representation of the element."""
         figure = self.get_root()
         assert isinstance(figure, Figure), (
