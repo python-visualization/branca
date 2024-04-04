@@ -14,7 +14,7 @@ import re
 import struct
 import typing
 import zlib
-from typing import Any, Callable, List, Sequence, Tuple, Union
+from typing import Any, Callable, List, Sequence, Tuple, Union, Optional
 
 from jinja2 import Environment, PackageLoader
 
@@ -103,7 +103,7 @@ def linear_gradient(hexList: List[str], nColors: int) -> List[str]:
     return result
 
 
-def color_brewer(color_code, n=6):
+def color_brewer(color_code: str, n: int = 6) -> List[str]:
     """
     Generate a colorbrewer color scheme of length 'len', type 'scheme.
     Live examples can be seen at http://colorbrewer2.org/
@@ -200,7 +200,7 @@ def color_brewer(color_code, n=6):
     return color_scheme
 
 
-def image_to_url(image, colormap=None, origin="upper"):
+def image_to_url(image: Any, colormap: Union["ColorMap", Callable, None] = None, origin: str = "upper") -> str:
     """Infers the type of an image argument and transforms it into a URL.
 
     Parameters
@@ -214,7 +214,7 @@ def image_to_url(image, colormap=None, origin="upper"):
     origin : ['upper' | 'lower'], optional, default 'upper'
         Place the [0, 0] index of the array in the upper left or
         lower left corner of the axes.
-    colormap : callable, used only for `mono` image.
+    colormap : ColorMap or callable, used only for `mono` image.
         Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
         for transforming a mono image into RGB.
         It must output iterables of length 3 or 4, with values between
@@ -346,7 +346,7 @@ def write_png(
     )
 
 
-def _camelify(out):
+def _camelify(out: str) -> str:
     return (
         (
             "".join(
@@ -355,12 +355,12 @@ def _camelify(out):
                         "_" + x.lower()
                         if i < len(out) - 1
                         and x.isupper()
-                        and out[i + 1].islower()  # noqa
+                        and out[i + 1].islower()
                         else (
                             x.lower() + "_"
                             if i < len(out) - 1
                             and x.islower()
-                            and out[i + 1].isupper()  # noqa
+                            and out[i + 1].isupper()
                             else x.lower()
                         )
                     )
@@ -370,7 +370,7 @@ def _camelify(out):
         )
         .lstrip("_")
         .replace("__", "_")
-    )  # noqa
+    )
 
 
 def _parse_size(value: TypeParseSize) -> Tuple[float, str]:
@@ -423,7 +423,7 @@ def _locations_tolist(x):
         return x
 
 
-def none_min(x, y):
+def none_min(x: Optional[float], y: Optional[float]) -> Optional[float]:
     if x is None:
         return y
     elif y is None:
@@ -432,7 +432,7 @@ def none_min(x, y):
         return min(x, y)
 
 
-def none_max(x, y):
+def none_max(x: Optional[float], y: Optional[float]) -> Optional[float]:
     if x is None:
         return y
     elif y is None:
@@ -441,7 +441,7 @@ def none_max(x, y):
         return max(x, y)
 
 
-def iter_points(x):
+def iter_points(x: Union[List, Tuple]) -> list:
     """Iterates over a list representing a feature, and returns a list of points,
     whatever the shape of the array (Point, MultiPolyline, etc).
     """
