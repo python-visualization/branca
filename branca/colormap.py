@@ -56,19 +56,17 @@ def _color_float_to_int(x: float) -> int:
 
 
 def _parse_color(x: Union[tuple, list, str]) -> TypeRGBAFloats:
-    color_tuple: TypeRGBAFloats
     if isinstance(x, (tuple, list)):
-        color_tuple = tuple(tuple(x) + (1.0,))[:4]  # type: ignore
+        return tuple(tuple(x) + (1.0,))[:4]  # type: ignore
     elif isinstance(x, str) and _is_hex(x):
-        color_tuple = _parse_hex(x)
+        return _parse_hex(x)
     elif isinstance(x, str):
         cname = _cnames.get(x.lower(), None)
         if cname is None:
             raise ValueError(f"Unknown color {cname!r}.")
-        color_tuple = _parse_hex(cname)
+        return _parse_hex(cname)
     else:
         raise ValueError(f"Unrecognized color code {x!r}")
-    return color_tuple
 
 
 def _base(x: float) -> float:
@@ -275,10 +273,14 @@ class LinearColormap(ColorMap):
     vmax : float, default 1.
         The maximal value for the colormap.
         Values higher than `vmax` will be bound directly to `colors[-1]`.
+<<<<<<< HEAD
     caption: str
         A caption to draw with the colormap.
     text_color: str, default "black"
         The color for the text.
+=======
+    caption : str, default ""
+>>>>>>> a7239e8... Update colormap.py
     max_labels : int, default 10
         Maximum number of legend tick labels
     tick_labels: list of floats, default None
@@ -302,7 +304,7 @@ class LinearColormap(ColorMap):
             text_color=text_color,
             max_labels=max_labels,
         )
-        self.tick_labels = tick_labels
+        self.tick_labels: Optional[Sequence[float]] = tick_labels
 
         n = len(colors)
         if n < 2:
@@ -339,7 +341,7 @@ class LinearColormap(ColorMap):
         n: Optional[int] = None,
         index: Optional[Sequence[float]] = None,
         data: Optional[Sequence[float]] = None,
-        method: Optional[str] = None,
+        method: str = "linear",
         quantiles: Optional[Sequence[float]] = None,
         round_method: Optional[str] = None,
         max_labels: int = 10,
@@ -404,11 +406,7 @@ class LinearColormap(ColorMap):
                 max_ = max(data)
                 min_ = min(data)
                 scaled_cm = self.scale(vmin=min_, vmax=max_)
-                method = (
-                    "quantiles"
-                    if quantiles is not None
-                    else method if method is not None else "linear"
-                )
+                method = "quantiles" if quantiles is not None else method
                 if method.lower().startswith("lin"):
                     if n is None:
                         raise ValueError(msg)
