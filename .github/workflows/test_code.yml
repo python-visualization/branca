@@ -11,16 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.11"]
-        # We only run latest Python on macOS and Windows to save resources.
-        include:
-          - os: ubuntu-latest
-            python-version: "3.8"
-          - os: ubuntu-latest
-            python-version: "3.9"
-          - os: ubuntu-latest
-            python-version: "3.10"
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.8", "3.12"]
 
     steps:
     - uses: actions/checkout@v3
