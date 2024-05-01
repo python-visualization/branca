@@ -10,6 +10,7 @@ jupyter
 nbsphinx
 nbval
 numpy
+pre-commit
 pylint
 pytest
 pytest-cov
