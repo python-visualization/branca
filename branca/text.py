@@ -2,7 +2,7 @@
 Text
 ----
 
-An abstraction to automatically escape characters.
+A string abstraction to automatically perform cleaning operations like escaping, etc.
 """
 
 import re
@@ -143,9 +143,9 @@ class EscapeBackslashes(_BaseEscapeOperation):
 class Operations:
     """Allowed Operations with their string representation."""
 
-    backslash = EscapeBackslashes
-    backtick = EscapeBackticks
-    double_quote = EscapeDoubleQuotes
+    backslash: _BaseEscapeOperation = EscapeBackslashes
+    backtick: _BaseEscapeOperation = EscapeBackticks
+    double_quote: _BaseEscapeOperation = EscapeDoubleQuotes
 
 
 class Text:
