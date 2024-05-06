@@ -72,7 +72,7 @@ class ColorMap(MacroElement):
         The right bound of the color scale.
     caption: str
         A caption to draw with the colormap.
-    text_color: str
+    text_color: str, default "black"
         The color for the text.
     max_labels : int, default 10
         Maximum number of legend tick labels
@@ -255,7 +255,7 @@ class LinearColormap(ColorMap):
         Values higher than `vmax` will be bound directly to `colors[-1]`.
     caption: str
         A caption to draw with the colormap.
-    text_color: str
+    text_color: str, default "black"
         The color for the text.
     max_labels : int, default 10
         Maximum number of legend tick labels
@@ -500,7 +500,7 @@ class StepColormap(ColorMap):
         Values higher than `vmax` will be bound directly to `colors[-1]`.
     caption: str
         A caption to draw with the colormap.
-    text_color: str
+    text_color: str, default "black"
         The color for the text.
     max_labels : int, default 10
         Maximum number of legend tick labels
