@@ -32,6 +32,7 @@
 
     {{this.get_name()}}.g = {{this.get_name()}}.svg.append("g")
         .attr("class", "key")
+        .attr("fill", {{ this.text_color | tojson }})
         .attr("transform", "translate(25,16)");
 
     {{this.get_name()}}.g.selectAll("rect")
@@ -51,5 +52,6 @@
     {{this.get_name()}}.g.call({{this.get_name()}}.xAxis).append("text")
         .attr("class", "caption")
         .attr("y", 21)
+        .attr("fill", {{ this.text_color | tojson }})
         .text({{ this.caption|tojson }});
 {% endmacro %}
