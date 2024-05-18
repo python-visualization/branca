@@ -245,42 +245,42 @@ class ColorMap(MacroElement):
 
 class LinearColormap(ColorMap):
     """Creates a ColorMap based on linear interpolation of a set of colors
-        over a given index.
+    over a given index.
 
-        Parameters
-        ----------
+    Parameters
+    ----------
 
-        colors : list-like object with at least two colors.
-            The set of colors to be used for interpolation.
-            Colors can be provided in the form:
-            * tuples of RGBA ints between 0 and 255 (e.g: `(255, 255, 0)` or
-            `(255, 255, 0, 255)`)
-            * tuples of RGBA floats between 0. and 1. (e.g: `(1.,1.,0.)` or
-            `(1., 1., 0., 1.)`)
-            * HTML-like string (e.g: `"#ffff00`)
-            * a color name or shortcut (e.g: `"y"` or `"yellow"`)
-        index : list of floats, default None
-            The values corresponding to each color.
-            It has to be sorted, and have the same length as `colors`.
-            If None, a regular grid between `vmin` and `vmax` is created.
-        vmin : float, default 0.
-            The minimal value for the colormap.
-            Values lower than `vmin` will be bound directly to `colors[0]`.
-        vmax : float, default 1.
-            The maximal value for the colormap.
-            Values higher than `vmax` will be bound directly to `colors[-1]`.
-    <<<<<<< HEAD
-        caption: str
-            A caption to draw with the colormap.
-        text_color: str, default "black"
-            The color for the text.
-    =======
-        caption : str, default ""
-    >>>>>>> a7239e8... Update colormap.py
-        max_labels : int, default 10
-            Maximum number of legend tick labels
-        tick_labels: list of floats, default None
-            If given, used as the positions of ticks."""
+    colors : list-like object with at least two colors.
+        The set of colors to be used for interpolation.
+        Colors can be provided in the form:
+        * tuples of RGBA ints between 0 and 255 (e.g: `(255, 255, 0)` or
+        `(255, 255, 0, 255)`)
+        * tuples of RGBA floats between 0. and 1. (e.g: `(1.,1.,0.)` or
+        `(1., 1., 0., 1.)`)
+        * HTML-like string (e.g: `"#ffff00`)
+        * a color name or shortcut (e.g: `"y"` or `"yellow"`)
+    index : list of floats, default None
+        The values corresponding to each color.
+        It has to be sorted, and have the same length as `colors`.
+        If None, a regular grid between `vmin` and `vmax` is created.
+    vmin : float, default 0.
+        The minimal value for the colormap.
+        Values lower than `vmin` will be bound directly to `colors[0]`.
+    vmax : float, default 1.
+        The maximal value for the colormap.
+        Values higher than `vmax` will be bound directly to `colors[-1]`.
+<<<<<<< HEAD
+    caption: str
+        A caption to draw with the colormap.
+    text_color: str, default "black"
+        The color for the text.
+=======
+    caption : str, default ""
+>>>>>>> a7239e8... Update colormap.py
+    max_labels : int, default 10
+        Maximum number of legend tick labels
+    tick_labels: list of floats, default None
+        If given, used as the positions of ticks."""
 
     def __init__(
         self,
