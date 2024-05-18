@@ -269,14 +269,10 @@ class LinearColormap(ColorMap):
     vmax : float, default 1.
         The maximal value for the colormap.
         Values higher than `vmax` will be bound directly to `colors[-1]`.
-<<<<<<< HEAD
     caption: str
         A caption to draw with the colormap.
     text_color: str, default "black"
         The color for the text.
-=======
-    caption : str, default ""
->>>>>>> a7239e8... Update colormap.py
     max_labels : int, default 10
         Maximum number of legend tick labels
     tick_labels: list of floats, default None
