@@ -14,36 +14,43 @@ import re
 import struct
 import typing
 import zlib
-from typing import Any, Callable, Union
+from typing import Any, Callable, List, Optional, Sequence, Tuple, Union
 
 from jinja2 import Environment, PackageLoader
 
 try:
     import numpy as np
 except ImportError:
-    np = None
+    np = None  # type: ignore
 
 if typing.TYPE_CHECKING:
     from branca.colormap import ColorMap
 
 
-rootpath = os.path.abspath(os.path.dirname(__file__))
+rootpath: str = os.path.abspath(os.path.dirname(__file__))
 
 
-def get_templates():
+TypeParseSize = Union[int, float, str, Tuple[float, str]]
+
+
+def get_templates() -> Environment:
     """Get Jinja templates."""
     return Environment(loader=PackageLoader("branca", "templates"))
 
 
-def legend_scaler(legend_values, max_labels=10.0):
+def legend_scaler(
+    legend_values: Sequence[float],
+    max_labels: int = 10,
+) -> List[Union[float, str]]:
     """
     Downsamples the number of legend values so that there isn't a collision
     of text on the legend colorbar (within reason). The colorbar seems to
     support ~10 entries as a maximum.
 
     """
+    legend_ticks: List[Union[float, str]]
     if len(legend_values) < max_labels:
-        legend_ticks = legend_values
+        legend_ticks = list(legend_values)
     else:
         spacer = int(math.ceil(len(legend_values) / max_labels))
         legend_ticks = []
@@ -53,16 +60,11 @@ def legend_scaler(legend_values, max_labels=10.0):
     return legend_ticks
 
 
-def linear_gradient(hexList, nColors):
+def linear_gradient(hexList: List[str], nColors: int) -> List[str]:
     """
     Given a list of hexcode values, will return a list of length
     nColors where the colors are linearly interpolated between the
     (r, g, b) tuples that are given.
-
-    Examples
-    --------
-    >>> linear_gradient([(0, 0, 0), (255, 0, 0), (255, 255, 0)], 100)
-
     """
 
     def _scale(start, finish, length, i):
@@ -80,7 +82,7 @@ def linear_gradient(hexList, nColors):
             thex = "0" + thex
         return thex
 
-    allColors = []
+    allColors: List[str] = []
     # Separate (R, G, B) pairs.
     for start, end in zip(hexList[:-1], hexList[1:]):
         # Linearly interpolate between pair of hex ###### values and
@@ -93,7 +95,7 @@ def linear_gradient(hexList, nColors):
             allColors.append("".join(["#", r, g, b]))
 
     # Pick only nColors colors from the total list.
-    result = []
+    result: List[str] = []
     for counter in range(nColors):
         fraction = float(counter) / (nColors - 1)
         index = int(fraction * (len(allColors) - 1))
@@ -101,7 +103,7 @@ def linear_gradient(hexList, nColors):
     return result
 
 
-def color_brewer(color_code, n=6):
+def color_brewer(color_code: str, n: int = 6) -> List[str]:
     """
     Generate a colorbrewer color scheme of length 'len', type 'scheme.
     Live examples can be seen at http://colorbrewer2.org/
@@ -198,7 +200,11 @@ def color_brewer(color_code, n=6):
     return color_scheme
 
 
-def image_to_url(image, colormap=None, origin="upper"):
+def image_to_url(
+    image: Any,
+    colormap: Union["ColorMap", Callable, None] = None,
+    origin: str = "upper",
+) -> str:
     """Infers the type of an image argument and transforms it into a URL.
 
     Parameters
@@ -212,7 +218,7 @@ def image_to_url(image, colormap=None, origin="upper"):
     origin : ['upper' | 'lower'], optional, default 'upper'
         Place the [0, 0] index of the array in the upper left or
         lower left corner of the axes.
-    colormap : callable, used only for `mono` image.
+    colormap : ColorMap or callable, used only for `mono` image.
         Function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)]
         for transforming a mono image into RGB.
         It must output iterables of length 3 or 4, with values between
@@ -344,21 +350,17 @@ def write_png(
     )
 
 
-def _camelify(out):
+def _camelify(out: str) -> str:
     return (
         (
             "".join(
                 [
                     (
                         "_" + x.lower()
-                        if i < len(out) - 1
-                        and x.isupper()
-                        and out[i + 1].islower()  # noqa
+                        if i < len(out) - 1 and x.isupper() and out[i + 1].islower()
                         else (
                             x.lower() + "_"
-                            if i < len(out) - 1
-                            and x.islower()
-                            and out[i + 1].isupper()  # noqa
+                            if i < len(out) - 1 and x.islower() and out[i + 1].isupper()
                             else x.lower()
                         )
                     )
@@ -368,10 +370,10 @@ def _camelify(out):
         )
         .lstrip("_")
         .replace("__", "_")
-    )  # noqa
+    )
 
 
-def _parse_size(value):
+def _parse_size(value: TypeParseSize) -> Tuple[float, str]:
     if isinstance(value, (int, float)):
         return float(value), "px"
     elif isinstance(value, str):
@@ -421,7 +423,7 @@ def _locations_tolist(x):
         return x
 
 
-def none_min(x, y):
+def none_min(x: Optional[float], y: Optional[float]) -> Optional[float]:
     if x is None:
         return y
     elif y is None:
@@ -430,7 +432,7 @@ def none_min(x, y):
         return min(x, y)
 
 
-def none_max(x, y):
+def none_max(x: Optional[float], y: Optional[float]) -> Optional[float]:
     if x is None:
         return y
     elif y is None:
@@ -439,7 +441,7 @@ def none_max(x, y):
         return max(x, y)
 
 
-def iter_points(x):
+def iter_points(x: Union[List, Tuple]) -> list:
     """Iterates over a list representing a feature, and returns a list of points,
     whatever the shape of the array (Point, MultiPolyline, etc).
     """

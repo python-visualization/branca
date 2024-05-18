@@ -14,11 +14,12 @@ from collections import OrderedDict
 from html import escape
 from os import urandom
 from pathlib import Path
+from typing import BinaryIO, List, Optional, Tuple, Type, Union
 from urllib.request import urlopen
 
 from jinja2 import Environment, PackageLoader, Template
 
-from .utilities import _camelify, _parse_size, none_max, none_min
+from .utilities import TypeParseSize, _camelify, _parse_size, none_max, none_min
 
 ENV = Environment(loader=PackageLoader("branca", "templates"))
 
@@ -45,26 +46,30 @@ class Element:
 
     """
 
-    _template = Template(
+    _template: Template = Template(
         "{% for name, element in this._children.items() %}\n"
         "    {{element.render(**kwargs)}}"
         "{% endfor %}",
     )
 
-    def __init__(self, template=None, template_name=None):
-        self._name = "Element"
-        self._id = hexlify(urandom(16)).decode()
-        self._children = OrderedDict()
-        self._parent = None
-        self._template_str = template
-        self._template_name = template_name
+    def __init__(
+        self,
+        template: Optional[str] = None,
+        template_name: Optional[str] = None,
+    ):
+        self._name: str = "Element"
+        self._id: str = hexlify(urandom(16)).decode()
+        self._children: OrderedDict[str, Element] = OrderedDict()
+        self._parent: Optional[Element] = None
+        self._template_str: Optional[str] = template
+        self._template_name: Optional[str] = template_name
 
         if template is not None:
             self._template = Template(template)
         elif template_name is not None:
             self._template = ENV.get_template(template_name)
 
-    def __getstate__(self):
+    def __getstate__(self) -> dict:
         """Modify object state when pickling the object.
 
         jinja2 Templates cannot be pickled, so remove the instance attribute
@@ -83,7 +88,7 @@ class Element:
 
         self.__dict__.update(state)
 
-    def get_name(self):
+    def get_name(self) -> str:
         """Returns a string representation of the object.
         This string has to be unique and to be a python and
         javascript-compatible
@@ -91,13 +96,13 @@ class Element:
         """
         return _camelify(self._name) + "_" + self._id
 
-    def _get_self_bounds(self):
+    def _get_self_bounds(self) -> List[List[Optional[float]]]:
         """Computes the bounds of the object itself (not including it's children)
         in the form [[lat_min, lon_min], [lat_max, lon_max]]
         """
         return [[None, None], [None, None]]
 
-    def get_bounds(self):
+    def get_bounds(self) -> List[List[Optional[float]]]:
         """Computes the bounds of the object and all it's children
         in the form [[lat_min, lon_min], [lat_max, lon_max]].
         """
@@ -117,7 +122,12 @@ class Element:
             ]
         return bounds
 
-    def add_children(self, child, name=None, index=None):
+    def add_children(
+        self,
+        child: "Element",
+        name: Optional[str] = None,
+        index: Optional[int] = None,
+    ) -> "Element":
         """Add a child."""
         warnings.warn(
             "Method `add_children` is deprecated. Please use `add_child` instead.",
@@ -126,7 +136,12 @@ class Element:
         )
         return self.add_child(child, name=name, index=index)
 
-    def add_child(self, child, name=None, index=None):
+    def add_child(
+        self,
+        child: "Element",
+        name: Optional[str] = None,
+        index: Optional[int] = None,
+    ) -> "Element":
         """Add a child."""
         if name is None:
             name = child.get_name()
@@ -139,13 +154,24 @@ class Element:
         child._parent = self
         return self
 
-    def add_to(self, parent, name=None, index=None):
+    def add_to(
+        self,
+        parent: "Element",
+        name: Optional[str] = None,
+        index: Optional[int] = None,
+    ) -> "Element":
         """Add element to a parent."""
         parent.add_child(self, name=name, index=index)
         return self
 
-    def to_dict(self, depth=-1, ordered=True, **kwargs):
+    def to_dict(
+        self,
+        depth: int = -1,
+        ordered: bool = True,
+        **kwargs,
+    ) -> Union[dict, OrderedDict]:
         """Returns a dict representation of the object."""
+        dict_fun: Type[Union[dict, OrderedDict]]
         if ordered:
             dict_fun = OrderedDict
         else:
@@ -159,25 +185,30 @@ class Element:
                     (name, child.to_dict(depth=depth - 1))
                     for name, child in self._children.items()
                 ],
-            )  # noqa
+            )
         return out
 
-    def to_json(self, depth=-1, **kwargs):
+    def to_json(self, depth: int = -1, **kwargs) -> str:
         """Returns a JSON representation of the object."""
         return json.dumps(self.to_dict(depth=depth, ordered=True), **kwargs)
 
-    def get_root(self):
+    def get_root(self) -> "Element":
         """Returns the root of the elements tree."""
         if self._parent is None:
             return self
         else:
             return self._parent.get_root()
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> str:
         """Renders the HTML representation of the element."""
         return self._template.render(this=self, kwargs=kwargs)
 
-    def save(self, outfile, close_file=True, **kwargs):
+    def save(
+        self,
+        outfile: Union[str, bytes, Path, BinaryIO],
+        close_file: bool = True,
+        **kwargs,
+    ):
         """Saves an Element into a file.
 
         Parameters
@@ -187,6 +218,7 @@ class Element:
         close_file : bool, default True
             Whether the file has to be closed after write.
         """
+        fid: BinaryIO
         if isinstance(outfile, (str, bytes, Path)):
             fid = open(outfile, "wb")
         else:
@@ -202,15 +234,27 @@ class Element:
 class Link(Element):
     """An abstract class for embedding a link in the HTML."""
 
-    def get_code(self):
+    def __init__(self, url: str, download: bool = False):
+        super().__init__()
+        self.url = url
+        self.code: Optional[bytes] = None
+        if download:
+            self.get_code()
+
+    def get_code(self) -> bytes:
         """Opens the link and returns the response's content."""
         if self.code is None:
             self.code = urlopen(self.url).read()
         return self.code
 
-    def to_dict(self, depth=-1, **kwargs):
+    def to_dict(
+        self,
+        depth: int = -1,
+        ordered: bool = True,
+        **kwargs,
+    ) -> Union[dict, OrderedDict]:
         """Returns a dict representation of the object."""
-        out = super().to_dict(depth=-1, **kwargs)
+        out = super().to_dict(depth=depth, ordered=ordered, **kwargs)
         out["url"] = self.url
         return out
 
@@ -235,13 +279,9 @@ class JavascriptLink(Link):
         "{% endif %}",
     )
 
-    def __init__(self, url, download=False):
-        super().__init__()
+    def __init__(self, url: str, download: bool = False):
+        super().__init__(url=url, download=download)
         self._name = "JavascriptLink"
-        self.url = url
-        self.code = None
-        if download:
-            self.get_code()
 
 
 class CssLink(Link):
@@ -264,13 +304,9 @@ class CssLink(Link):
         "{% endif %}",
     )
 
-    def __init__(self, url, download=False):
-        super().__init__()
+    def __init__(self, url: str, download: bool = False):
+        super().__init__(url=url, download=download)
         self._name = "CssLink"
-        self.url = url
-        self.code = None
-        if download:
-            self.get_code()
 
 
 class Figure(Element):
@@ -314,11 +350,11 @@ class Figure(Element):
 
     def __init__(
         self,
-        width="100%",
-        height=None,
-        ratio="60%",
-        title=None,
-        figsize=None,
+        width: str = "100%",
+        height: Optional[str] = None,
+        ratio: str = "60%",
+        title: Optional[str] = None,
+        figsize: Optional[Tuple[int, int]] = None,
     ):
         super().__init__()
         self._name = "Figure"
@@ -346,7 +382,12 @@ class Figure(Element):
             name="meta_http",
         )
 
-    def to_dict(self, depth=-1, **kwargs):
+    def to_dict(
+        self,
+        depth: int = -1,
+        ordered: bool = True,
+        **kwargs,
+    ) -> Union[dict, OrderedDict]:
         """Returns a dict representation of the object."""
         out = super().to_dict(depth=depth, **kwargs)
         out["header"] = self.header.to_dict(depth=depth - 1, **kwargs)
@@ -354,17 +395,17 @@ class Figure(Element):
         out["script"] = self.script.to_dict(depth=depth - 1, **kwargs)
         return out
 
-    def get_root(self):
+    def get_root(self) -> "Figure":
         """Returns the root of the elements tree."""
         return self
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> str:
         """Renders the HTML representation of the element."""
         for name, child in self._children.items():
             child.render(**kwargs)
         return self._template.render(this=self, kwargs=kwargs)
 
-    def _repr_html_(self, **kwargs):
+    def _repr_html_(self, **kwargs) -> str:
         """Displays the Figure in a Jupyter notebook."""
         html = escape(self.render(**kwargs))
         if self.height is None:
@@ -387,7 +428,7 @@ class Figure(Element):
             ).format(html=html, width=self.width, height=self.height)
         return iframe
 
-    def add_subplot(self, x, y, n, margin=0.05):
+    def add_subplot(self, x: int, y: int, n: int, margin: float = 0.05) -> "Div":
         """Creates a div child subplot in a matplotlib.figure.add_subplot style.
 
         Parameters
@@ -398,8 +439,11 @@ class Figure(Element):
             The number of columns in the grid.
         n : int
             The cell number in the grid, counted from 1 to x*y.
+        margin : float, default 0.05
+            Factor to add to the left, top, width and height parameters.
 
-        Example:
+        Example
+        -------
         >>> fig.add_subplot(3, 2, 5)
         # Create a div in the 5th cell of a 3rows x 2columns
         grid(bottom-left corner).
@@ -447,9 +491,15 @@ class Html(Element):
         '<div id="{{this.get_name()}}" '
         'style="width: {{this.width[0]}}{{this.width[1]}}; height: {{this.height[0]}}{{this.height[1]}};">'  # noqa
         "{% if this.script %}{{this.data}}{% else %}{{this.data|e}}{% endif %}</div>",
-    )  # noqa
+    )
 
-    def __init__(self, data, script=False, width="100%", height="100%"):
+    def __init__(
+        self,
+        data: str,
+        script: bool = False,
+        width: TypeParseSize = "100%",
+        height: TypeParseSize = "100%",
+    ):
         super().__init__()
         self._name = "Html"
         self.script = script
@@ -494,18 +544,18 @@ class Div(Figure):
 
     def __init__(
         self,
-        width="100%",
-        height="100%",
-        left="0%",
-        top="0%",
-        position="relative",
+        width: TypeParseSize = "100%",
+        height: TypeParseSize = "100%",
+        left: TypeParseSize = "0%",
+        top: TypeParseSize = "0%",
+        position: str = "relative",
     ):
         super(Figure, self).__init__()
         self._name = "Div"
 
         # Size Parameters.
-        self.width = _parse_size(width)
-        self.height = _parse_size(height)
+        self.width = _parse_size(width)  # type: ignore
+        self.height = _parse_size(height)  # type: ignore
         self.left = _parse_size(left)
         self.top = _parse_size(top)
         self.position = position
@@ -522,7 +572,7 @@ class Div(Figure):
         self.html._parent = self
         self.script._parent = self
 
-    def get_root(self):
+    def get_root(self) -> "Div":
         """Returns the root of the elements tree."""
         return self
 
@@ -554,14 +604,14 @@ class Div(Figure):
         if script is not None:
             figure.script.add_child(Element(script(self, kwargs)), name=self.get_name())
 
-    def _repr_html_(self, **kwargs):
+    def _repr_html_(self, **kwargs) -> str:
         """Displays the Div in a Jupyter notebook."""
         if self._parent is None:
             self.add_to(Figure())
-            out = self._parent._repr_html_(**kwargs)
+            out = self._parent._repr_html_(**kwargs)  # type: ignore
             self._parent = None
         else:
-            out = self._parent._repr_html_(**kwargs)
+            out = self._parent._repr_html_(**kwargs)  # type: ignore
         return out
 
 
@@ -588,7 +638,14 @@ class IFrame(Element):
         width="600px", height="300px".
     """
 
-    def __init__(self, html=None, width="100%", height=None, ratio="60%", figsize=None):
+    def __init__(
+        self,
+        html: Optional[Union[str, Element]] = None,
+        width: str = "100%",
+        height: Optional[str] = None,
+        ratio: str = "60%",
+        figsize: Optional[Tuple[int, int]] = None,
+    ):
         super().__init__()
         self._name = "IFrame"
 
@@ -599,19 +656,17 @@ class IFrame(Element):
             self.width = str(60 * figsize[0]) + "px"
             self.height = str(60 * figsize[1]) + "px"
 
-        if isinstance(html, str) or isinstance(html, bytes):
+        if isinstance(html, str):
             self.add_child(Element(html))
         elif html is not None:
             self.add_child(html)
 
-    def render(self, **kwargs):
+    def render(self, **kwargs) -> str:
         """Renders the HTML representation of the element."""
         html = super().render(**kwargs)
         html = "data:text/html;charset=utf-8;base64," + base64.b64encode(
             html.encode("utf8"),
-        ).decode(
-            "utf8",
-        )  # noqa
+        ).decode("utf8")
 
         if self.height is None:
             iframe = (
