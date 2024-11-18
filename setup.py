@@ -30,6 +30,7 @@ pkg_data = {
         "templates/*.html",
         "templates/*.js",
         "templates/*.txt",
+        "py.typed",
     ],
 }
 pkgs = ["branca"]
