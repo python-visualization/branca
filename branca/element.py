@@ -11,6 +11,7 @@ import json
 import warnings
 from binascii import hexlify
 from collections import OrderedDict
+from copy import copy
 from html import escape
 from os import urandom
 from pathlib import Path
@@ -69,6 +70,9 @@ class Element:
         elif template_name is not None:
             self._template = ENV.get_template(template_name)
 
+    
+    
+    
     def __getstate__(self) -> dict:
         """Modify object state when pickling the object.
 
@@ -87,6 +91,12 @@ class Element:
             state["_template"] = ENV.get_template(state["_template_name"])
 
         self.__dict__.update(state)
+
+    def clone():
+        """creates a new copy of an element, but with a unique identifier"""
+        clone = copy(self)
+        clone._id = hexlify(urandom(16)).decode()
+        return clone
 
     def get_name(self) -> str:
         """Returns a string representation of the object.
@@ -143,6 +153,23 @@ class Element:
         index: Optional[int] = None,
     ) -> "Element":
         """Add a child."""
+
+        # replace the proposed child with a clone of the proposed child because
+        # add_child 1) overwrites any existing value in the child._parent field
+        # and 2) does not do anything to remove the child from the list of children of the prior parent
+        # leading to inconsistency and to problems like the fact that adding the same icon to a map twice fails, as 
+        # documented in https://github.com/python-visualization/folium/issues/1885
+        # Creating a clone leads to internally consistent behavior if the
+        # child already has a parent, although existing code of the form:
+        # my_map.add_child(myElement)
+        # my_other_map.add_child(myElement)
+        # myElement.change
+        # will now have surprising new behavior
+
+        if child._parent is not None:
+            child = child.clone()
+
+
         if name is None:
             name = child.get_name()
         if index is None:
@@ -152,6 +179,7 @@ class Element:
             items.insert(int(index), (name, child))
             self._children = OrderedDict(items)
         child._parent = self
+        assert child._parent is not None
         return self
 
     def add_to(
