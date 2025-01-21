@@ -164,7 +164,9 @@ class Element:
         # will now have surprising new behavior
 
         if child._parent is not None:
-            print("Note:  the branca add_child function cloned an element rather than overwrite its existing parent element.  This is new behavior as of early 2025.  If you got this after issuing a command like my_map.add_child(myElement) and plan to issue a subsequent command like myElement.change(), that subsequent command will not affect the clone.  Try either issuing the myElement.change() command first or creating a fresh version of myElement with no parent.")
+            print(
+                "Note:  the branca add_child function cloned an element rather than overwrite its existing parent element.  This is new behavior as of early 2025.  If you got this after issuing a command like my_map.add_child(myElement) and plan to issue a subsequent command like myElement.change(), that subsequent command will not affect the clone.  Try either issuing the myElement.change() command first or creating a fresh version of myElement with no parent.",
+            )
             child = child.clone()
 
         if name is None:
