@@ -70,9 +70,6 @@ class Element:
         elif template_name is not None:
             self._template = ENV.get_template(template_name)
 
-    
-    
-    
     def __getstate__(self) -> dict:
         """Modify object state when pickling the object.
 
@@ -157,7 +154,7 @@ class Element:
         # replace the proposed child with a clone of the proposed child because
         # add_child 1) overwrites any existing value in the child._parent field
         # and 2) does not do anything to remove the child from the list of children of the prior parent
-        # leading to inconsistency and to problems like the fact that adding the same icon to a map twice fails, as 
+        # leading to inconsistency and to problems like the fact that adding the same icon to a map twice fails, as
         # documented in https://github.com/python-visualization/folium/issues/1885
         # Creating a clone leads to internally consistent behavior if the
         # child already has a parent, although existing code of the form:
@@ -168,7 +165,6 @@ class Element:
 
         if child._parent is not None:
             child = child.clone()
-
 
         if name is None:
             name = child.get_name()
