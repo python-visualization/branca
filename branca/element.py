@@ -92,7 +92,7 @@ class Element:
 
         self.__dict__.update(state)
 
-    def clone():
+    def clone(self):
         """creates a new copy of an element, but with a unique identifier"""
         clone = copy(self)
         clone._id = hexlify(urandom(16)).decode()
@@ -163,10 +163,11 @@ class Element:
         # child already has a parent, although existing code of the form:
         # my_map.add_child(myElement)
         # my_other_map.add_child(myElement)
-        # myElement.change
+        # myElement.change()
         # will now have surprising new behavior
 
         if child._parent is not None:
+            print("Note:  the branca add_child function cloned an element rather than overwrite its existing parent element.  This is new behavior as of early 2025.  If you got this after issuing a command like my_map.add_child(myElement) and plan to issue a subsequent command like myElement.change(), that subsequent command will not affect the clone.  Try either issuing the myElement.change() command first or creating a fresh version of myElement with no parent.")
             child = child.clone()
 
 
