@@ -90,9 +90,11 @@ class Element:
         self.__dict__.update(state)
 
     def clone(self):
-        """creates a new copy of an element, but with a unique identifier"""
+        """creates a new copy of an element, but with a unique identifier 
+        and without the prior version's relationship to a parent object """
         clone = copy(self)
         clone._id = hexlify(urandom(16)).decode()
+        clone._parent = None
         return clone
 
     def get_name(self) -> str:
@@ -149,24 +151,26 @@ class Element:
         name: Optional[str] = None,
         index: Optional[int] = None,
     ) -> "Element":
-        """Add a child."""
+        """Add a child and modify the child with a pointer to its parent."""
 
-        # replace the proposed child with a clone of the proposed child because
-        # add_child 1) overwrites any existing value in the child._parent field
-        # and 2) does not do anything to remove the child from the list of children of the prior parent
-        # leading to inconsistency and to problems like the fact that adding the same icon to a map twice fails, as
-        # documented in https://github.com/python-visualization/folium/issues/1885
-        # Creating a clone leads to internally consistent behavior if the
-        # child already has a parent, although existing code of the form:
-        # my_map.add_child(myElement)
-        # my_other_map.add_child(myElement)
-        # myElement.change()
-        # will now have surprising new behavior
 
         if child._parent is not None:
-            print("Note:  the branca add_child function cloned an element rather than overwrite its existing parent element.  This is new behavior as of early 2025.  If you got this after issuing a command like my_map.add_child(myElement) and plan to issue a subsequent command like myElement.change(), that subsequent command will not affect the clone.  Try either issuing the myElement.change() command first or creating a fresh version of myElement with no parent.")
-            child = child.clone()
-
+            warnings.warn(
+                    f"""The code added\n {child.get_name()} as a child of 
+                    {self.get_name()} which 
+                    overwrote an existing pointer to a parent object, {child._parent.get_name()},
+                    but leaves the parent object pointing to the child.  
+                    Branca is designed so each object will have no more than
+                    one parent.  Consider replacing the object with object.clone() 
+                    so that each object has only one parent.  Otherwise, actions may
+                    fail.  For example, adding an icon object to a map
+                    only adds one valid icon to the map regardless of how many times 
+                    the code adds that icon object.  This behavior is documented at:
+                    https://github.com/python-visualization/folium/issues/1885
+                    """,
+                    category=UserWarning,
+                    stacklevel=2
+                )
         if name is None:
             name = child.get_name()
         if index is None:
@@ -176,7 +180,6 @@ class Element:
             items.insert(int(index), (name, child))
             self._children = OrderedDict(items)
         child._parent = self
-        assert child._parent is not None
         return self
 
     def add_to(
