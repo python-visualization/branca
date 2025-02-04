@@ -90,8 +90,8 @@ class Element:
         self.__dict__.update(state)
 
     def clone(self):
-        """creates a new copy of an element, but with a unique identifier 
-        and without the prior version's relationship to a parent object """
+        """creates a new copy of an element, but with a unique identifier
+        and without the prior version's relationship to a parent object"""
         clone = copy(self)
         clone._id = hexlify(urandom(16)).decode()
         clone._parent = None
@@ -153,24 +153,23 @@ class Element:
     ) -> "Element":
         """Add a child and modify the child with a pointer to its parent."""
 
-
         if child._parent is not None:
             warnings.warn(
-                    f"""The code added\n {child.get_name()} as a child of 
-                    {self.get_name()} which 
+                f"""The code added\n {child.get_name()} as a child of
+                    {self.get_name()} which
                     overwrote an existing pointer to a parent object, {child._parent.get_name()},
-                    but leaves the parent object pointing to the child.  
+                    but leaves the parent object pointing to the child.
                     Branca is designed so each object will have no more than
-                    one parent.  Consider replacing the object with object.clone() 
+                    one parent.  Consider replacing the object with object.clone()
                     so that each object has only one parent.  Otherwise, actions may
                     fail.  For example, adding an icon object to a map
-                    only adds one valid icon to the map regardless of how many times 
+                    only adds one valid icon to the map regardless of how many times
                     the code adds that icon object.  This behavior is documented at:
                     https://github.com/python-visualization/folium/issues/1885
                     """,
-                    category=UserWarning,
-                    stacklevel=2
-                )
+                category=UserWarning,
+                stacklevel=2,
+            )
         if name is None:
             name = child.get_name()
         if index is None:
