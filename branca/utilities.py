@@ -66,7 +66,9 @@ def linear_gradient(hexList: List[str], nColors: int) -> List[str]:
     nColors where the colors are linearly interpolated between the
     (r, g, b) tuples that are given.
     """
-    input_color_bytes = [[int(_hex[i:i + 2], 16) for i in (1, 3, 5)] for _hex in hexList]
+    input_color_bytes = [
+        [int(_hex[i : i + 2], 16) for i in (1, 3, 5)] for _hex in hexList
+    ]
     result: List[str] = []
     step_size = (len(hexList) - 1) / (nColors - 1)
     step = 0

@@ -176,24 +176,54 @@ def test_write_png_rgb():
     "hex_list, n_colors, expected_output",
     [
         (["#000000", "#FFFFFF"], 2, ["#000000", "#ffffff"]),
-        (["#000000", "#FFFFFF"], 4, ['#000000', '#545454', '#a9a9a9', '#ffffff']),
+        (["#000000", "#FFFFFF"], 4, ["#000000", "#545454", "#a9a9a9", "#ffffff"]),
         (["#FF0000", "#00FF00", "#0000FF"], 3, ["#ff0000", "#00ff00", "#0000ff"]),
-        (["#FF0000", "#00FF00", "#0000FF"], 4, ['#ff0000', '#55a900', '#00aa54', '#0000ff']),
-        (["#000000", "#0000FF"], 5, ['#000000', '#00003f', '#00007f', '#0000bf', '#0000ff']),
-        (["#FFFFFF", "#000000"], 5, ['#ffffff', '#bfbfbf', '#7f7f7f', '#3f3f3f', '#000000']),
-        (["#FF0000", "#00FF00", "#0000FF"], 5, ['#ff0000', '#7f7f00', '#00ff00', '#007f7f', '#0000ff']),
-        (["#FF0000", "#00FF00", "#0000FF"], 7, ['#ff0000', '#aa5400', '#55a900', '#00ff00', '#00aa54', '#0055a9', '#0000ff']),
-    ]
+        (
+            ["#FF0000", "#00FF00", "#0000FF"],
+            4,
+            ["#ff0000", "#55a900", "#00aa54", "#0000ff"],
+        ),
+        (
+            ["#000000", "#0000FF"],
+            5,
+            ["#000000", "#00003f", "#00007f", "#0000bf", "#0000ff"],
+        ),
+        (
+            ["#FFFFFF", "#000000"],
+            5,
+            ["#ffffff", "#bfbfbf", "#7f7f7f", "#3f3f3f", "#000000"],
+        ),
+        (
+            ["#FF0000", "#00FF00", "#0000FF"],
+            5,
+            ["#ff0000", "#7f7f00", "#00ff00", "#007f7f", "#0000ff"],
+        ),
+        (
+            ["#FF0000", "#00FF00", "#0000FF"],
+            7,
+            [
+                "#ff0000",
+                "#aa5400",
+                "#55a900",
+                "#00ff00",
+                "#00aa54",
+                "#0055a9",
+                "#0000ff",
+            ],
+        ),
+    ],
 )
-def test_linear_gradient(hex_list: List[str], n_colors: int, expected_output: List[str]):
+def test_linear_gradient(
+    hex_list: List[str], n_colors: int, expected_output: List[str],
+):
     result = ut.linear_gradient(hex_list, n_colors)
     assert len(result) == len(expected_output), "Output length mismatch"
 
     # because we rewrote this function, we allow a difference of 1 between the old and the new version
     tolerance = 1
     for actual, expected in zip(result, expected_output):
-        r1, g1, b1 = (int(actual[i:i+2], 16) for i in (1, 3, 5))
-        r2, g2, b2 = (int(expected[i:i+2], 16) for i in (1, 3, 5))
+        r1, g1, b1 = (int(actual[i : i + 2], 16) for i in (1, 3, 5))
+        r2, g2, b2 = (int(expected[i : i + 2], 16) for i in (1, 3, 5))
         if not all(abs(a - b) <= tolerance for a, b in zip((r1, g1, b1), (r2, g2, b2))):
             # to get a nice output, assert the full array when we spot a failure
             assert result == expected_output
