@@ -1,12 +1,12 @@
 import pytest
 
 from branca.colormap import (
-    _parse_color_as_numerical_sequence,
-    _color_normalized_float_to_byte_int,
     _color_byte_to_normalized_float,
-    _parse_hex,
+    _color_normalized_float_to_byte_int,
     _is_hex,
     _parse_color,
+    _parse_color_as_numerical_sequence,
+    _parse_hex,
 )
 
 
