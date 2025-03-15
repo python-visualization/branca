@@ -66,27 +66,22 @@ def linear_gradient(hexList: List[str], nColors: int) -> List[str]:
     nColors where the colors are linearly interpolated between the
     (r, g, b) tuples that are given.
     """
-    allColors: List[str] = []
-    # Separate (R, G, B) pairs.
-    for start, end in zip(hexList[:-1], hexList[1:]):
-        # Linearly interpolate between pair of hex ###### values and
-        # add to list.
-        start = [int(start[i:i+2], 16) for i in (1, 3, 5)]
-        end = [int(end[i:i+2], 16) for i in (1, 3, 5)]
-
-        n_interpolate = 765
-        for i in range(n_interpolate):
-            frac = i / (n_interpolate - 1)
-            byte_ints = [int(x + (y - x) * frac) for x, y in zip(start, end)]
-            hexs = [hex(x)[2:].zfill(2) for x in byte_ints]
-            allColors.append("#" + "".join(hexs))
-
-    # Pick only nColors colors from the total list.
+    input_color_bytes = [[int(_hex[i:i + 2], 16) for i in (1, 3, 5)] for _hex in hexList]
     result: List[str] = []
-    for counter in range(nColors):
-        fraction = float(counter) / (nColors - 1)
-        index = int(fraction * (len(allColors) - 1))
-        result.append(allColors[index])
+    step_size = (len(hexList) - 1) / (nColors - 1)
+    step = 0
+    idx = 0
+    while len(result) < nColors - 1:
+        start, end = input_color_bytes[idx], input_color_bytes[idx + 1]
+        new_color_bytes = [int(x + step * (y - x)) for x, y in zip(start, end)]
+        new_color_hexs = [hex(x)[2:].zfill(2) for x in new_color_bytes]
+        result.append("#" + "".join(new_color_hexs))
+        step += step_size
+        if step > 1:
+            step -= 1
+            idx += 1
+
+    result.append(hexList[-1].lower())
     return result
 
 
