@@ -219,13 +219,4 @@ def test_linear_gradient(
     expected_output: List[str],
 ):
     result = ut.linear_gradient(hex_list, n_colors)
-    assert len(result) == len(expected_output), "Output length mismatch"
-
-    # because we rewrote this function, we allow a difference of 1 between the old and the new version
-    tolerance = 1
-    for actual, expected in zip(result, expected_output):
-        r1, g1, b1 = (int(actual[i : i + 2], 16) for i in (1, 3, 5))
-        r2, g2, b2 = (int(expected[i : i + 2], 16) for i in (1, 3, 5))
-        if not all(abs(a - b) <= tolerance for a, b in zip((r1, g1, b1), (r2, g2, b2))):
-            # to get a nice output, assert the full array when we spot a failure
-            assert result == expected_output
+    assert result == expected_output

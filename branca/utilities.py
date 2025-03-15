@@ -69,12 +69,17 @@ def linear_gradient(hexList: List[str], nColors: int) -> List[str]:
     input_color_bytes = [
         [int(_hex[i : i + 2], 16) for i in (1, 3, 5)] for _hex in hexList
     ]
-    result = []
-    for output_idx in range(nColors - 1):
-        output_fraction = (len(hexList) - 1) * output_idx / (nColors - 1)
-        idx = int(output_fraction)
-        fraction = output_fraction - idx
-        start, end = input_color_bytes[idx], input_color_bytes[idx + 1]
+    resolution = 765
+    n_indexes = resolution * (len(hexList) - 1)
+    result: List[str] = []
+    for counter in range(nColors - 1):
+        fraction_overall = float(counter) / (nColors - 1)
+        index_overall = int(fraction_overall * (n_indexes - 1))
+        index_color_bin = index_overall % 765
+        idx_input = index_overall // 765
+        fraction = index_color_bin / (resolution - 1)
+        start = input_color_bytes[idx_input]
+        end = input_color_bytes[idx_input + 1]
         new_color_bytes = [int(x + fraction * (y - x)) for x, y in zip(start, end)]
         new_color_hexs = [hex(x)[2:].zfill(2) for x in new_color_bytes]
         result.append("#" + "".join(new_color_hexs))
