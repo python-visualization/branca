@@ -1,8 +1,8 @@
 import pytest
 
 from branca.colormap import (
-    _color_int_to_float,
     _color_float_to_int,
+    _color_int_to_float,
     _is_hex,
     _parse_color,
     _parse_color_as_numerical_sequence,
