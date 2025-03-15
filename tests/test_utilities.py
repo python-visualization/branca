@@ -214,7 +214,9 @@ def test_write_png_rgb():
     ],
 )
 def test_linear_gradient(
-    hex_list: List[str], n_colors: int, expected_output: List[str],
+    hex_list: List[str],
+    n_colors: int,
+    expected_output: List[str],
 ):
     result = ut.linear_gradient(hex_list, n_colors)
     assert len(result) == len(expected_output), "Output length mismatch"
