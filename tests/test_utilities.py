@@ -43,8 +43,7 @@ def test_color_brewer_reverse():
     assert scheme[::-1] == scheme_r
 
 
-@pytest.mark.parametrize("sname", core_schemes)
-def test_color_brewer_extendability(sname):
+def test_color_brewer_extendability():
     """
     The non-qualitative schemes should be extendable.
 
@@ -56,20 +55,21 @@ def test_color_brewer_extendability(sname):
     Indeed, in color_brewer, the key searched in the scheme database was not found,
     thus, it was passing `None` instead of a real scheme vector to linear_gradient.
     """
-    for n in range(color_brewer_minimum_n, color_brewer_maximum_n + 1):
-        try:
-            scheme = ut.color_brewer(sname, n=n)
-        except Exception as e:
-            if scheme_info[sname] == "Qualitative" and isinstance(e, ValueError):
-                continue
-            raise
+    for sname in core_schemes:
+        for n in range(color_brewer_minimum_n, color_brewer_maximum_n + 1):
+            try:
+                scheme = ut.color_brewer(sname, n=n)
+            except Exception as e:
+                if scheme_info[sname] == "Qualitative" and isinstance(e, ValueError):
+                    continue
+                raise
 
-        assert len(scheme) == n
+            assert len(scheme) == n
 
-        # When we try to extend a scheme,
-        # the reverse is not always the exact reverse vector of the original one.
-        # Thus, we do not test this property!
-        _ = ut.color_brewer(sname + "_r", n=n)
+            # When we try to extend a scheme,
+            # the reverse is not always the exact reverse vector of the original one.
+            # Thus, we do not test this property!
+            _ = ut.color_brewer(sname + "_r", n=n)
 
 
 def test_color_avoid_unexpected_error():
