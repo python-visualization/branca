@@ -1,8 +1,8 @@
 import pytest
 
 from branca.colormap import (
-    _color_byte_to_normalized_float,
-    _color_normalized_float_to_byte_int,
+    _color_int_to_float,
+    _color_float_to_int,
     _is_hex,
     _parse_color,
     _parse_color_as_numerical_sequence,
@@ -110,7 +110,7 @@ def test_parse_hex(input_data, expected):
     ],
 )
 def test_color_byte_to_normalized_float(input_data, expected):
-    assert _color_byte_to_normalized_float(input_data) == expected
+    assert _color_int_to_float(input_data) == expected
 
 
 @pytest.mark.parametrize(
@@ -125,4 +125,4 @@ def test_color_byte_to_normalized_float(input_data, expected):
     ],
 )
 def test_color_normalized_float_to_byte_int(input_data, expected):
-    assert _color_normalized_float_to_byte_int(input_data) == expected
+    assert _color_float_to_int(input_data) == expected
