@@ -9,7 +9,7 @@ Utility module for dealing with colormaps.
 import json
 import math
 import os
-from typing import Dict, List, Optional, Sequence, Tuple, Union, Callable
+from typing import Callable, Dict, List, Optional, Sequence, Tuple, Union
 
 from jinja2 import Template
 
@@ -175,8 +175,9 @@ class ColorMap(MacroElement):
         """Provides the color corresponding to value `x` in the
         form of a tuple (R,G,B,A) with int values between 0 and 255.
         """
-        return tuple(_color_normalized_float_to_byte_int(u)
-                     for u in self.rgba_floats_tuple(x))  # type: ignore
+        return tuple(
+            _color_normalized_float_to_byte_int(u) for u in self.rgba_floats_tuple(x)
+        )  # type: ignore
 
     def rgb_bytes_tuple(self, x: float) -> TypeRGBInts:
         """Provides the color corresponding to value `x` in the
