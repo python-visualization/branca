@@ -9,7 +9,7 @@ Utility module for dealing with colormaps.
 import json
 import math
 import os
-from typing import Dict, List, Optional, Sequence, Tuple, Union
+from typing import Dict, List, Optional, Sequence, Tuple, Union, Callable
 
 from jinja2 import Template
 
@@ -76,7 +76,7 @@ def _parse_color_as_numerical_sequence(x: Union[tuple, list]) -> TypeRGBAFloats:
         raise TypeError("Components in color sequence should all be int or float.")
     if not 3 <= len(x) <= 4:
         raise ValueError(f"Color sequence should have 3 or 4 elements, not {len(x)}.")
-    conversion_function = float
+    conversion_function: Callable = float
     if 1 < max(x) <= 255:
         conversion_function = _color_byte_to_normalized_float
     if min(x) < 0 or max(x) > 255:
