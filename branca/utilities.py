@@ -66,33 +66,20 @@ def linear_gradient(hexList: List[str], nColors: int) -> List[str]:
     nColors where the colors are linearly interpolated between the
     (r, g, b) tuples that are given.
     """
-
-    def _scale(start, finish, length, i):
-        """
-        Return the value correct value of a number that is in between start
-        and finish, for use in a loop of length *length*.
-
-        """
-        base = 16
-
-        fraction = float(i) / (length - 1)
-        raynge = int(finish, base) - int(start, base)
-        thex = hex(int(int(start, base) + fraction * raynge)).split("x")[-1]
-        if len(thex) != 2:
-            thex = "0" + thex
-        return thex
-
     allColors: List[str] = []
     # Separate (R, G, B) pairs.
     for start, end in zip(hexList[:-1], hexList[1:]):
         # Linearly interpolate between pair of hex ###### values and
         # add to list.
-        nInterpolate = 765
-        for index in range(nInterpolate):
-            r = _scale(start[1:3], end[1:3], nInterpolate, index)
-            g = _scale(start[3:5], end[3:5], nInterpolate, index)
-            b = _scale(start[5:7], end[5:7], nInterpolate, index)
-            allColors.append("".join(["#", r, g, b]))
+        start = [int(start[i:i+2], 16) for i in (1, 3, 5)]
+        end = [int(end[i:i+2], 16) for i in (1, 3, 5)]
+
+        n_interpolate = 765
+        for i in range(n_interpolate):
+            frac = i / (n_interpolate - 1)
+            byte_ints = [int(x + (y - x) * frac) for x, y in zip(start, end)]
+            hexs = [hex(x)[2:].zfill(2) for x in byte_ints]
+            allColors.append("#" + "".join(hexs))
 
     # Pick only nColors colors from the total list.
     result: List[str] = []

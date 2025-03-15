@@ -1,6 +1,7 @@
 import json
 import os
 from pathlib import Path
+from typing import List
 
 import pytest
 
@@ -42,7 +43,8 @@ def test_color_brewer_reverse():
     assert scheme[::-1] == scheme_r
 
 
-def test_color_brewer_extendability():
+@pytest.mark.parametrize("sname", core_schemes)
+def test_color_brewer_extendability(sname):
     """
     The non-qualitative schemes should be extendable.
 
@@ -54,21 +56,20 @@ def test_color_brewer_extendability():
     Indeed, in color_brewer, the key searched in the scheme database was not found,
     thus, it was passing `None` instead of a real scheme vector to linear_gradient.
     """
-    for sname in core_schemes:
-        for n in range(color_brewer_minimum_n, color_brewer_maximum_n + 1):
-            try:
-                scheme = ut.color_brewer(sname, n=n)
-            except Exception as e:
-                if scheme_info[sname] == "Qualitative" and isinstance(e, ValueError):
-                    continue
-                raise
+    for n in range(color_brewer_minimum_n, color_brewer_maximum_n + 1):
+        try:
+            scheme = ut.color_brewer(sname, n=n)
+        except Exception as e:
+            if scheme_info[sname] == "Qualitative" and isinstance(e, ValueError):
+                continue
+            raise
 
-            assert len(scheme) == n
+        assert len(scheme) == n
 
-            # When we try to extend a scheme,
-            # the reverse is not always the exact reverse vector of the original one.
-            # Thus, we do not test this property!
-            _ = ut.color_brewer(sname + "_r", n=n)
+        # When we try to extend a scheme,
+        # the reverse is not always the exact reverse vector of the original one.
+        # Thus, we do not test this property!
+        _ = ut.color_brewer(sname + "_r", n=n)
 
 
 def test_color_avoid_unexpected_error():
@@ -169,3 +170,18 @@ def test_write_png_rgb():
     ]
     png = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x04\x00\x00\x00\x02\x08\x06\x00\x00\x00\x7f\xa8}c\x00\x00\x00-IDATx\xda\x01"\x00\xdd\xff\x00\xff\xa7G\xffp\xff+\xff\x9e\x1cH\xff9\x90$\xff\x00\x93\xe9\xb8\xff\x0cz\xe2\xff\xc6\xca\xff\xff\xd4W\xd0\xffYw\x15\x95\xcf\xb9@D\x00\x00\x00\x00IEND\xaeB`\x82'  # noqa E501
     assert ut.write_png(image_rgb) == png
+
+
+@pytest.mark.parametrize(
+    "hex_list, n_colors, expected_output",
+    [
+        (["#000000", "#FFFFFF"], 2, ["#000000", "#ffffff"]),
+        (["#FF0000", "#00FF00", "#0000FF"], 3, ["#ff0000", "#00ff00", "#0000ff"]),
+        (["#000000", "#0000FF"], 5, ['#000000', '#00003f', '#00007f', '#0000bf', '#0000ff']),
+        (["#FFFFFF", "#000000"], 5, ['#ffffff', '#bfbfbf', '#7f7f7f', '#3f3f3f', '#000000']),
+        (["#FF0000", "#00FF00", "#0000FF"], 7, ['#ff0000', '#aa5400', '#55a900', '#00ff00', '#00aa54', '#0055a9', '#0000ff']),
+    ]
+)
+def test_linear_gradient(hex_list: List[str], n_colors: int, expected_output: List[str]):
+    result = ut.linear_gradient(hex_list, n_colors)
+    assert result == expected_output
