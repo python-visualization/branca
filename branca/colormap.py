@@ -38,19 +38,19 @@ def _is_hex(x: str) -> bool:
 
 def _parse_hex(color_code: str) -> TypeRGBAFloats:
     return (
-        _color_int_to_float(int(color_code[1:3], 16)),
-        _color_int_to_float(int(color_code[3:5], 16)),
-        _color_int_to_float(int(color_code[5:7], 16)),
+        _color_byte_to_normalized_float(int(color_code[1:3], 16)),
+        _color_byte_to_normalized_float(int(color_code[3:5], 16)),
+        _color_byte_to_normalized_float(int(color_code[5:7], 16)),
         1.0,
     )
 
 
-def _color_int_to_float(x: int) -> float:
+def _color_byte_to_normalized_float(x: Union[int, float]) -> float:
     """Convert an integer between 0 and 255 to a float between 0. and 1.0"""
     return x / 255.0
 
 
-def _color_float_to_int(x: float) -> int:
+def _color_normalized_float_to_byte_int(x: float) -> int:
     """Convert a float between 0. and 1.0 to an integer between 0 and 255"""
     return int(x * 255.9999)
 
@@ -72,19 +72,19 @@ def _parse_color(x: Union[tuple, list, str]) -> TypeRGBAFloats:
 
 def _parse_color_as_numerical_sequence(x: Union[tuple, list]) -> TypeRGBAFloats:
     """Convert a color as a sequence of numbers to an RGBA tuple between 0 and 1."""
+    if not all(isinstance(value, (int, float)) for value in x):
+        raise TypeError("Components in color sequence should all be int or float.")
     if not 3 <= len(x) <= 4:
         raise ValueError(f"Color sequence should have 3 or 4 elements, not {len(x)}.")
-    color: List[float] = []
-    for value in x:
-        if isinstance(value, int):
-            color.append(_color_int_to_float(value))
-        elif isinstance(value, float):
-            color.append(value)
-        else:
-            raise TypeError(f"Unexpected type in color sequence: {type(value)}.")
+    conversion_function = float
+    if 1 < max(x) <= 255:
+        conversion_function = _color_byte_to_normalized_float
+    if min(x) < 0 or max(x) > 255:
+        raise ValueError("Color components should be between 0.0 and 1.0 or 0 and 255.")
+    color: List[float] = [conversion_function(value) for value in x]
     if len(color) == 3:
         color.append(1.0)  # add alpha channel
-    return tuple(color)  # type: ignore
+    return color[0], color[1], color[2], color[3]
 
 
 def _base(x: float) -> float:
@@ -175,7 +175,7 @@ class ColorMap(MacroElement):
         """Provides the color corresponding to value `x` in the
         form of a tuple (R,G,B,A) with int values between 0 and 255.
         """
-        return tuple(_color_float_to_int(u) for u in self.rgba_floats_tuple(x))  # type: ignore
+        return tuple(_color_normalized_float_to_byte_int(u) for u in self.rgba_floats_tuple(x))  # type: ignore
 
     def rgb_bytes_tuple(self, x: float) -> TypeRGBInts:
         """Provides the color corresponding to value `x` in the
