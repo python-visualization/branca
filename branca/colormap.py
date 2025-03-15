@@ -56,8 +56,9 @@ def _color_float_to_int(x: float) -> int:
 
 
 def _parse_color(x: Union[tuple, list, str]) -> TypeRGBAFloats:
+    """Convert an unknown color value to an RGBA tuple between 0 and 1."""
     if isinstance(x, (tuple, list)):
-        return tuple(tuple(x) + (1.0,))[:4]  # type: ignore
+        return _parse_color_as_numerical_sequence(x)
     elif isinstance(x, str) and _is_hex(x):
         return _parse_hex(x)
     elif isinstance(x, str):
@@ -67,6 +68,23 @@ def _parse_color(x: Union[tuple, list, str]) -> TypeRGBAFloats:
         return _parse_hex(cname)
     else:
         raise ValueError(f"Unrecognized color code {x!r}")
+
+
+def _parse_color_as_numerical_sequence(x: Union[tuple, list]) -> TypeRGBAFloats:
+    """Convert a color as a sequence of numbers to an RGBA tuple between 0 and 1."""
+    if not 3 <= len(x) <= 4:
+        raise ValueError(f"Color sequence should have 3 or 4 elements, not {len(x)}.")
+    color: List[float] = []
+    for value in x:
+        if isinstance(value, int):
+            color.append(_color_int_to_float(value))
+        elif isinstance(value, float):
+            color.append(value)
+        else:
+            raise TypeError(f"Unexpected type in color sequence: {type(value)}.")
+    if len(color) == 3:
+        color.append(1.0)  # add alpha channel
+    return tuple(color)  # type: ignore
 
 
 def _base(x: float) -> float:
