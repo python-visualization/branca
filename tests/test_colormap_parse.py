@@ -57,9 +57,15 @@ def test_parse_color_as_numerical_sequence(input_data, expected):
 @pytest.mark.parametrize(
     "input_data, raises",
     [
+        # larger than 255
         ((256, 0, 0), ValueError),
+        # smaller than 0
         ((0, 0, -1), ValueError),
+        # sequence too long
         ((0, 1, 2, 3, 4), ValueError),
+        # sequence too short
+        ((0, 1), ValueError),
+        # invalid type in sequence
         ((0.5, 0.5, 0.5, "string"), TypeError),
     ],
 )
