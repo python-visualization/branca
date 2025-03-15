@@ -46,12 +46,12 @@ def _parse_hex(color_code: str) -> TypeRGBAFloats:
 
 
 def _color_int_to_float(x: Union[int, float]) -> float:
-    """Convert an integer between 0 and 255 to a float between 0. and 1.0"""
+    """Convert a byte between 0 and 255 to a normalized float between 0. and 1.0"""
     return x / 255.0
 
 
 def _color_float_to_int(x: float) -> int:
-    """Convert a float between 0. and 1.0 to an integer between 0 and 255"""
+    """Convert a float between 0. and 1.0 to a byte integer between 0 and 255"""
     return int(x * 255.9999)
 
 
