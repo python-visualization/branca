@@ -66,40 +66,20 @@ def linear_gradient(hexList: List[str], nColors: int) -> List[str]:
     nColors where the colors are linearly interpolated between the
     (r, g, b) tuples that are given.
     """
+    input_color_bytes = [
+        [int(_hex[i : i + 2], 16) for i in (1, 3, 5)] for _hex in hexList
+    ]
+    result = []
+    for output_idx in range(nColors - 1):
+        output_fraction = (len(hexList) - 1) * output_idx / (nColors - 1)
+        idx = int(output_fraction)
+        fraction = output_fraction - idx
+        start, end = input_color_bytes[idx], input_color_bytes[idx + 1]
+        new_color_bytes = [int(x + fraction * (y - x)) for x, y in zip(start, end)]
+        new_color_hexs = [hex(x)[2:].zfill(2) for x in new_color_bytes]
+        result.append("#" + "".join(new_color_hexs))
 
-    def _scale(start, finish, length, i):
-        """
-        Return the value correct value of a number that is in between start
-        and finish, for use in a loop of length *length*.
-
-        """
-        base = 16
-
-        fraction = float(i) / (length - 1)
-        raynge = int(finish, base) - int(start, base)
-        thex = hex(int(int(start, base) + fraction * raynge)).split("x")[-1]
-        if len(thex) != 2:
-            thex = "0" + thex
-        return thex
-
-    allColors: List[str] = []
-    # Separate (R, G, B) pairs.
-    for start, end in zip(hexList[:-1], hexList[1:]):
-        # Linearly interpolate between pair of hex ###### values and
-        # add to list.
-        nInterpolate = 765
-        for index in range(nInterpolate):
-            r = _scale(start[1:3], end[1:3], nInterpolate, index)
-            g = _scale(start[3:5], end[3:5], nInterpolate, index)
-            b = _scale(start[5:7], end[5:7], nInterpolate, index)
-            allColors.append("".join(["#", r, g, b]))
-
-    # Pick only nColors colors from the total list.
-    result: List[str] = []
-    for counter in range(nColors):
-        fraction = float(counter) / (nColors - 1)
-        index = int(fraction * (len(allColors) - 1))
-        result.append(allColors[index])
+    result.append(hexList[-1].lower())
     return result
 
 
