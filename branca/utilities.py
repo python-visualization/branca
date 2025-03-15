@@ -71,7 +71,7 @@ def linear_gradient(hexList: List[str], nColors: int) -> List[str]:
     ]
     result: List[str] = []
     step_size = (len(hexList) - 1) / (nColors - 1)
-    step = 0
+    step = 0.0
     idx = 0
     while len(result) < nColors - 1:
         start, end = input_color_bytes[idx], input_color_bytes[idx + 1]
