@@ -39,15 +39,26 @@ def test_parse_color(input_data, expected):
 @pytest.mark.parametrize(
     "input_data, expected",
     [
+        # these are byte values as ints and should be normalized and converted
         ((0, 0, 0), (0.0, 0.0, 0.0, 1.0)),
         ((255, 255, 255), (1.0, 1.0, 1.0, 1.0)),
         ((255, 0, 0), (1.0, 0.0, 0.0, 1.0)),
+        # a special case: ints that are 0 or 1 should be considered bytes
+        ((0, 0, 1), (0.0, 0.0, 1 / 255, 1.0)),
+        ((0, 0, 0, 1), (0.0, 0.0, 0.0, 1 / 255)),
+        # these already are normalized floats
         ((0.0, 0.0, 0.0), (0.0, 0.0, 0.0, 1.0)),
+        ((0.0, 0.0, 1.0), (0.0, 0.0, 1.0, 1.0)),
         ((0.5, 0.5, 0.5), (0.5, 0.5, 0.5, 1.0)),
         ((0.1, 0.2, 0.3, 0.4), (0.1, 0.2, 0.3, 0.4)),
         ((0.0, 1.0, 0.0, 0.5), (0.0, 1.0, 0.0, 0.5)),
+        # these are byte values as floats and should be normalized
         ((0, 0, 0, 255.0), (0.0, 0.0, 0.0, 1.0)),
         ((0, 0, 255.0, 0.0), (0.0, 0.0, 1.0, 0.0)),
+        # if floats and ints are mixed, assume they are intended as floats
+        ((0, 0, 1.0), (0.0, 0.0, 1.0, 1.0)),
+        # unless some of them are between 1 and 255
+        ((0, 0, 1.0, 128), (0.0, 0.0, 1 / 255, 128 / 255)),
     ],
 )
 def test_parse_color_as_numerical_sequence(input_data, expected):

@@ -56,7 +56,7 @@ def _color_float_to_int(x: float) -> int:
 
 
 def _parse_color(x: Union[tuple, list, str]) -> TypeRGBAFloats:
-    """Convert an unknown color value to an RGBA tuple between 0 and 1."""
+    """Convert an unknown color value to an RGBA tuple of floats between 0 and 1."""
     if isinstance(x, (tuple, list)):
         return _parse_color_as_numerical_sequence(x)
     elif isinstance(x, str) and _is_hex(x):
@@ -71,19 +71,28 @@ def _parse_color(x: Union[tuple, list, str]) -> TypeRGBAFloats:
 
 
 def _parse_color_as_numerical_sequence(x: Union[tuple, list]) -> TypeRGBAFloats:
-    """Convert a color as a sequence of numbers to an RGBA tuple between 0 and 1."""
+    """Convert a color as a sequence of numbers to an RGBA tuple of floats between 0 and 1."""
     if not all(isinstance(value, (int, float)) for value in x):
         raise TypeError("Components in color sequence should all be int or float.")
     if not 3 <= len(x) <= 4:
-        raise ValueError(f"Color sequence should have 3 or 4 elements, not {len(x)}.")
-    conversion_function: Callable = float
-    if 1 < max(x) <= 255:
-        conversion_function = _color_int_to_float
+        raise ValueError(f"Color sequence should have 3 or 4 components, not {len(x)}.")
     if min(x) < 0 or max(x) > 255:
         raise ValueError("Color components should be between 0.0 and 1.0 or 0 and 255.")
+
+    if all(isinstance(value, int) for value in x):
+        # assume integers are a sequence of bytes that have to be normalized
+        conversion_function = _color_int_to_float
+    elif 1 < max(x) <= 255:
+        # values between 1 and 255 are bytes no matter the type and should be normalized
+        conversion_function = _color_int_to_float
+    else:
+        # else assume it's already normalized
+        conversion_function = float
+
     color: List[float] = [conversion_function(value) for value in x]
     if len(color) == 3:
         color.append(1.0)  # add alpha channel
+
     return color[0], color[1], color[2], color[3]
 
 
