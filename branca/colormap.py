@@ -81,7 +81,7 @@ def _parse_color_as_numerical_sequence(x: Union[tuple, list]) -> TypeRGBAFloats:
 
     if all(isinstance(value, int) for value in x):
         # assume integers are a sequence of bytes that have to be normalized
-        conversion_function = _color_int_to_float
+        conversion_function: Callable = _color_int_to_float
     elif 1 < max(x) <= 255:
         # values between 1 and 255 are bytes no matter the type and should be normalized
         conversion_function = _color_int_to_float
