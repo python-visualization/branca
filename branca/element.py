@@ -58,7 +58,7 @@ class Element:
         template_name: Optional[str] = None,
     ):
         self._name: str = "Element"
-        self._id: str = hexlify(urandom(16)).decode()
+        self._id: str = self._generate_id()
         self._children: OrderedDict[str, Element] = OrderedDict()
         self._parent: Optional[Element] = None
         self._template_str: Optional[str] = template
@@ -68,6 +68,10 @@ class Element:
             self._template = Template(template)
         elif template_name is not None:
             self._template = ENV.get_template(template_name)
+
+    @classmethod
+    def _generate_id(cls) -> str:
+        return hexlify(urandom(16)).decode()
 
     def __getstate__(self) -> dict:
         """Modify object state when pickling the object.
