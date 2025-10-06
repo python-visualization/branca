@@ -21,20 +21,20 @@ repos:
       args: [--max-line-length=105, "--ignore=E203,W503"]
 
 - repo: https://github.com/pycqa/isort
-  rev: 6.0.1
+  rev: 6.1.0
   hooks:
     - id: isort
       additional_dependencies: [toml]
       args: ["--profile", "black", "--filter-files"]
 
-- repo: https://github.com/psf/black
+- repo: https://github.com/psf/black-pre-commit-mirror
   rev: 25.9.0
   hooks:
   - id: black
     language_version: python3
 
 - repo: https://github.com/keewis/blackdoc
-  rev: v0.4.2
+  rev: v0.4.3
   hooks:
     - id: blackdoc
 
