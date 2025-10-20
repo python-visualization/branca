@@ -21,7 +21,7 @@ repos:
       args: [--max-line-length=105, "--ignore=E203,W503"]
 
 - repo: https://github.com/pycqa/isort
-  rev: 6.1.0
+  rev: 7.0.0
   hooks:
     - id: isort
       additional_dependencies: [toml]
@@ -34,7 +34,7 @@ repos:
     language_version: python3
 
 - repo: https://github.com/keewis/blackdoc
-  rev: v0.4.3
+  rev: v0.4.4
   hooks:
     - id: blackdoc
 
@@ -46,13 +46,13 @@ repos:
         - --ignore-words-list=thex
 
 - repo: https://github.com/asottile/pyupgrade
-  rev: v3.20.0
+  rev: v3.21.0
   hooks:
     - id: pyupgrade
       args:
         - --py36-plus
 
 - repo: https://github.com/asottile/add-trailing-comma
-  rev: v3.2.0
+  rev: v4.0.0
   hooks:
     - id: add-trailing-comma
