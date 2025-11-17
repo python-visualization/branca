@@ -34,7 +34,7 @@ repos:
     language_version: python3
 
 - repo: https://github.com/keewis/blackdoc
-  rev: v0.4.5
+  rev: v0.4.6
   hooks:
     - id: blackdoc
 
