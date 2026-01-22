@@ -9,7 +9,7 @@ Utility module for dealing with colormaps.
 import json
 import math
 import os
-from typing import Dict, List, Optional, Sequence, Tuple, Union
+from typing import Callable, Dict, List, Optional, Sequence, Tuple, Union
 
 from jinja2 import Template
 
@@ -45,19 +45,20 @@ def _parse_hex(color_code: str) -> TypeRGBAFloats:
     )
 
 
-def _color_int_to_float(x: int) -> float:
-    """Convert an integer between 0 and 255 to a float between 0. and 1.0"""
+def _color_int_to_float(x: Union[int, float]) -> float:
+    """Convert a byte between 0 and 255 to a normalized float between 0. and 1.0"""
     return x / 255.0
 
 
 def _color_float_to_int(x: float) -> int:
-    """Convert a float between 0. and 1.0 to an integer between 0 and 255"""
+    """Convert a float between 0. and 1.0 to a byte integer between 0 and 255"""
     return int(x * 255.9999)
 
 
 def _parse_color(x: Union[tuple, list, str]) -> TypeRGBAFloats:
+    """Convert an unknown color value to an RGBA tuple of floats between 0 and 1."""
     if isinstance(x, (tuple, list)):
-        return tuple(tuple(x) + (1.0,))[:4]  # type: ignore
+        return _parse_color_as_numerical_sequence(x)
     elif isinstance(x, str) and _is_hex(x):
         return _parse_hex(x)
     elif isinstance(x, str):
@@ -67,6 +68,32 @@ def _parse_color(x: Union[tuple, list, str]) -> TypeRGBAFloats:
         return _parse_hex(cname)
     else:
         raise ValueError(f"Unrecognized color code {x!r}")
+
+
+def _parse_color_as_numerical_sequence(x: Union[tuple, list]) -> TypeRGBAFloats:
+    """Convert a color as a sequence of numbers to an RGBA tuple of floats between 0 and 1."""
+    if not all(isinstance(value, (int, float)) for value in x):
+        raise TypeError("Components in color sequence should all be int or float.")
+    if not 3 <= len(x) <= 4:
+        raise ValueError(f"Color sequence should have 3 or 4 components, not {len(x)}.")
+    if min(x) < 0 or max(x) > 255:
+        raise ValueError("Color components should be between 0.0 and 1.0 or 0 and 255.")
+
+    if all(isinstance(value, int) for value in x):
+        # assume integers are a sequence of bytes that have to be normalized
+        conversion_function: Callable = _color_int_to_float
+    elif 1 < max(x) <= 255:
+        # values between 1 and 255 are bytes no matter the type and should be normalized
+        conversion_function = _color_int_to_float
+    else:
+        # else assume it's already normalized
+        conversion_function = float
+
+    color: List[float] = [conversion_function(value) for value in x]
+    if len(color) == 3:
+        color.append(1.0)  # add alpha channel
+
+    return color[0], color[1], color[2], color[3]
 
 
 def _base(x: float) -> float:
