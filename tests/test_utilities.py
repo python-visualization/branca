@@ -1,6 +1,7 @@
 import json
 import os
 from pathlib import Path
+from typing import List
 
 import pytest
 
@@ -169,3 +170,81 @@ def test_write_png_rgb():
     ]
     png = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x04\x00\x00\x00\x02\x08\x06\x00\x00\x00\x7f\xa8}c\x00\x00\x00-IDATx\xda\x01"\x00\xdd\xff\x00\xff\xa7G\xffp\xff+\xff\x9e\x1cH\xff9\x90$\xff\x00\x93\xe9\xb8\xff\x0cz\xe2\xff\xc6\xca\xff\xff\xd4W\xd0\xffYw\x15\x95\xcf\xb9@D\x00\x00\x00\x00IEND\xaeB`\x82'  # noqa E501
     assert ut.write_png(image_rgb) == png
+
+
+@pytest.mark.parametrize(
+    "hex_list, n_colors, expected_output",
+    [
+        (["#000000", "#FFFFFF"], 2, ["#000000", "#ffffff"]),
+        (["#000000", "#FFFFFF"], 4, ["#000000", "#545454", "#a9a9a9", "#ffffff"]),
+        (["#FF0000", "#00FF00", "#0000FF"], 3, ["#ff0000", "#00ff00", "#0000ff"]),
+        (
+            ["#FF0000", "#00FF00", "#0000FF"],
+            4,
+            ["#ff0000", "#55a900", "#00aa54", "#0000ff"],
+        ),
+        (
+            ["#000000", "#0000FF"],
+            5,
+            ["#000000", "#00003f", "#00007f", "#0000bf", "#0000ff"],
+        ),
+        (
+            ["#FFFFFF", "#000000"],
+            5,
+            ["#ffffff", "#bfbfbf", "#7f7f7f", "#3f3f3f", "#000000"],
+        ),
+        (
+            ["#FF0000", "#00FF00", "#0000FF"],
+            5,
+            ["#ff0000", "#7f7f00", "#00ff00", "#007f7f", "#0000ff"],
+        ),
+        (
+            ["#FF0000", "#00FF00", "#0000FF"],
+            7,
+            [
+                "#ff0000",
+                "#aa5400",
+                "#55a900",
+                "#00ff00",
+                "#00aa54",
+                "#0055a9",
+                "#0000ff",
+            ],
+        ),
+        (
+            ["#abcdef", "#010603", "#f7f9f3"],
+            4,
+            ["#abcdef", "#394851", "#525652", "#f7f9f3"],
+        ),
+        (
+            ["#abcdef", "#010603", "#f7f9f3"],
+            7,
+            [
+                "#abcdef",
+                "#728aa0",
+                "#394851",
+                "#010603",
+                "#525652",
+                "#a4a7a2",
+                "#f7f9f3",
+            ],
+        ),
+        (
+            ["#00abff", "#ff00ab", "#abff00", "#00abff"],
+            4,
+            ["#00abff", "#ff00ab", "#abff00", "#00abff"],
+        ),
+        (
+            ["#00abff", "#ff00ab", "#abff00", "#00abff"],
+            6,
+            ["#00abff", "#9844cc", "#ee3288", "#bbcb22", "#66dd65", "#00abff"],
+        ),
+    ],
+)
+def test_linear_gradient(
+    hex_list: List[str],
+    n_colors: int,
+    expected_output: List[str],
+):
+    result = ut.linear_gradient(hex_list, n_colors)
+    assert result == expected_output
