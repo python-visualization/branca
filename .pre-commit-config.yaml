@@ -21,7 +21,7 @@ repos:
       args: [--max-line-length=105, "--ignore=E203,W503"]
 
 - repo: https://github.com/pycqa/isort
-  rev: 9.0.0a3
+  rev: 9.0.0b1
   hooks:
     - id: isort
       additional_dependencies: [toml]
@@ -56,3 +56,12 @@ repos:
   rev: v4.0.0
   hooks:
     - id: add-trailing-comma
+
+ci:
+    autofix_commit_msg: |
+        [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+        for more information, see https://pre-commit.ci
+    autofix_prs: false
+    skip: []
+    submodules: false

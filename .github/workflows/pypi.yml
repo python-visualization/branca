@@ -1,6 +1,9 @@
 
 name: Publish to PyPI
 
+# no permissions by default
+permissions: {}
+
 on:
   pull_request:
   push:
@@ -17,11 +20,17 @@ defaults:
 jobs:
   packages:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+      with:
+        # Should be enough for setuptools-scm
+        fetch-depth: 100
+        persist-credentials: false
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1  # v6.3.0
       with:
         python-version: "3.x"
 
@@ -47,7 +56,7 @@ jobs:
 
     - name: Publish a Python distribution to PyPI
       if: success() && github.event_name == 'release'
-      uses: pypa/gh-action-pypi-publish@release/v1
+      uses: pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b  # v1.14.0
       with:
         user: __token__
         password: ${{ secrets.PYPI_PASSWORD }}
