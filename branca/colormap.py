@@ -445,12 +445,20 @@ class LinearColormap(ColorMap):
         if round_method == "log10":
             index = [_base(x) for x in index]
 
-        colors = [
-            scaled_cm.rgba_floats_tuple(
-                index[i] * (1.0 - i / (n - 1.0)) + index[i + 1] * i / (n - 1.0),
-            )
-            for i in range(n)
-        ]
+        if n == 1:
+            # Steps are normally sampled at points spread evenly across the
+            # colormap, the first at `index[0]` and the last at `index[-1]`.
+            # A single step is the degenerate case of that spread (0 / 0), so
+            # sample the middle instead: the one bin covers the whole range
+            # and gets a color to match.
+            colors = [scaled_cm.rgba_floats_tuple((index[0] + index[1]) / 2.0)]
+        else:
+            colors = [
+                scaled_cm.rgba_floats_tuple(
+                    index[i] * (1.0 - i / (n - 1.0)) + index[i + 1] * i / (n - 1.0),
+                )
+                for i in range(n)
+            ]
 
         caption = self.caption
         text_color = self.text_color
