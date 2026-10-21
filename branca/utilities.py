@@ -255,12 +255,13 @@ def write_png(
     colormap: Union["ColorMap", Callable, None] = None,
 ) -> bytes:
     """
-    Transform an array of data into a PNG string.
+    Transform an array of data into PNG bytes.
     This can be written to disk using binary I/O, or encoded using base64
     for an inline PNG like this:
 
-    >>> png_str = write_png(array)
-    >>> "data:image/png;base64," + png_str.encode("base64")
+    >>> import base64
+    >>> png_bytes = write_png([[0, 1], [1, 0]])
+    >>> url = "data:image/png;base64," + base64.b64encode(png_bytes).decode("ascii")
 
     Inspired from
     http://stackoverflow.com/questions/902761/saving-a-numpy-array-as-an-image
@@ -274,6 +275,7 @@ def write_png(
         corner of the axes.
     colormap : ColorMap subclass or callable, optional
         Only needed to transform mono images into RGB. You have three options:
+
         - use a subclass of `ColorMap` like `LinearColorMap`
         - use a colormap from `matplotlib.cm`
         - use a custom function of the form [x -> (r,g,b)] or [x -> (r,g,b,a)].
@@ -282,6 +284,28 @@ def write_png(
     Returns
     -------
     PNG formatted byte string
+
+    Notes
+    -----
+    After applying the colormap and adding an alpha channel if needed,
+    arrays whose dtype is not ``uint8`` are normalized independently in each
+    channel (including alpha): values are multiplied by 255 and divided by
+    that channel's maximum, then converted to ``uint8``. Non-finite results
+    are set to zero. This can change the relative intensities of RGB channels,
+    even for floating-point colors already in the range [0, 1].
+
+    RGB arrays, including ``uint8`` RGB arrays, receive a floating-point alpha
+    channel and are therefore normalized too. To preserve color and opacity
+    values, provide an RGBA array with dtype ``uint8`` and values in [0, 255].
+    For example, convert RGB colors in [0, 1] and add an opaque alpha channel
+    before calling this function:
+
+    >>> import numpy as np
+    >>> rgb = np.array([[[0.2, 0.4, 0.8]]])
+    >>> rgb_uint8 = (rgb * 255).astype(np.uint8)
+    >>> alpha = np.full((*rgb.shape[:2], 1), 255, dtype=np.uint8)
+    >>> rgba = np.concatenate((rgb_uint8, alpha), axis=2)
+    >>> png_bytes = write_png(rgba)
     """
     from branca.colormap import ColorMap
 
