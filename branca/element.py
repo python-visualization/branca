@@ -425,9 +425,9 @@ class Figure(Element):
             ).format(html=html, width=self.width, ratio=self.ratio)
         else:
             iframe = (
-                '<iframe srcdoc="{html}" width="{width}" height="{height}"'
+                '<iframe srcdoc="{html}" width="{width}" height="{height}" '
                 'style="border:none !important;" '
-                '"allowfullscreen" "webkitallowfullscreen" "mozallowfullscreen">'
+                "allowfullscreen webkitallowfullscreen mozallowfullscreen>"
                 "</iframe>"
             ).format(html=html, width=self.width, height=self.height)
         return iframe
