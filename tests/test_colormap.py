@@ -6,6 +6,7 @@ Folium Colormap Module
 import pytest
 
 import branca.colormap as cm
+from branca.element import Figure
 
 
 def test_simple_step():
@@ -151,3 +152,15 @@ def test_max_labels_step(max_labels, expected):
     except AssertionError:  # rendering outside parent Figure raises error
         pass
     assert colorbar.tick_labels == expected
+
+
+def test_each_legend_draws_into_its_own_control():
+    figure = Figure()
+    first = cm.LinearColormap(["red", "blue"]).add_to(figure)
+    second = cm.StepColormap(["red", "blue"]).add_to(figure)
+    out = figure.render()
+    # A global selector would put every legend into the first one on the page.
+    assert 'd3.select(".legend.leaflet-control")' not in out
+    for colormap in (first, second):
+        name = colormap.get_name()
+        assert f"d3.select({name}.legend.getContainer())" in out
