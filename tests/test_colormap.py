@@ -89,6 +89,25 @@ def test_linear_to_step():
     lc.to_step(data=some_list, quantiles=[0, 0.3, 0.7, 1], round_method="log10")
 
 
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {"n": 1},
+        {"index": [0, 1]},
+        {"data": [0, 0.5, 1], "n": 1},
+        {"data": [0.5, 0.75, 1], "n": 1, "method": "log"},
+        {"data": [0, 0.5, 1], "quantiles": [0, 1]},
+    ],
+)
+def test_linear_to_step_single_step(kwargs):
+    """A one-bin colormap is valid; every path here raised ZeroDivisionError."""
+    linear = cm.LinearColormap(["red", "blue"], vmin=0, vmax=1)
+    step = linear.to_step(**kwargs)
+    assert len(step.colors) == 1
+    # The single bin spans the whole range, so it takes the middle color.
+    assert step.colors[0] == linear.rgba_floats_tuple(0.5)
+
+
 def test_step_to_linear():
     step = cm.StepColormap(
         ["green", "yellow", "red"],
