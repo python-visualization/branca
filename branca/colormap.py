@@ -77,6 +77,9 @@ def _base(x: float) -> float:
         return 0
 
 
+_LEGEND_POSITIONS = ("topright", "topleft", "bottomright", "bottomleft")
+
+
 class ColorMap(MacroElement):
     """A generic class for creating colormaps.
 
@@ -92,6 +95,9 @@ class ColorMap(MacroElement):
         The color for the text.
     max_labels : int, default 10
         Maximum number of legend tick labels
+    position : str, default "topright"
+        Corner of the map the legend is shown in: "topright", "topleft",
+        "bottomright" or "bottomleft".
     """
 
     _template: Template = ENV.get_template("color_scale.js")
@@ -103,6 +109,7 @@ class ColorMap(MacroElement):
         caption: str = "",
         text_color: str = "black",
         max_labels: int = 10,
+        position: str = "topright",
     ):
         super().__init__()
         self._name = "ColorMap"
@@ -114,6 +121,12 @@ class ColorMap(MacroElement):
         self.index: List[float] = [vmin, vmax]
         self.max_labels = max_labels
         self.tick_labels: Optional[Sequence[Union[float, str]]] = None
+        if position not in _LEGEND_POSITIONS:
+            raise ValueError(
+                f"position must be one of {', '.join(_LEGEND_POSITIONS)}, "
+                f"got {position!r}.",
+            )
+        self.position = position
 
         self.width = 450
         self.height = 40
@@ -276,7 +289,10 @@ class LinearColormap(ColorMap):
     max_labels : int, default 10
         Maximum number of legend tick labels
     tick_labels: list of floats, default None
-        If given, used as the positions of ticks."""
+        If given, used as the positions of ticks.
+    position : str, default "topright"
+        Corner of the map the legend is shown in: "topright", "topleft",
+        "bottomright" or "bottomleft"."""
 
     def __init__(
         self,
@@ -288,6 +304,7 @@ class LinearColormap(ColorMap):
         text_color: str = "black",
         max_labels: int = 10,
         tick_labels: Optional[Sequence[float]] = None,
+        position: str = "topright",
     ):
         super().__init__(
             vmin=vmin,
@@ -295,6 +312,7 @@ class LinearColormap(ColorMap):
             caption=caption,
             text_color=text_color,
             max_labels=max_labels,
+            position=position,
         )
         self.tick_labels: Optional[Sequence[float]] = tick_labels
 
@@ -464,6 +482,7 @@ class LinearColormap(ColorMap):
             text_color=text_color,
             max_labels=max_labels,
             tick_labels=self.tick_labels,
+            position=self.position,
         )
 
     def scale(
@@ -486,6 +505,7 @@ class LinearColormap(ColorMap):
             caption=self.caption,
             text_color=self.text_color,
             max_labels=max_labels,
+            position=self.position,
         )
 
 
@@ -523,6 +543,9 @@ class StepColormap(ColorMap):
         Maximum number of legend tick labels
     tick_labels: list of floats, default None
         If given, used as the positions of ticks.
+    position : str, default "topright"
+        Corner of the map the legend is shown in: "topright", "topleft",
+        "bottomright" or "bottomleft".
     """
 
     def __init__(
@@ -535,6 +558,7 @@ class StepColormap(ColorMap):
         text_color: str = "black",
         max_labels: int = 10,
         tick_labels: Optional[Sequence[float]] = None,
+        position: str = "topright",
     ):
         super().__init__(
             vmin=vmin,
@@ -542,6 +566,7 @@ class StepColormap(ColorMap):
             caption=caption,
             text_color=text_color,
             max_labels=max_labels,
+            position=position,
         )
         self.tick_labels = tick_labels
 
@@ -603,6 +628,7 @@ class StepColormap(ColorMap):
             caption=self.caption,
             text_color=self.text_color,
             max_labels=max_labels,
+            position=self.position,
         )
 
     def scale(
@@ -625,6 +651,7 @@ class StepColormap(ColorMap):
             caption=self.caption,
             text_color=self.text_color,
             max_labels=max_labels,
+            position=self.position,
         )
 
 

@@ -15,7 +15,7 @@
               .domain([{{ this.color_domain[0] }}, {{ this.color_domain[-1] }}])
               .range([0, {{ this.width }} - 50]);
 
-    {{this.get_name()}}.legend = L.control({position: 'topright'});
+    {{this.get_name()}}.legend = L.control({position: {{ this.position|tojson }}});
     {{this.get_name()}}.legend.onAdd = function (map) {var div = L.DomUtil.create('div', 'legend'); return div};
     {{this.get_name()}}.legend.addTo({{this._parent.get_name()}});
 

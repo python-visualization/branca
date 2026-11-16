@@ -6,6 +6,7 @@ Folium Colormap Module
 import pytest
 
 import branca.colormap as cm
+from branca.element import Figure
 
 
 def test_simple_step():
@@ -151,3 +152,41 @@ def test_max_labels_step(max_labels, expected):
     except AssertionError:  # rendering outside parent Figure raises error
         pass
     assert colorbar.tick_labels == expected
+
+
+def _render_in_figure(colormap):
+    figure = Figure()
+    figure.add_child(colormap)
+    return figure.render()
+
+
+@pytest.mark.parametrize("cls", [cm.LinearColormap, cm.StepColormap])
+@pytest.mark.parametrize(
+    "position",
+    ["topright", "topleft", "bottomright", "bottomleft"],
+)
+def test_legend_position(cls, position):
+    colormap = cls(["red", "blue"], position=position)
+    out = _render_in_figure(colormap)
+    assert f'L.control({{position: "{position}"}})' in out
+
+
+@pytest.mark.parametrize("cls", [cm.LinearColormap, cm.StepColormap])
+def test_legend_position_default(cls):
+    out = _render_in_figure(cls(["red", "blue"]))
+    assert 'L.control({position: "topright"})' in out
+
+
+@pytest.mark.parametrize("position", ["top", "TopLeft", "", None])
+def test_legend_position_invalid(position):
+    with pytest.raises(ValueError, match="position must be one of"):
+        cm.LinearColormap(["red", "blue"], position=position)
+
+
+def test_legend_position_kept_by_derived_colormaps():
+    linear = cm.LinearColormap(["red", "blue"], position="bottomleft")
+    step = cm.StepColormap(["red", "blue"], position="topleft")
+    assert linear.to_step(3).position == "bottomleft"
+    assert linear.scale(0, 10).position == "bottomleft"
+    assert step.to_linear().position == "topleft"
+    assert step.scale(0, 10).position == "topleft"
