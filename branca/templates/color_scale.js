@@ -25,7 +25,7 @@
         .tickSize(1)
         .tickValues({{ this.tick_labels }});
 
-    {{this.get_name()}}.svg = d3.select(".legend.leaflet-control").append("svg")
+    {{this.get_name()}}.svg = d3.select({{this.get_name()}}.legend.getContainer()).append("svg")
         .attr("id", 'legend')
         .attr("width", {{ this.width }})
         .attr("height", {{ this.height }});
