@@ -328,17 +328,20 @@ class Figure(Element):
         A percentage defining the aspect ratio of the Figure.
         It will be ignored if height is not None.
     title : str, default None
-        Figure title.
+        Figure title. Also used as the accessible name of the iframe when the
+        Figure is displayed in a notebook.
     figsize : tuple of two int, default None
         If you're a matplotlib addict, you can overwrite width and
         height. Values will be converted into pixels in using 60 dpi.
         For example figsize=(10, 5) will result in
         width="600px", height="300px".
+    lang : str, default "en"
+        Language of the generated HTML document.
     """
 
     _template = Template(
         "<!DOCTYPE html>\n"
-        "<html>\n"
+        '<html lang="{{this.lang}}">\n'
         "<head>\n"
         "{% if this.title %}<title>{{this.title}}</title>{% endif %}"
         "    {{this.header.render(**kwargs)}}\n"
@@ -359,6 +362,7 @@ class Figure(Element):
         ratio: str = "60%",
         title: Optional[str] = None,
         figsize: Optional[Tuple[int, int]] = None,
+        lang: str = "en",
     ):
         super().__init__()
         self._name = "Figure"
@@ -374,6 +378,7 @@ class Figure(Element):
         self.height = height
         self.ratio = ratio
         self.title = title
+        self.lang = lang
         if figsize is not None:
             self.width = str(60 * figsize[0]) + "px"
             self.height = str(60 * figsize[1]) + "px"
@@ -412,24 +417,25 @@ class Figure(Element):
     def _repr_html_(self, **kwargs) -> str:
         """Displays the Figure in a Jupyter notebook."""
         html = escape(self.render(**kwargs))
+        title = f' title="{escape(self.title, quote=True)}"' if self.title else ""
         if self.height is None:
             iframe = (
                 '<div style="width:{width};">'
                 '<div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">'  # noqa
                 '<span style="color:#565656">Make this Notebook Trusted to load map: File -> Trust Notebook</span>'  # noqa
-                '<iframe srcdoc="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;'  # noqa
+                '<iframe srcdoc="{html}"{title} style="position:absolute;width:100%;height:100%;left:0;top:0;'  # noqa
                 'border:none !important;" '
                 "allowfullscreen webkitallowfullscreen mozallowfullscreen>"
                 "</iframe>"
                 "</div></div>"
-            ).format(html=html, width=self.width, ratio=self.ratio)
+            ).format(html=html, title=title, width=self.width, ratio=self.ratio)
         else:
             iframe = (
-                '<iframe srcdoc="{html}" width="{width}" height="{height}"'
+                '<iframe srcdoc="{html}"{title} width="{width}" height="{height}"'
                 'style="border:none !important;" '
                 '"allowfullscreen" "webkitallowfullscreen" "mozallowfullscreen">'
                 "</iframe>"
-            ).format(html=html, width=self.width, height=self.height)
+            ).format(html=html, title=title, width=self.width, height=self.height)
         return iframe
 
     def add_subplot(self, x: int, y: int, n: int, margin: float = 0.05) -> "Div":
@@ -640,6 +646,8 @@ class IFrame(Element):
         height. Values will be converted into pixels in using 60 dpi.
         For example figsize=(10, 5) will result in
         width="600px", height="300px".
+    title : str, default None
+        Accessible name for the iframe.
     """
 
     def __init__(
@@ -649,6 +657,7 @@ class IFrame(Element):
         height: Optional[str] = None,
         ratio: str = "60%",
         figsize: Optional[Tuple[int, int]] = None,
+        title: Optional[str] = None,
     ):
         super().__init__()
         self._name = "IFrame"
@@ -656,6 +665,7 @@ class IFrame(Element):
         self.width = width
         self.height = height
         self.ratio = ratio
+        self.title = title
         if figsize is not None:
             self.width = str(60 * figsize[0]) + "px"
             self.height = str(60 * figsize[1]) + "px"
@@ -671,21 +681,22 @@ class IFrame(Element):
         html = "data:text/html;charset=utf-8;base64," + base64.b64encode(
             html.encode("utf8"),
         ).decode("utf8")
+        title = f' title="{escape(self.title, quote=True)}"' if self.title else ""
 
         if self.height is None:
             iframe = (
                 '<div style="width:{width};">'
                 '<div style="position:relative;width:100%;height:0;padding-bottom:{ratio};">'  # noqa
-                '<iframe src="{html}" style="position:absolute;width:100%;height:100%;left:0;top:0;'  # noqa
+                '<iframe src="{html}"{title} style="position:absolute;width:100%;height:100%;left:0;top:0;'  # noqa
                 'border:none !important;">'
                 "</iframe>"
                 "</div></div>"
-            ).format(html=html, width=self.width, ratio=self.ratio)
+            ).format(html=html, title=title, width=self.width, ratio=self.ratio)
         else:
             iframe = (
-                '<iframe src="{html}" width="{width}" style="border:none !important;" '
+                '<iframe src="{html}"{title} width="{width}" style="border:none !important;" '
                 'height="{height}"></iframe>'
-            ).format(html=html, width=self.width, height=self.height)
+            ).format(html=html, title=title, width=self.width, height=self.height)
         return iframe
 
 
