@@ -586,11 +586,15 @@ class StepColormap(ColorMap):
             Maximum number of legend tick labels
 
         """
+        if index is None and len(self.colors) == 1:
+            index = [self.vmin, self.vmax]
         if index is None:
-            n = len(self.index) - 1
+            bounds = self.index
+            if len(bounds) == len(self.colors):
+                bounds = [*bounds, max(self.vmax, bounds[-1])]
+            n = len(bounds) - 1
             index = [
-                self.index[i] * (1.0 - i / (n - 1.0))
-                + self.index[i + 1] * i / (n - 1.0)
+                bounds[i] * (1.0 - i / (n - 1.0)) + bounds[i + 1] * i / (n - 1.0)
                 for i in range(n)
             ]
 
