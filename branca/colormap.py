@@ -346,8 +346,9 @@ class LinearColormap(ColorMap):
             The number of expected colors in the output StepColormap.
             This will be ignored if `index` is provided.
         index : list of floats, default None
-            The values corresponding to each color bounds.
-            It has to be sorted.
+            Sorted bin edges. The linear colormap is sampled to choose a
+            color for each bin. To assign specific colors to the bins,
+            pass the colors and edges directly to :class:`StepColormap`.
             If None, a regular grid between `vmin` and `vmax` is created.
         data : list of floats, default None
             A sample of data to adapt the color map to.
@@ -490,13 +491,12 @@ class LinearColormap(ColorMap):
 
 
 class StepColormap(ColorMap):
-    """Creates a ColorMap based on linear interpolation of a set of colors
-    over a given index.
+    """Assigns a constant color to each interval in a set of bins.
 
     Parameters
     ----------
     colors : list-like object
-        The set of colors to be used for interpolation.
+        The color of each bin, in order.
         Colors can be provided in the form:
         * tuples of int between 0 and 255 (e.g: `(255,255,0)` or
         `(255, 255, 0, 255)`)
@@ -505,9 +505,8 @@ class StepColormap(ColorMap):
         * HTML-like string (e.g: `"#ffff00`)
         * a color name or shortcut (e.g: `"y"` or `"yellow"`)
     index : list of floats, default None
-        The bounds of the colors. The lower value is inclusive,
-        the upper value is exclusive.
-        It has to be sorted, and have the same length as `colors`.
+        Sorted lower bounds, one per color, optionally followed by the
+        upper bound of the last bin. Each lower bound is inclusive.
         If None, a regular grid between `vmin` and `vmax` is created.
     vmin : float, default 0.
         The minimal value for the colormap.
@@ -523,6 +522,12 @@ class StepColormap(ColorMap):
         Maximum number of legend tick labels
     tick_labels: list of floats, default None
         If given, used as the positions of ticks.
+
+    Examples
+    --------
+    >>> cmap = StepColormap(["red", "lime", "blue"], index=[0, 1, 2, 10], vmax=10)
+    >>> [cmap(x) for x in (0.5, 1, 9)]
+    ['#ff0000ff', '#00ff00ff', '#0000ffff']
     """
 
     def __init__(
