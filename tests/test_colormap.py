@@ -100,6 +100,17 @@ def test_step_to_linear():
     step.to_linear()
 
 
+@pytest.mark.parametrize("colors", [["red"], ["red", "blue"], ["red", "lime", "blue"]])
+def test_step_to_linear_with_lower_bounds(colors):
+    lower_bounds = [0, 1, 4][: len(colors)]
+    step = cm.StepColormap(colors, index=lower_bounds, vmax=10)
+    explicit = cm.StepColormap(colors, index=[*lower_bounds, 10], vmax=10)
+    linear = step.to_linear()
+    assert linear.index == explicit.to_linear().index
+    assert linear.colors == (step.colors if len(colors) > 1 else step.colors * 2)
+    assert step.index == lower_bounds
+
+
 def test_linear_object():
     cm.linear.OrRd_06._repr_html_()
     cm.linear.PuBu_06.to_step(12)
