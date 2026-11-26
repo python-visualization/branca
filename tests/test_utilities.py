@@ -1,7 +1,10 @@
 import json
 import os
+import struct
+import zlib
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 import branca.utilities as ut
@@ -169,3 +172,43 @@ def test_write_png_rgb():
     ]
     png = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x04\x00\x00\x00\x02\x08\x06\x00\x00\x00\x7f\xa8}c\x00\x00\x00-IDATx\xda\x01"\x00\xdd\xff\x00\xff\xa7G\xffp\xff+\xff\x9e\x1cH\xff9\x90$\xff\x00\x93\xe9\xb8\xff\x0cz\xe2\xff\xc6\xca\xff\xff\xd4W\xd0\xffYw\x15\x95\xcf\xb9@D\x00\x00\x00\x00IEND\xaeB`\x82'  # noqa E501
     assert ut.write_png(image_rgb) == png
+
+
+def _png_scanlines(png):
+    """Decode the unfiltered RGBA scanlines emitted by write_png."""
+    assert png[:8] == b"\x89PNG\r\n\x1a\n"
+    offset = 8
+    compressed = b""
+    while offset < len(png):
+        length = struct.unpack("!I", png[offset : offset + 4])[0]
+        if png[offset + 4 : offset + 8] == b"IDAT":
+            compressed += png[offset + 8 : offset + 8 + length]
+        offset += length + 12
+    return zlib.decompress(compressed)
+
+
+def test_write_png_normalizes_float_rgba_channels():
+    image = np.array([[[0.2, 0.4, 0.0, 0.25], [0.4, 0.4, 0.0, 0.5]]])
+    assert _png_scanlines(ut.write_png(image)) == bytes(
+        [0, 127, 255, 0, 127, 255, 255, 0, 255],
+    )
+
+
+def test_write_png_normalizes_uint8_rgb_channels():
+    image = np.array([[[20, 40, 80], [40, 40, 80]]], dtype=np.uint8)
+    assert _png_scanlines(ut.write_png(image)) == bytes(
+        [0, 127, 255, 255, 255, 255, 255, 255, 255],
+    )
+
+
+def test_write_png_preserves_uint8_rgba_channels():
+    image = np.array([[[20, 40, 80, 64], [40, 40, 80, 128]]], dtype=np.uint8)
+    assert _png_scanlines(ut.write_png(image)) == b"\x00" + image.tobytes()
+
+
+def test_write_png_preprocessed_rgb_preserves_colors():
+    rgb = np.array([[[0.2, 0.4, 0.8]]])
+    rgb_uint8 = (rgb * 255).astype(np.uint8)
+    alpha = np.full((*rgb.shape[:2], 1), 255, dtype=np.uint8)
+    rgba = np.concatenate((rgb_uint8, alpha), axis=2)
+    assert _png_scanlines(ut.write_png(rgba)) == bytes([0, 51, 102, 204, 255])
